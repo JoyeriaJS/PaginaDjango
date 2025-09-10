@@ -55,6 +55,7 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"{self.product_id} - {self.alt or self.image.name}"
+    
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
