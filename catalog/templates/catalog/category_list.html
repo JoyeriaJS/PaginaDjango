@@ -1,0 +1,1 @@
+{% extends 'catalog/base_admin.html' %}{% block content %}<h1 class='h4'>Categorías</h1>{% for c in categories %}<div>{{ c.name }}</div>{% empty %}<div class='text-muted'>Sin categorías</div>{% endfor %}<a href='{% url "catalog:category_create" %}' class='btn btn-primary mt-2'>Nueva</a>{% endblock %}

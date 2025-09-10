@@ -1,0 +1,1 @@
+{% extends 'catalog/base_admin.html' %}{% block content %}<h1 class='h4'>Imágenes</h1><form method='post' enctype='multipart/form-data'>{% csrf_token %}{{ form.as_p }}<button class='btn btn-primary'>Subir</button></form>{% endblock %}

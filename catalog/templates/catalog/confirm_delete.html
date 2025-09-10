@@ -1,0 +1,1 @@
+{% extends 'catalog/base_admin.html' %}{% block content %}<h1 class='h5'>¿Eliminar {{ name }}?</h1><form method='post'>{% csrf_token %}<button class='btn btn-danger'>Eliminar</button></form>{% endblock %}
