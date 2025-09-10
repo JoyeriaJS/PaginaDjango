@@ -18,13 +18,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.http import HttpResponse
+from django.shortcuts import render
 
 
-def health(_):  # página simple para "/"
-    return HttpResponse("OK")
+def home(request):  # página simple para "/"
+    return render(request, 'home.html')
 
 urlpatterns = [
-    path("", health), 
+    path("", home, name="home"), 
     path('admin/', admin.site.urls),
     path('panel/', include('catalog.urls', namespace='catalog')),  #CRUD
 ]
