@@ -87,14 +87,24 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
+DATABASE_URL = (
+    os.environ.get("DATABASE_URL")
+    or os.environ.get("RAILWAY_DATABASE_URL")
+    or os.environ.get("database_url")  # <- tu variable en minúsculas
+)
+
+# Si Railway solo expone PG* (raro, pero por si acaso)
 if not DATABASE_URL:
-    raise RuntimeError("DATABASE_URL no está definida. Configúrala con la URL de Postgres de Railway.")
+    pg = {k: os.environ.get(k) for k in ["PGHOST", "PGPORT", "PGUSER", "PGPASSWORD", "PGDATABASE"]}
+    if all(pg.values()):
+        DATABASE_URL = f"postgresql://{pg['PGUSER']}:{pg['PGPASSWORD']}@{pg['PGHOST']}:{pg['PGPORT']}/{pg['PGDATABASE']}"
+
+if not DATABASE_URL:
+    raise RuntimeError("No se encontró ninguna DATABASE_URL. Define DATABASE_URL (mayúsculas) en el servicio web de Railway.")
 
 DATABASES = {
     "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
 }
-
 
 
 # Password validation
