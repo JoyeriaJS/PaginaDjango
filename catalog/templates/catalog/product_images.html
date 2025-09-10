@@ -1,11 +1,1 @@
-{% extends "catalog/base_admin.html" %}
-{% block title %}Agregar imagen{% endblock %}
-{% block content %}
-<h1 class="h4 mb-3">Agregar imagen a {{ product.name }}</h1>
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button class="btn btn-primary">Subir</button>
-  <a class="btn btn-secondary" href="{% url 'catalog:product_edit' product.pk %}">Volver</a>
-</form>
-{% endblock %}
+{% extends 'catalog/base_admin.html' %}{% block content %}<h1 class='h4'>Imágenes</h1><form method='post' enctype='multipart/form-data'>{% csrf_token %}{{ form.as_p }}<button class='btn btn-primary'>Subir</button></form>{% endblock %}

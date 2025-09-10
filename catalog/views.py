@@ -2,7 +2,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import transaction
-from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import ProductForm, ProductImageForm, CategoryForm, MaterialForm
@@ -10,176 +9,148 @@ from .models import Product, Category, Material, ProductImage
 
 @login_required
 def product_list(request):
-    qs = Product.objects.select_related("category","material").order_by("-updated_at","-created_at")
-    q = request.GET.get("q")
-    cat = request.GET.get("cat")
-    active = request.GET.get("active")
+    qs = Product.objects.select_related('category','material').order_by('-updated_at')
+    q = request.GET.get('q')
+    cat = request.GET.get('cat')
+    active = request.GET.get('active')
     if q:
-        qs = qs.filter(Q(name__icontains=q) | Q(sku__icontains=q) | Q(description__icontains=q))
+        qs = qs.filter(name__icontains=q) | qs.filter(sku__icontains=q)
     if cat:
         qs = qs.filter(category_id=cat)
-    if active in ("1","0"):
-        qs = qs.filter(is_active=(active=="1"))
-    paginator = Paginator(qs, 20)
-    products = paginator.get_page(request.GET.get("page"))
-    return render(request, "catalog/product_list.html", {
-        "products": products,
-        "categories": Category.objects.all(),
-        "q": q or "",
-        "cat": int(cat) if cat else None,
-        "active": active,
+    if active in ('1','0'):
+        qs = qs.filter(is_active=(active=='1'))
+    products = Paginator(qs, 20).get_page(request.GET.get('page'))
+    return render(request, 'catalog/product_list.html', {
+        'products': products,
+        'categories': Category.objects.all(),
+        'q': q or '', 'cat': int(cat) if cat else None, 'active': active
     })
 
 @login_required
 def product_create(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         form = ProductForm(request.POST)
         if form.is_valid():
-            obj = form.save()
-            messages.success(request, f"Producto '{obj.name}' creado.")
-            return redirect("catalog:product_list")
+            product = form.save()
+            messages.success(request, 'Producto creado correctamente.')
+            return redirect('catalog:product_edit', pk=product.pk)
     else:
         form = ProductForm()
-    return render(request, "catalog/product_form.html", {"form": form, "title":"Crear producto"})
+    return render(request, 'catalog/product_form.html', {'form': form, 'title': 'Crear producto'})
 
 @login_required
 def product_edit(request, pk):
-    obj = get_object_or_404(Product, pk=pk)
-    if request.method == "POST":
-        form = ProductForm(request.POST, instance=obj)
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=product)
         if form.is_valid():
             form.save()
-            messages.success(request, "Producto actualizado.")
-            return redirect("catalog:product_edit", pk=obj.pk)
+            messages.success(request, 'Producto actualizado.')
+            return redirect('catalog:product_edit', pk=product.pk)
     else:
-        form = ProductForm(instance=obj)
-    images = obj.images.all()
-    return render(request, "catalog/product_form.html", {"form": form, "title":"Editar producto", "product": obj, "images": images})
+        form = ProductForm(instance=product)
+    images = product.images.all()
+    return render(request, 'catalog/product_form.html', {'form': form, 'title': 'Editar producto', 'product': product, 'images': images})
 
 @login_required
 @transaction.atomic
 def product_delete(request, pk):
-    obj = get_object_or_404(Product, pk=pk)
-    if request.method == "POST":
-        name = obj.name
-        obj.delete()
-        messages.success(request, f"Producto '{name}' eliminado.")
-        return redirect("catalog:product_list")
-    return render(request, "catalog/confirm_delete.html", {"object": obj, "name": obj.name})
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        product.delete()
+        messages.success(request, 'Producto eliminado.')
+        return redirect('catalog:product_list')
+    return render(request, 'catalog/confirm_delete.html', {'object': product, 'name': product.name})
 
-# ---- Image management ----
 @login_required
 def product_images(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    if request.method == "POST":
+    if request.method == 'POST':
         form = ProductImageForm(request.POST, request.FILES)
         if form.is_valid():
             img = form.save(commit=False)
             img.product = product
+            if img.is_primary:
+                ProductImage.objects.filter(product=product, is_primary=True).update(is_primary=False)
             img.save()
-            messages.success(request, "Imagen subida.")
-            return redirect("catalog:product_edit", pk=product.pk)
+            messages.success(request, 'Imagen agregada.')
+            return redirect('catalog:product_edit', pk=product.pk)
     else:
         form = ProductImageForm()
-    return render(request, "catalog/product_images.html", {"product": product, "form": form})
+    return render(request, 'catalog/product_images.html', {'product': product, 'form': form})
 
-@login_required
-def image_set_primary(request, image_id):
-    img = get_object_or_404(ProductImage, pk=image_id)
-    ProductImage.objects.filter(product=img.product, is_primary=True).update(is_primary=False)
-    img.is_primary = True
-    img.save(update_fields=["is_primary"])
-    messages.success(request, "Imagen marcada como principal.")
-    return redirect("catalog:product_edit", pk=img.product_id)
-
-@login_required
-def image_delete(request, image_id):
-    img = get_object_or_404(ProductImage, pk=image_id)
-    pid = img.product_id
-    if request.method == "POST":
-        img.delete()
-        messages.success(request, "Imagen eliminada.")
-        return redirect("catalog:product_edit", pk=pid)
-    return render(request, "catalog/confirm_delete.html", {"object": img, "name": img.alt or img.image.name})
-
-# ---- Category CRUD ----
 @login_required
 def category_list(request):
-    cats = Category.objects.order_by("name")
-    return render(request, "catalog/category_list.html", {"categories": cats})
+    return render(request, 'catalog/category_list.html', {'categories': Category.objects.order_by('name')})
 
 @login_required
 def category_create(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "Categoría creada.")
-            return redirect("catalog:category_list")
+            messages.success(request, 'Categoría creada.')
+            return redirect('catalog:category_list')
     else:
         form = CategoryForm()
-    return render(request, "catalog/simple_form.html", {"form": form, "title":"Crear categoría"})
+    return render(request, 'catalog/simple_form.html', {'form': form, 'title': 'Crear categoría'})
 
 @login_required
 def category_edit(request, pk):
     obj = get_object_or_404(Category, pk=pk)
-    if request.method == "POST":
+    if request.method == 'POST':
         form = CategoryForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
-            messages.success(request, "Categoría actualizada.")
-            return redirect("catalog:category_list")
+            messages.success(request, 'Categoría actualizada.')
+            return redirect('catalog:category_list')
     else:
         form = CategoryForm(instance=obj)
-    return render(request, "catalog/simple_form.html", {"form": form, "title":"Editar categoría"})
+    return render(request, 'catalog/simple_form.html', {'form': form, 'title': 'Editar categoría'})
 
 @login_required
 def category_delete(request, pk):
     obj = get_object_or_404(Category, pk=pk)
-    if request.method == "POST":
-        name = obj.name
+    if request.method == 'POST':
         obj.delete()
-        messages.success(request, f"Categoría '{name}' eliminada.")
-        return redirect("catalog:category_list")
-    return render(request, "catalog/confirm_delete.html", {"object": obj, "name": obj.name})
+        messages.success(request, 'Categoría eliminada.')
+        return redirect('catalog:category_list')
+    return render(request, 'catalog/confirm_delete.html', {'object': obj, 'name': obj.name})
 
-# ---- Material CRUD ----
 @login_required
 def material_list(request):
-    items = Material.objects.order_by("name")
-    return render(request, "catalog/material_list.html", {"items": items})
+    return render(request, 'catalog/material_list.html', {'items': Material.objects.order_by('name')})
 
 @login_required
 def material_create(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         form = MaterialForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "Material creado.")
-            return redirect("catalog:material_list")
+            messages.success(request, 'Material creado.')
+            return redirect('catalog:material_list')
     else:
         form = MaterialForm()
-    return render(request, "catalog/simple_form.html", {"form": form, "title":"Crear material"})
+    return render(request, 'catalog/simple_form.html', {'form': form, 'title': 'Crear material'})
 
 @login_required
 def material_edit(request, pk):
     obj = get_object_or_404(Material, pk=pk)
-    if request.method == "POST":
+    if request.method == 'POST':
         form = MaterialForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
-            messages.success(request, "Material actualizado.")
-            return redirect("catalog:material_list")
+            messages.success(request, 'Material actualizado.')
+            return redirect('catalog:material_list')
     else:
         form = MaterialForm(instance=obj)
-    return render(request, "catalog/simple_form.html", {"form": form, "title":"Editar material"})
+    return render(request, 'catalog/simple_form.html', {'form': form, 'title': 'Editar material'})
 
 @login_required
 def material_delete(request, pk):
     obj = get_object_or_404(Material, pk=pk)
-    if request.method == "POST":
-        name = obj.name
+    if request.method == 'POST':
         obj.delete()
-        messages.success(request, f"Material '{name}' eliminado.")
-        return redirect("catalog:material_list")
-    return render(request, "catalog/confirm_delete.html", {"object": obj, "name": obj.name})
+        messages.success(request, 'Material eliminado.')
+        return redirect('catalog:material_list')
+    return render(request, 'catalog/confirm_delete.html', {'object': obj, 'name': obj.name})
