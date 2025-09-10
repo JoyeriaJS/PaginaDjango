@@ -17,10 +17,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import HttpResponse
+
+
+def health(_):  # página simple para "/"
+    return HttpResponse("OK")
 
 urlpatterns = [
+    path("", health), 
     path('admin/', admin.site.urls),
-    path('panel/', include('catalog.urls', namespace='catalog')),
+    path('panel/', include('catalog.urls', namespace='catalog')),  #CRUD
 ]
 
 if settings.DEBUG:
