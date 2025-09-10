@@ -1,0 +1,116 @@
+{% extends "base_site.html" %}
+{% block title %}Artesanías Pachy — Joyería en Lapislázuli{% endblock %}
+
+{% block content %}
+
+<section class="hero d-flex align-items-center">
+  <div class="container py-5">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-6">
+        <h1 class="display-5 fw-bold mb-3">Joyería de lapislázuli hecha en Chile</h1>
+        <p class="lead text-muted">Piezas únicas, diseño atemporal y materiales nobles. Conoce nuestra colección y encuentra el regalo perfecto.</p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="#nuevos" class="btn btn-primary btn-lg">Ver novedades</a>
+          <a href="#categorias" class="btn btn-outline-primary btn-lg">Explorar categorías</a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-card shadow-lg rounded-4 overflow-hidden">
+          <img class="w-100" src="https://images.unsplash.com/photo-1585386959984-a415522316dc?q=80&w=1200&auto=format&fit=crop" alt="Joyas de piedra azul">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="categorias" class="py-5 bg-light">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-3">
+      <h2 class="h3 m-0">Categorías destacadas</h2>
+      <a href="/panel/categorias/" class="small text-decoration-none">Gestionar categorías →</a>
+    </div>
+
+    <div class="row g-3">
+      {% for c in categories %}
+      <div class="col-6 col-md-3">
+        <a class="card card-category h-100 text-decoration-none" href="#">
+          <div class="card-body d-flex flex-column justify-content-center text-center">
+            <div class="category-circle mx-auto mb-3">{{ c.name|first }}</div>
+            <h3 class="h6 text-dark mb-1">{{ c.name }}</h3>
+            <p class="small text-muted mb-0">{{ c.n }} productos</p>
+          </div>
+        </a>
+      </div>
+      {% empty %}
+      <div class="col-12 text-muted">Aún no hay categorías.</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section id="nuevos" class="py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-3">
+      <h2 class="h3 m-0">Novedades</h2>
+      <a href="/panel/productos/" class="small text-decoration-none">Gestionar productos →</a>
+    </div>
+
+    <div class="row g-3">
+      {% for p in latest_products %}
+      <div class="col-6 col-md-3">
+        <div class="card h-100 product-card">
+          {% with img=p.images.first %}
+          {% if img %}
+            <img src="{{ img.image.url }}" class="card-img-top" alt="{{ img.alt|default:p.name }}">
+          {% else %}
+            <div class="ratio ratio-1x1 bg-light d-flex align-items-center justify-content-center text-muted">Sin imagen</div>
+          {% endif %}
+          {% endwith %}
+          <div class="card-body">
+            <h3 class="h6 card-title mb-1">{{ p.name }}</h3>
+            <div class="small text-muted mb-2">{{ p.category.name }}</div>
+            <div class="fw-semibold">${{ p.price }}</div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-muted">Aún no hay productos.</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section id="nosotros" class="py-5 bg-light">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-6">
+        <img class="w-100 rounded-4 shadow" src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=1200&auto=format&fit=crop" alt="Taller artesanal">
+      </div>
+      <div class="col-lg-6">
+        <h2 class="h3">Hecho a mano, con historia</h2>
+        <p class="text-muted">Cada pieza es elaborada por artesanos locales con técnicas tradicionales, usando lapislázuli chileno de alta calidad.</p>
+        <ul class="list-unstyled text-muted">
+          <li>• Selección curada de materiales</li>
+          <li>• Producción responsable</li>
+          <li>• Diseño atemporal</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contacto" class="py-5">
+  <div class="container">
+    <div class="row g-3 align-items-center">
+      <div class="col-md-8">
+        <h3 class="h4 mb-1">¿Tienes un pedido especial?</h3>
+        <p class="text-muted mb-0">Escríbenos y te ayudamos a encontrar la pieza perfecta o a crear una a medida.</p>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <a class="btn btn-primary btn-lg" href="mailto:contacto@artesaniaspachy.cl">Contactar</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -21,11 +21,9 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 
-def home(request):  # página simple para "/"
-    return render(request, 'home.html')
 
 urlpatterns = [
-    path("", home, name="home"), 
+    path('', include('core.urls', namespace='core')), 
     path('admin/', admin.site.urls),
     path('panel/', include('catalog.urls', namespace='catalog')),  #CRUD
 ]
