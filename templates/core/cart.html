@@ -1,0 +1,81 @@
+{% extends "base_site.html" %}
+{% block title %}Carrito — Artesanías Pachy{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h1 class="h3 mb-3">Carrito</h1>
+
+  {% if items %}
+  <form method="post" action="{% url 'core:update_cart' %}">
+    {% csrf_token %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th style="width:80px">Img</th>
+            <th>Producto</th>
+            <th style="width:140px">Cantidad</th>
+            <th style="width:120px">Precio</th>
+            <th style="width:120px">Total</th>
+            <th style="width:110px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for it in items %}
+          <tr>
+            <td>
+              {% if it.image %}
+                <img src="{{ it.image.image.url }}" class="img-thumbnail" style="width:60px;height:60px;object-fit:cover;">
+              {% else %}
+                <div class="bg-light text-muted d-flex align-items-center justify-content-center" style="width:60px;height:60px;border:1px solid #e5e5e5;border-radius:.25rem;">–</div>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{% url 'core:product_detail' it.product.pk %}" class="text-decoration-none">{{ it.product.name }}</a>
+              <div class="small text-muted">{{ it.product.category.name }}</div>
+            </td>
+            <td>
+              <input type="number" name="qty_{{ it.product.pk }}" value="{{ it.qty }}" min="1" class="form-control">
+            </td>
+            <td>${{ it.price }}</td>
+            <td>${{ it.total }}</td>
+            <td>
+              <form method="post" action="{% url 'core:remove_from_cart' it.product.pk %}">
+                {% csrf_token %}
+                <button class="btn btn-sm btn-outline-danger">Quitar</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-flex justify-content-end">
+      <div class="card p-3" style="min-width:320px">
+        <div class="d-flex justify-content-between"><span>Subtotal</span><strong>${{ subtotal }}</strong></div>
+        {% if tax != 0 %}
+          <div class="d-flex justify-content-between"><span>Impuestos</span><strong>${{ tax }}</strong></div>
+        {% endif %}
+        {% if shipping != 0 %}
+          <div class="d-flex justify-content-between"><span>Envío</span><strong>${{ shipping }}</strong></div>
+        {% endif %}
+        <hr class="my-2">
+        <div class="d-flex justify-content-between fs-5"><span>Total</span><strong>${{ grand_total }}</strong></div>
+        <div class="mt-3 d-flex gap-2">
+          <a href="/" class="btn btn-outline-secondary w-50">Seguir comprando</a>
+          <button class="btn btn-primary w-50" type="submit">Actualizar</button>
+        </div>
+        <div class="mt-2">
+          <a class="btn btn-success w-100 disabled" href="#">Pagar (próximamente)</a>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  {% else %}
+    <div class="alert alert-info">Tu carrito está vacío.</div>
+    <a href="/" class="btn btn-primary">Ir a comprar</a>
+  {% endif %}
+</div>
+{% endblock %}
