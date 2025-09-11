@@ -12,6 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")  # opcional para entorno local
 
 # --- Media -------------------------------------------------------------------
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -37,6 +38,8 @@ CSRF_TRUSTED_ORIGINS = [
 
 # --- Apps --------------------------------------------------------------------
 INSTALLED_APPS = [
+    'cloudinary',
+    'cloudinary_storage',
     'cms',
     'core',        # Home público (si aún no copiaste la app core, quita esta línea)
     'catalog',     # CRUD interno
