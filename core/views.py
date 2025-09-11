@@ -5,6 +5,7 @@ from cms.models import Banner
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from decimal import Decimal
+from django.core.paginator import Paginator
 
 def home(request):
     categories = Category.objects.annotate(n=Count('products')).order_by('-n','name')[:8]
@@ -25,6 +26,15 @@ def product_detail(request, pk):
         "product": product,
         "images": images,
         "related": related,
+    })
+
+def category_products(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    qs = Product.objects.filter(is_active=True, category=category).order_by('-created_at')
+    products = Paginator(qs, 24).get_page(request.GET.get('page'))
+    return render(request, "core/category_products.html", {
+        "category": category,
+        "products": products,
     })
 
 
@@ -85,6 +95,15 @@ def update_cart(request):
     _save_cart(request.session, new_cart)
     messages.success(request, "Carrito actualizado.")
     return redirect('core:cart_detail')
+
+def clear_cart(request):
+    if request.method != "POST":
+        return redirect('core:cart_detail')
+    request.session['cart'] = {}
+    request.session.modified = True
+    messages.success(request, "Carrito vaciado.")
+    return redirect('core:cart_detail')
+
 
 def cart_detail(request):
     cart = _get_cart(request.session)
