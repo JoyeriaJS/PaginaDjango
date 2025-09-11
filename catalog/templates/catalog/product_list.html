@@ -1,1 +1,117 @@
-{% extends 'catalog/base_admin.html' %}{% block content %}<div class='d-flex justify-content-between'><h1 class='h3'>Productos</h1><a href='{% url "catalog:product_create" %}' class='btn btn-primary'>Nuevo</a></div>{% endblock %}
+{% extends "catalog/base_admin.html" %}
+{% block title %}Productos{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 m-0">Productos</h1>
+  <a href="{% url 'catalog:product_create' %}" class="btn btn-primary">Nuevo</a>
+</div>
+
+{# Panel de diagnóstico opcional; puedes quitarlo luego #}
+{% if total_count is not None and shown_count is not None %}
+<div class="alert alert-info d-flex justify-content-between">
+  <span>Total en BD: <strong>{{ total_count }}</strong></span>
+  <span>Mostrados: <strong>{{ shown_count }}</strong></span>
+  <a class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:product_list' %}">Limpiar filtros</a>
+</div>
+{% endif %}
+
+<form class="row g-2 mb-3" method="get">
+  <div class="col-md-4">
+    <input name="q" value="{{ q|default:'' }}" class="form-control" placeholder="Buscar por nombre, SKU o descripción">
+  </div>
+  <div class="col-md-3">
+    <select name="cat" class="form-select">
+      <option value="">Todas las categorías</option>
+      {% for c in categories %}
+        <option value="{{ c.id }}" {% if cat == c.id %}selected{% endif %}>{{ c.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3">
+    <select name="active" class="form-select">
+      <option value="">Todos</option>
+      <option value="1" {% if active == "1" %}selected{% endif %}>Activos</option>
+      <option value="0" {% if active == "0" %}selected{% endif %}>Inactivos</option>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <button class="btn btn-primary w-100">Filtrar</button>
+  </div>
+</form>
+
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th style="width:80px">Img</th>
+        <th>Nombre</th>
+        <th>Categoría</th>
+        <th>SKU</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Activo</th>
+        <th class="text-end">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in products %}
+      <tr>
+        <td>
+          {% with img=p.images.first %}
+            {% if img %}
+              <img src="{{ img.image.url }}" alt="{{ img.alt|default:p.name }}" class="img-thumbnail" style="width:60px;height:60px;object-fit:cover;">
+            {% else %}
+              <div class="bg-light text-muted d-flex align-items-center justify-content-center" style="width:60px;height:60px;border:1px solid #e5e5e5;border-radius:.25rem;">–</div>
+            {% endif %}
+          {% endwith %}
+        </td>
+        <td class="fw-semibold">{{ p.name }}</td>
+        <td>{{ p.category.name }}</td>
+        <td class="text-muted small">{{ p.sku|default:"—" }}</td>
+        <td>${{ p.price }}</td>
+        <td>{{ p.stock }}</td>
+        <td>
+          {% if p.is_active %}
+            <span class="badge bg-success">Sí</span>
+          {% else %}
+            <span class="badge bg-secondary">No</span>
+          {% endif %}
+        </td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-info" href="{% url 'catalog:product_images' p.pk %}">Imágenes</a>
+          <a class="btn btn-sm btn-outline-primary" href="{% url 'catalog:product_edit' p.pk %}">Editar</a>
+          <form action="{% url 'catalog:product_delete' p.pk %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar producto?')">Eliminar</button>
+          </form>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="8" class="text-center text-muted py-4">No hay productos para mostrar.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if products.has_other_pages %}
+<nav aria-label="Paginación">
+  <ul class="pagination justify-content-center">
+    {% if products.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}&q={{ q }}&cat={{ cat }}&active={{ active }}">«</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">«</span></li>
+    {% endif %}
+    <li class="page-item disabled"><span class="page-link">Página {{ products.number }} de {{ products.paginator.num_pages }}</span></li>
+    {% if products.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}&q={{ q }}&cat={{ cat }}&active={{ active }}">»</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">»</span></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+
+{% endblock %}

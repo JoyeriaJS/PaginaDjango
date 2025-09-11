@@ -10,19 +10,38 @@ from .models import Product, Category, Material, ProductImage
 
 @login_required
 def product_list(request):
-    qs = Product.objects.select_related('category','material').order_by('-updated_at','-created_at')
-    q = request.GET.get('q'); cat = request.GET.get('cat'); active = request.GET.get('active')
+    qs = Product.objects.select_related("category", "material").order_by("-updated_at", "-created_at")
+
+    q = (request.GET.get("q") or "").strip()
+    cat = (request.GET.get("cat") or "").strip()
+    active = (request.GET.get("active") or "").strip()  # "1" | "0" | ""
+
     if q:
-        qs = qs.filter(Q(name__icontains=q) | Q(sku__icontains=q) | Q(description__icontains=q))
-    if cat:
-        qs = qs.filter(category_id=cat)
-    if active in ('1','0'):
-        qs = qs.filter(is_active=(active == '1'))
-    products = Paginator(qs, 20).get_page(request.GET.get('page'))
-    return render(request, 'catalog/product_list.html', {
-        'products': products,
-        'categories': Category.objects.all(),
-        'q': q or '', 'cat': int(cat) if cat else None, 'active': active,
+        qs = qs.filter(
+            Q(name__icontains=q) |
+            Q(sku__icontains=q) |
+            Q(description__icontains=q)
+        )
+
+    if cat.isdigit():
+        qs = qs.filter(category_id=int(cat))
+
+    # Solo filtra por activo si el parámetro viene explícito
+    if active in ("1", "0"):
+        qs = qs.filter(is_active=(active == "1"))
+
+    paginator = Paginator(qs, 20)
+    products = paginator.get_page(request.GET.get("page"))
+
+    return render(request, "catalog/product_list.html", {
+        "products": products,
+        "categories": Category.objects.all(),
+        "q": q,
+        "cat": int(cat) if cat.isdigit() else None,
+        "active": active,
+        # métricas de diagnóstico (te ayudan a verificar)
+        "total_count": Product.objects.count(),
+        "shown_count": products.paginator.count,
     })
 
 @login_required
