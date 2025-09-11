@@ -1,8 +1,11 @@
 from django.db import models
 from django.utils.text import slugify
 
+# --- compat para migraciones antiguas (déjala aunque no la uses) ---
 def product_image_path(instance, filename):
-    return f"products/{instance.product.id}/{filename}"
+    return f"products/{getattr(instance, 'product_id', 'unknown')}/{filename}"
+# -------------------------------------------------------------------
+
 
 class Category(models.Model):
     name = models.CharField(max_length=120, unique=True)
@@ -50,14 +53,21 @@ class Product(models.Model):
             self.slug = slugify(f"{self.name}-{self.sku}")
         return super().save(*args, **kwargs)
 
+
 class ProductImage(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to=product_image_path)
-    alt = models.CharField(max_length=160, blank=True)
+    product = models.ForeignKey('Product', related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='products/%Y/%m/')
+    alt = models.CharField(max_length=120, blank=True)
     is_primary = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
     class Meta:
-        verbose_name = 'Imagen de producto'
-        verbose_name_plural = 'Imágenes de producto'
+        ordering = ['-is_primary', '-created_at']
+
     def __str__(self):
-        return f"Imagen de {self.product}"
+        return f"{self.product_id} - {self.alt or self.image.name}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.is_primary:
+            ProductImage.objects.filter(product=self.product).exclude(pk=self.pk).update(is_primary=False)

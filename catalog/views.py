@@ -3,27 +3,26 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
+from django.db.models import Q
 
 from .forms import ProductForm, ProductImageForm, CategoryForm, MaterialForm
 from .models import Product, Category, Material, ProductImage
 
 @login_required
 def product_list(request):
-    qs = Product.objects.select_related('category','material').order_by('-updated_at')
-    q = request.GET.get('q')
-    cat = request.GET.get('cat')
-    active = request.GET.get('active')
+    qs = Product.objects.select_related('category','material').order_by('-updated_at','-created_at')
+    q = request.GET.get('q'); cat = request.GET.get('cat'); active = request.GET.get('active')
     if q:
-        qs = qs.filter(name__icontains=q) | qs.filter(sku__icontains=q)
+        qs = qs.filter(Q(name__icontains=q) | Q(sku__icontains=q) | Q(description__icontains=q))
     if cat:
         qs = qs.filter(category_id=cat)
     if active in ('1','0'):
-        qs = qs.filter(is_active=(active=='1'))
+        qs = qs.filter(is_active=(active == '1'))
     products = Paginator(qs, 20).get_page(request.GET.get('page'))
     return render(request, 'catalog/product_list.html', {
         'products': products,
         'categories': Category.objects.all(),
-        'q': q or '', 'cat': int(cat) if cat else None, 'active': active
+        'q': q or '', 'cat': int(cat) if cat else None, 'active': active,
     })
 
 @login_required
@@ -31,26 +30,27 @@ def product_create(request):
     if request.method == 'POST':
         form = ProductForm(request.POST)
         if form.is_valid():
-            product = form.save()
-            messages.success(request, 'Producto creado correctamente.')
-            return redirect('catalog:product_edit', pk=product.pk)
+            obj = form.save()
+            messages.success(request, f"Producto '{obj.name}' creado.")
+            return redirect('catalog:product_list')
     else:
         form = ProductForm()
     return render(request, 'catalog/product_form.html', {'form': form, 'title': 'Crear producto'})
 
+
 @login_required
 def product_edit(request, pk):
-    product = get_object_or_404(Product, pk=pk)
+    obj = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
-        form = ProductForm(request.POST, instance=product)
+        form = ProductForm(request.POST, instance=obj)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Producto actualizado.')
-            return redirect('catalog:product_edit', pk=product.pk)
+            messages.success(request, "Producto actualizado.")
+            return redirect('catalog:product_edit', pk=obj.pk)
     else:
-        form = ProductForm(instance=product)
-    images = product.images.all()
-    return render(request, 'catalog/product_form.html', {'form': form, 'title': 'Editar producto', 'product': product, 'images': images})
+        form = ProductForm(instance=obj)
+    images = obj.images.all()
+    return render(request, 'catalog/product_form.html', {'form': form, 'title': 'Editar producto', 'product': obj, 'images': images})
 
 @login_required
 @transaction.atomic
@@ -70,15 +70,32 @@ def product_images(request, pk):
         if form.is_valid():
             img = form.save(commit=False)
             img.product = product
-            if img.is_primary:
-                ProductImage.objects.filter(product=product, is_primary=True).update(is_primary=False)
             img.save()
-            messages.success(request, 'Imagen agregada.')
+            messages.success(request, "Imagen subida.")
             return redirect('catalog:product_edit', pk=product.pk)
     else:
         form = ProductImageForm()
     return render(request, 'catalog/product_images.html', {'product': product, 'form': form})
 
+@login_required
+def image_set_primary(request, image_id):
+    img = get_object_or_404(ProductImage, pk=image_id)
+    ProductImage.objects.filter(product=img.product, is_primary=True).update(is_primary=False)
+    img.is_primary = True
+    img.save(update_fields=['is_primary'])
+    messages.success(request, "Imagen marcada como principal.")
+    return redirect('catalog:product_edit', pk=img.product_id)
+
+@login_required
+@transaction.atomic
+def image_delete(request, image_id):
+    img = get_object_or_404(ProductImage, pk=image_id)
+    pid = img.product_id
+    if request.method == 'POST':
+        img.delete()
+        messages.success(request, "Imagen eliminada.")
+        return redirect('catalog:product_edit', pk=pid)
+    return render(request, 'catalog/confirm_delete.html', {'object': img, 'name': img.alt or img.image.name})
 @login_required
 def category_list(request):
     return render(request, 'catalog/category_list.html', {'categories': Category.objects.order_by('name')})

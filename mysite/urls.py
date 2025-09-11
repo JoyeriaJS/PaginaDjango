@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('core.urls', namespace='core')), 
     path('admin/', admin.site.urls),
     path('panel/', include('catalog.urls', namespace='catalog')),  #CRUD
+    path('panel/', include('cms.urls', namespace='cms')),
 ]
 
 if settings.DEBUG:

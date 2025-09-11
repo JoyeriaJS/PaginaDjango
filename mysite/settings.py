@@ -37,6 +37,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 # --- Apps --------------------------------------------------------------------
 INSTALLED_APPS = [
+    'cms',
     'core',        # Home público (si aún no copiaste la app core, quita esta línea)
     'catalog',     # CRUD interno
     'django.contrib.admin',

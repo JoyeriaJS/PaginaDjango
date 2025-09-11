@@ -1,0 +1,42 @@
+{% if banners_hero %}
+<div id="heroCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    {% for b in banners_hero %}
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></button>
+    {% endfor %}
+  </div>
+  <div class="carousel-inner rounded-4 shadow">
+    {% for b in banners_hero %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <img src="{{ b.image.url }}" class="d-block w-100" alt="{{ b.title }}">
+        {% if b.title or b.subtitle or b.link_url %}
+        <div class="carousel-caption text-start bg-dark bg-opacity-50 p-3 rounded-3">
+          {% if b.title %}<h5 class="mb-1">{{ b.title }}</h5>{% endif %}
+          {% if b.subtitle %}<p class="mb-2">{{ b.subtitle }}</p>{% endif %}
+          {% if b.link_url %}<a class="btn btn-primary btn-sm" href="{{ b.link_url }}">{{ b.link_label|default:"Ver más" }}</a>{% endif %}
+        </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+{% endif %}
+{% if banners_strip %}
+<div class="container mb-4">
+  <div class="row g-3">
+    {% for b in banners_strip %}
+      <div class="col-6 col-md-4">
+        <a class="d-block rounded-3 overflow-hidden shadow-sm" href="{{ b.link_url|default:'#' }}">
+          <img src="{{ b.image.url }}" class="w-100" alt="{{ b.title }}">
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
