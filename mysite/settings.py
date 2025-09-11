@@ -11,13 +11,7 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")  # opcional para entorno local
 
-# --- Media -------------------------------------------------------------------
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 # --- Seguridad / Debug -------------------------------------------------------
-# Mantengo tu SECRET_KEY y DEBUG como los tenías.
-# Sugerencia: en producción, pásalos a variables de entorno.
 SECRET_KEY = 'django-insecure-rc^*w^w&6g9_(uvx#6s*bnt!w)l0rdi%!l7mv#y%uc&x%wo5pk'
 DEBUG = True
 
@@ -25,28 +19,44 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "localhost", "127.0.0.1",
     "artesaniaspachy.cl",
-    "server-production-e90b5.up.railway.app",  # cambia por tu URL real de Railway si difiere
+    "server-production-e90b5.up.railway.app",  # cambia si tu subdominio es otro
 ]
 
 # Evita el error de CSRF en admin/login y formularios
 CSRF_TRUSTED_ORIGINS = [
     "https://artesaniaspachy.cl",
     "https://server-production-e90b5.up.railway.app",  # cambia si tu subdominio es otro
-    # "https://*.railway.app",  # opcional, wildcard
+    # "https://*.railway.app",  # opcional
 ]
 
 # --- Apps --------------------------------------------------------------------
 INSTALLED_APPS = [
-    'cms',
-    'core',        # Home público (si aún no copiaste la app core, quita esta línea)
-    'catalog',     # CRUD interno
+    # Django core
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Tus apps
+    'cms',
+    'core',        # Home público
+    'catalog',     # CRUD interno
 ]
+
+# Si existe CLOUDINARY_URL, activamos Cloudinary SOLO para MEDIA
+if os.environ.get("CLOUDINARY_URL"):
+    INSTALLED_APPS += ['cloudinary', 'cloudinary_storage']
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    # MEDIA_URL puede seguir siendo /media/; las ImageField devolverán URL absolutas de Cloudinary
+else:
+    # Media local (modo desarrollo sin Cloudinary)
+    pass  # no cambiamos nada
+
+# --- Media (valores por defecto; con Cloudinary no se usan en prod) ----------
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # --- Middleware --------------------------------------------------------------
 MIDDLEWARE = [
@@ -83,14 +93,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # --- Base de Datos (Railway) -------------------------------------------------
-# Acepta DATABASE_URL (mayúsculas), RAILWAY_DATABASE_URL y database_url (minúsculas).
 DATABASE_URL = (
     os.environ.get("DATABASE_URL")
     or os.environ.get("RAILWAY_DATABASE_URL")
     or os.environ.get("database_url")
 )
 
-# Si Railway expone solo variables PG*, construimos la URL automáticamente.
 if not DATABASE_URL:
     pg = {k: os.environ.get(k) for k in ["PGHOST", "PGPORT", "PGUSER", "PGPASSWORD", "PGDATABASE"]}
     if all(pg.values()):
@@ -99,9 +107,7 @@ if not DATABASE_URL:
 if not DATABASE_URL:
     raise RuntimeError("No se encontró ninguna DATABASE_URL. Define DATABASE_URL en el servicio web de Railway.")
 
-DATABASES = {
-    "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
-}
+DATABASES = {"default": dj_database_url.config(default=DATABASE_URL, conn_max_age=600)}
 
 # --- Password validators -----------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
@@ -119,10 +125,10 @@ USE_TZ = True
 
 # --- Static & WhiteNoise -----------------------------------------------------
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]            # tu carpeta de assets locales
-STATIC_ROOT = BASE_DIR / "staticfiles"              # carpeta de recogida para prod (collectstatic)
+STATICFILES_DIRS = [BASE_DIR / "static"]      # carpeta de assets locales
+STATIC_ROOT = BASE_DIR / "staticfiles"        # carpeta de recogida para prod (collectstatic)
 
-# Al usar WhiteNoise:
+# IMPORTANTE: mantenemos WhiteNoise con manifest para evitar el error del admin
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # --- Proxy/HTTPS detrás de Railway ------------------------------------------
@@ -130,7 +136,6 @@ USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # --- Login (para @login_required) -------------------------------------------
-# Evita el 404 en /accounts/login/ y redirige al admin por defecto
 LOGIN_URL = "/admin/login/"
 LOGIN_REDIRECT_URL = "/panel/productos/"
 
