@@ -3,27 +3,29 @@
 
 {% block content %}
 
-{% include "core/_banners.html" %}
-
-<section class="hero d-flex align-items-center">
-  <div class="container py-5">
-    <div class="row align-items-center g-4">
-      <div class="col-lg-6">
-        <h1 class="display-5 fw-bold mb-3">Joyería de lapislázuli hecha en Chile</h1>
-        <p class="lead text-muted">Piezas únicas, diseño atemporal y materiales nobles. Conoce nuestra colección y encuentra el regalo perfecto.</p>
-        <div class="d-flex gap-2 mt-3">
-          <a href="#nuevos" class="btn btn-primary btn-lg">Ver novedades</a>
-          <a href="#categorias" class="btn btn-outline-primary btn-lg">Explorar categorías</a>
+{% if banners_hero or banners_strip %}
+  {% include "core/_banners.html" %}
+{% else %}
+  <section class="hero d-flex align-items-center">
+    <div class="container py-5">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6">
+          <h1 class="display-5 fw-bold mb-3">Joyería de lapislázuli hecha en Chile</h1>
+          <p class="lead text-muted">Piezas únicas, diseño atemporal y materiales nobles. Conoce nuestra colección y encuentra el regalo perfecto.</p>
+          <div class="d-flex gap-2 mt-3">
+            <a href="#nuevos" class="btn btn-primary btn-lg">Ver novedades</a>
+            <a href="#categorias" class="btn btn-outline-primary btn-lg">Explorar categorías</a>
+          </div>
         </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="hero-card shadow-lg rounded-4 overflow-hidden">
-          <img class="w-100" src="https://images.unsplash.com/photo-1585386959984-a415522316dc?q=80&w=1200&auto=format&fit=crop" alt="Joyas de piedra azul">
+        <div class="col-lg-6">
+          <div class="hero-card shadow-lg rounded-4 overflow-hidden">
+            <img class="w-100" src="https://images.unsplash.com/photo-1585386959984-a415522316dc?q=80&w=1200&auto=format&fit=crop" alt="Joyas de piedra azul">
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+{% endif %}
 
 <section id="categorias" class="py-5 bg-light">
   <div class="container">
