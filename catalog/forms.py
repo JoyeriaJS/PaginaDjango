@@ -25,3 +25,6 @@ class MaterialForm(forms.ModelForm):
     class Meta:
         model = Material
         fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre del material'}),
+        }

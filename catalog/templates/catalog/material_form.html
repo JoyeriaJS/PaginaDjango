@@ -1,0 +1,23 @@
+{% extends "catalog/base_admin.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h4 m-0">{{ title }}</h1>
+  <a href="{% url 'catalog:material_list' %}" class="btn btn-outline-secondary">Volver</a>
+</div>
+
+<form method="post" class="card p-3">
+  {% csrf_token %}
+  <div class="mb-3">
+    {{ form.name.label_tag }}
+    {{ form.name }}
+    {% if form.name.errors %}
+      <div class="text-danger small">{{ form.name.errors|striptags }}</div>
+    {% endif %}
+  </div>
+  <div class="d-flex gap-2">
+    <button class="btn btn-primary" type="submit">Guardar</button>
+    <a class="btn btn-light" href="{% url 'catalog:material_list' %}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

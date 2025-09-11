@@ -155,7 +155,13 @@ def category_delete(request, pk):
 
 @login_required
 def material_list(request):
-    return render(request, 'catalog/material_list.html', {'items': Material.objects.order_by('name')})
+    q = (request.GET.get('q') or '').strip()
+    qs = Material.objects.all().order_by('name')
+    if q:
+        qs = qs.filter(Q(name__icontains=q))
+
+    items = Paginator(qs, 20).get_page(request.GET.get('page'))
+    return render(request, 'catalog/material_list.html', {'items': items, 'q': q})
 
 @login_required
 def material_create(request):
@@ -167,26 +173,27 @@ def material_create(request):
             return redirect('catalog:material_list')
     else:
         form = MaterialForm()
-    return render(request, 'catalog/simple_form.html', {'form': form, 'title': 'Crear material'})
+    return render(request, 'catalog/material_form.html', {'form': form, 'title': 'Nuevo material'})
 
 @login_required
 def material_edit(request, pk):
-    obj = get_object_or_404(Material, pk=pk)
+    material = get_object_or_404(Material, pk=pk)
     if request.method == 'POST':
-        form = MaterialForm(request.POST, instance=obj)
+        form = MaterialForm(request.POST, instance=material)
         if form.is_valid():
             form.save()
             messages.success(request, 'Material actualizado.')
             return redirect('catalog:material_list')
     else:
-        form = MaterialForm(instance=obj)
-    return render(request, 'catalog/simple_form.html', {'form': form, 'title': 'Editar material'})
+        form = MaterialForm(instance=material)
+    return render(request, 'catalog/material_form.html', {'form': form, 'title': 'Editar material'})
 
 @login_required
 def material_delete(request, pk):
-    obj = get_object_or_404(Material, pk=pk)
+    material = get_object_or_404(Material, pk=pk)
     if request.method == 'POST':
-        obj.delete()
+        material.delete()
         messages.success(request, 'Material eliminado.')
         return redirect('catalog:material_list')
-    return render(request, 'catalog/confirm_delete.html', {'object': obj, 'name': obj.name})
+    # Si llegara por GET, muestra confirmación simple
+    return render(request, 'catalog/confirm_delete.html', {'obj': material, 'type': 'material'})
