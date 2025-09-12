@@ -27,7 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('panel/', include('catalog.urls', namespace='catalog')),  #CRUD
     path('panel/', include('cms.urls', namespace='cms')),
-    path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+    
 ]
 
 if settings.DEBUG:
