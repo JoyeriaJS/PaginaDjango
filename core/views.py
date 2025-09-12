@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from decimal import Decimal, ROUND_HALF_UP
 
 def home(request):
     categories = Category.objects.annotate(n=Count('products')).order_by('-n','name')[:8]
@@ -181,15 +182,14 @@ def cart_detail(request):
     items, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
 
     discount_code = request.session.get("coupon")
-    discount_amount = 0
-    discount_obj = None
+    discount_amount = Decimal("0.00")
     if discount_code:
         d = _find_discount_by_code(discount_code)
         if d:
             discount_amount = _discount_amount_for_cart(d, items, subtotal)
-            discount_obj = d
 
-    grand_total = grand_total - discount_amount
+    # aplicar descuento al total
+    grand_total = max(Decimal("0.00"), grand_total - discount_amount)
 
     return render(request, "core/cart.html", {
         "items": items,
@@ -197,9 +197,10 @@ def cart_detail(request):
         "shipping": shipping,
         "tax": tax,
         "discount_amount": discount_amount,
-        "discount_code": discount_obj.code if discount_obj else None,
+        "discount_code": discount_code if discount_amount > 0 else None,
         "grand_total": grand_total,
     })
+    
 #DESCUENTOS
 def _find_discount_by_code(code):
     now = timezone.now()
@@ -212,24 +213,39 @@ def _find_discount_by_code(code):
     if d.usage_limit and d.times_used >= d.usage_limit: return None
     return d
 
+def _money(x):
+    return Decimal(x).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
 def _discount_amount_for_cart(d, items, subtotal):
-    """items = lista de dicts (id, qty, price, total, category) como en _cart_summary"""
-    if subtotal < d.min_subtotal:
-        return 0
-    base = subtotal
-    if d.scope == Discount.SCOPE_PRODUCT and d.product_id:
-        base = sum(it['total'] for it in items if it['id'] == d.product_id)
+    """
+    Calcula el monto de descuento aplicable.
+    - d: instancia de Discount
+    - items: lista de dicts del carrito (id, qty, price, total, category)
+    - subtotal: total bruto del carrito
+    """
+    # Validar mínimo de compra
+    if subtotal < (d.min_subtotal or Decimal("0")):
+        return Decimal("0.00")
+
+    base = Decimal("0.00")
+
+    if d.scope == Discount.SCOPE_ALL:
+        base = subtotal
+    elif d.scope == Discount.SCOPE_PRODUCT and d.product_id:
+        base = sum((it["total"] for it in items if it["id"] == d.product_id), Decimal("0.00"))
     elif d.scope == Discount.SCOPE_CATEGORY and d.category_id:
-        base = sum(it['total'] for it in items if it.get('category') == d.category.name if d.category else False)
+        # Aquí comparamos contra el nombre de la categoría del item
+        base = sum((it["total"] for it in items if it.get("category") == d.category.name), Decimal("0.00"))
 
     if base <= 0:
-        return 0
+        return Decimal("0.00")
 
     if d.dtype == Discount.PERCENT:
-        return (base * (d.value / 100)).quantize(subtotal.as_tuple()._exp) if hasattr(subtotal,'quantize') else base * (d.value/100)
-    else:
-        return min(base, d.value)
+        amt = (base * (Decimal(d.value) / Decimal("100")))
+    else:  # d.dtype == FIXED
+        amt = min(base, Decimal(d.value))
 
+    return _money(amt)
 @require_POST
 def apply_coupon(request):
     code = (request.POST.get('coupon') or '').strip()
