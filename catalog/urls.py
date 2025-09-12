@@ -20,4 +20,12 @@ urlpatterns = [
     path('materiales/crear/', views.material_create, name='material_create'),
     path('materiales/<int:pk>/editar/', views.material_edit, name='material_edit'),
     path('materiales/<int:pk>/eliminar/', views.material_delete, name='material_delete'),
+    path('menu/', views.menu_list, name='menu_list'),
+    path('menu/nuevo/', views.menu_create, name='menu_create'),
+    path('menu/<int:pk>/editar/', views.menu_edit, name='menu_edit'),
+    path('menu/<int:pk>/eliminar/', views.menu_delete, name='menu_delete'),
+    path('descuentos/', views.discount_list, name='discount_list'),
+    path('descuentos/nuevo/', views.discount_create, name='discount_create'),
+    path('descuentos/<int:pk>/editar/', views.discount_edit, name='discount_edit'),
+    path('descuentos/<int:pk>/eliminar/', views.discount_delete, name='discount_delete'),
 ]

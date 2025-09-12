@@ -71,3 +71,35 @@ class ProductImage(models.Model):
         super().save(*args, **kwargs)
         if self.is_primary:
             ProductImage.objects.filter(product=self.product).exclude(pk=self.pk).update(is_primary=False)
+
+
+class Discount(models.Model):
+    PERCENT = 'P'
+    FIXED = 'F'
+    TYPE_CHOICES = [(PERCENT,'Porcentaje'), (FIXED,'Monto fijo')]
+
+    SCOPE_ALL = 'ALL'
+    SCOPE_PRODUCT = 'PROD'
+    SCOPE_CATEGORY = 'CAT'
+    SCOPE_CHOICES = [(SCOPE_ALL,'Todos los productos'), (SCOPE_PRODUCT,'Un producto'), (SCOPE_CATEGORY,'Una categoría')]
+
+    name = models.CharField('Nombre interno', max_length=120)
+    code = models.CharField('Código (cupón)', max_length=40, unique=True, null=True, blank=True)
+    dtype = models.CharField('Tipo', max_length=1, choices=TYPE_CHOICES, default=PERCENT)
+    value = models.DecimalField('Valor', max_digits=12, decimal_places=2, help_text='Si %: 10 = 10%; si fijo: 5000 = $5.000')
+    scope = models.CharField('Ámbito', max_length=4, choices=SCOPE_CHOICES, default=SCOPE_ALL)
+    product = models.ForeignKey('catalog.Product', null=True, blank=True, on_delete=models.CASCADE)
+    category = models.ForeignKey('catalog.Category', null=True, blank=True, on_delete=models.CASCADE)
+    min_subtotal = models.DecimalField('Mínimo compra', max_digits=12, decimal_places=2, default=0)
+    start_at = models.DateTimeField('Desde', null=True, blank=True)
+    end_at = models.DateTimeField('Hasta', null=True, blank=True)
+    usage_limit = models.PositiveIntegerField('Límite de usos', null=True, blank=True)
+    times_used = models.PositiveIntegerField('Usos', default=0)
+    is_active = models.BooleanField('Activo', default=True)
+    stackable = models.BooleanField('Acumulable', default=False)
+
+    class Meta:
+        ordering = ['-id']
+
+    def __str__(self):
+        return self.name or (self.code or f"Descuento {self.id}")

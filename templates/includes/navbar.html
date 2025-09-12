@@ -6,11 +6,25 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarsDefault">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="#categorias">Categorías</a></li>
-        <li class="nav-item"><a class="nav-link" href="#nuevos">Novedades</a></li>
-        <li class="nav-item"><a class="nav-link" href="#nosotros">Nosotros</a></li>
-        <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
-      </ul>
+          {% for it in main_menu %}
+            {% if it.children %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="{{ it.url }}" data-bs-toggle="dropdown" {% if it.new %}target="_blank" rel="noopener"{% endif %}>{{ it.title }}</a>
+                <ul class="dropdown-menu">
+                  {% for ch in it.children %}
+                    <li>
+                      <a class="dropdown-item" href="{{ ch.url }}" {% if ch.open_in_new_tab %}target="_blank" rel="noopener"{% endif %}>{{ ch.title }}</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ it.url }}" {% if it.new %}target="_blank" rel="noopener"{% endif %}>{{ it.title }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
       <div class="d-flex">
         {% if request.user.is_authenticated %}
           {% if request.user.is_staff %}

@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.db.models import Count
-from catalog.models import Product, Category
+from catalog.models import Product, Category, Discount
 from cms.models import Banner
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from decimal import Decimal
 from django.core.paginator import Paginator
 from django.http import JsonResponse
+from django.utils import timezone
+from django.views.decorators.http import require_POST
 
 def home(request):
     categories = Category.objects.annotate(n=Count('products')).order_by('-n','name')[:8]
@@ -177,10 +179,73 @@ def clear_cart(request):
 def cart_detail(request):
     cart = _get_cart(request.session)
     items, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
+
+    discount_code = request.session.get("coupon")
+    discount_amount = 0
+    discount_obj = None
+    if discount_code:
+        d = _find_discount_by_code(discount_code)
+        if d:
+            discount_amount = _discount_amount_for_cart(d, items, subtotal)
+            discount_obj = d
+
+    grand_total = grand_total - discount_amount
+
     return render(request, "core/cart.html", {
         "items": items,
         "subtotal": subtotal,
         "shipping": shipping,
         "tax": tax,
+        "discount_amount": discount_amount,
+        "discount_code": discount_obj.code if discount_obj else None,
         "grand_total": grand_total,
     })
+#DESCUENTOS
+def _find_discount_by_code(code):
+    now = timezone.now()
+    try:
+        d = Discount.objects.get(code__iexact=code.strip(), is_active=True)
+    except Discount.DoesNotExist:
+        return None
+    if d.start_at and d.start_at > now: return None
+    if d.end_at and d.end_at < now: return None
+    if d.usage_limit and d.times_used >= d.usage_limit: return None
+    return d
+
+def _discount_amount_for_cart(d, items, subtotal):
+    """items = lista de dicts (id, qty, price, total, category) como en _cart_summary"""
+    if subtotal < d.min_subtotal:
+        return 0
+    base = subtotal
+    if d.scope == Discount.SCOPE_PRODUCT and d.product_id:
+        base = sum(it['total'] for it in items if it['id'] == d.product_id)
+    elif d.scope == Discount.SCOPE_CATEGORY and d.category_id:
+        base = sum(it['total'] for it in items if it.get('category') == d.category.name if d.category else False)
+
+    if base <= 0:
+        return 0
+
+    if d.dtype == Discount.PERCENT:
+        return (base * (d.value / 100)).quantize(subtotal.as_tuple()._exp) if hasattr(subtotal,'quantize') else base * (d.value/100)
+    else:
+        return min(base, d.value)
+
+@require_POST
+def apply_coupon(request):
+    code = (request.POST.get('coupon') or '').strip()
+    d = _find_discount_by_code(code)
+    if not d:
+        messages.error(request, "Código inválido o no vigente.")
+        return redirect('core:cart_detail')
+    request.session['coupon'] = d.code
+    request.session.modified = True
+    messages.success(request, f"Cupón “{d.code}” aplicado.")
+    return redirect('core:cart_detail')
+
+@require_POST
+def remove_coupon(request):
+    if request.session.get('coupon'):
+        del request.session['coupon']
+        request.session.modified = True
+        messages.success(request, "Cupón quitado.")
+    return redirect('core:cart_detail')
