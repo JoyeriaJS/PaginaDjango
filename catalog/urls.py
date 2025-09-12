@@ -4,6 +4,7 @@ from . import views
 app_name = 'catalog'
 
 urlpatterns = [
+    path('', views.panel_home, name='panel_home'),  # /panel/
     path('productos/', views.product_list, name='product_list'),
     path('productos/crear/', views.product_create, name='product_create'),
     path('productos/<int:pk>/editar/', views.product_edit, name='product_edit'),

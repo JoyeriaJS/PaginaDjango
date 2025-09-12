@@ -12,8 +12,14 @@
         <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
       </ul>
       <div class="d-flex">
-        <a class="btn btn-outline-primary me-2" href="/panel/productos/">Panel</a>
-        <a class="btn btn-primary" href="/admin/login/">Iniciar sesión</a>
+        {% if request.user.is_authenticated %}
+          {% if request.user.is_staff %}
+            <a class="btn btn-outline-primary me-2" href="/panel/">Panel</a>
+          {% endif %}
+          <a class="btn btn-primary" href="/admin/logout/">Cerrar sesión</a>
+        {% else %}
+          <a class="btn btn-primary" href="/admin/login/">Iniciar sesión</a>
+        {% endif %}
       </div>
     </div>
   </div>
