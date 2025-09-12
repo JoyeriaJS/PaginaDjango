@@ -253,18 +253,16 @@ def discount_delete(request, pk):
         return redirect('catalog:discount_list')
     return render(request, 'catalog/confirm_delete.html', {'obj': obj, 'type': 'descuento'})
 
-##MENU
-staff = [login_required, user_passes_test(lambda u: u.is_staff)]
-
-@user_passes_test(lambda u: u.is_staff)
+# --- MENU ---
 @login_required
+@user_passes_test(lambda u: u.is_staff)
 def menu_list(request):
     roots = MenuItem.objects.filter(parent__isnull=True).order_by('order','id')
-    children = MenuItem.objects.filter(parent__isnull=False).order_by('order','id')
-    return render(request, 'catalog/menu_list.html', {'roots': roots, 'children': children})
+    # si quieres mostrar también los hijos anidados en el template, ya están accesibles como m.children.all
+    return render(request, 'catalog/menu_list.html', {'roots': roots})
 
-@user_passes_test(lambda u: u.is_staff)
 @login_required
+@user_passes_test(lambda u: u.is_staff)
 def menu_create(request):
     if request.method == 'POST':
         form = MenuItemForm(request.POST)
@@ -274,10 +272,10 @@ def menu_create(request):
             return redirect('catalog:menu_list')
     else:
         form = MenuItemForm()
-    return render(request, 'catalog/menu_form.html', {'form': form, 'title':'Nuevo elemento'})
+    return render(request, 'catalog/menu_form.html', {'form': form, 'title': 'Nuevo elemento'})
 
-@user_passes_test(lambda u: u.is_staff)
 @login_required
+@user_passes_test(lambda u: u.is_staff)
 def menu_edit(request, pk):
     obj = get_object_or_404(MenuItem, pk=pk)
     if request.method == 'POST':
@@ -288,10 +286,10 @@ def menu_edit(request, pk):
             return redirect('catalog:menu_list')
     else:
         form = MenuItemForm(instance=obj)
-    return render(request, 'catalog/menu_form.html', {'form': form, 'title':'Editar elemento'})
+    return render(request, 'catalog/menu_form.html', {'form': form, 'title': 'Editar elemento'})
 
-@user_passes_test(lambda u: u.is_staff)
 @login_required
+@user_passes_test(lambda u: u.is_staff)
 def menu_delete(request, pk):
     obj = get_object_or_404(MenuItem, pk=pk)
     if request.method == 'POST':
