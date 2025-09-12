@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from cms.models import MenuItem
 
 def cart_badge(request):

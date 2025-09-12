@@ -13,53 +13,6 @@ from .models import Discount
 from .forms import ProductForm, ProductImageForm, CategoryForm, MaterialForm
 from .models import Product, Category, Material, ProductImage
 
-staff = [login_required, user_passes_test(lambda u: u.is_staff)]
-
-@user_passes_test(lambda u: u.is_staff)
-@login_required
-def menu_list(request):
-    roots = MenuItem.objects.filter(parent__isnull=True).order_by('order','id')
-    children = MenuItem.objects.filter(parent__isnull=False).order_by('order','id')
-    return render(request, 'catalog/menu_list.html', {'roots': roots, 'children': children})
-
-@user_passes_test(lambda u: u.is_staff)
-@login_required
-def menu_create(request):
-    if request.method == 'POST':
-        form = MenuItemForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Elemento creado.')
-            return redirect('catalog:menu_list')
-    else:
-        form = MenuItemForm()
-    return render(request, 'catalog/menu_form.html', {'form': form, 'title':'Nuevo elemento'})
-
-@user_passes_test(lambda u: u.is_staff)
-@login_required
-def menu_edit(request, pk):
-    obj = get_object_or_404(MenuItem, pk=pk)
-    if request.method == 'POST':
-        form = MenuItemForm(request.POST, instance=obj)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Elemento actualizado.')
-            return redirect('catalog:menu_list')
-    else:
-        form = MenuItemForm(instance=obj)
-    return render(request, 'catalog/menu_form.html', {'form': form, 'title':'Editar elemento'})
-
-@user_passes_test(lambda u: u.is_staff)
-@login_required
-def menu_delete(request, pk):
-    obj = get_object_or_404(MenuItem, pk=pk)
-    if request.method == 'POST':
-        obj.delete()
-        messages.success(request, 'Elemento eliminado.')
-        return redirect('catalog:menu_list')
-    return render(request, 'catalog/confirm_delete.html', {'obj': obj, 'type': 'elemento de menú'})
-
-
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 def panel_home(request):
@@ -299,3 +252,50 @@ def discount_delete(request, pk):
         messages.success(request, 'Descuento eliminado.')
         return redirect('catalog:discount_list')
     return render(request, 'catalog/confirm_delete.html', {'obj': obj, 'type': 'descuento'})
+
+##MENU
+staff = [login_required, user_passes_test(lambda u: u.is_staff)]
+
+@user_passes_test(lambda u: u.is_staff)
+@login_required
+def menu_list(request):
+    roots = MenuItem.objects.filter(parent__isnull=True).order_by('order','id')
+    children = MenuItem.objects.filter(parent__isnull=False).order_by('order','id')
+    return render(request, 'catalog/menu_list.html', {'roots': roots, 'children': children})
+
+@user_passes_test(lambda u: u.is_staff)
+@login_required
+def menu_create(request):
+    if request.method == 'POST':
+        form = MenuItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Elemento creado.')
+            return redirect('catalog:menu_list')
+    else:
+        form = MenuItemForm()
+    return render(request, 'catalog/menu_form.html', {'form': form, 'title':'Nuevo elemento'})
+
+@user_passes_test(lambda u: u.is_staff)
+@login_required
+def menu_edit(request, pk):
+    obj = get_object_or_404(MenuItem, pk=pk)
+    if request.method == 'POST':
+        form = MenuItemForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Elemento actualizado.')
+            return redirect('catalog:menu_list')
+    else:
+        form = MenuItemForm(instance=obj)
+    return render(request, 'catalog/menu_form.html', {'form': form, 'title':'Editar elemento'})
+
+@user_passes_test(lambda u: u.is_staff)
+@login_required
+def menu_delete(request, pk):
+    obj = get_object_or_404(MenuItem, pk=pk)
+    if request.method == 'POST':
+        obj.delete()
+        messages.success(request, 'Elemento eliminado.')
+        return redirect('catalog:menu_list')
+    return render(request, 'catalog/confirm_delete.html', {'obj': obj, 'type': 'elemento de menú'})
