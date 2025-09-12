@@ -7,24 +7,19 @@ def cart_badge(request):
     return {"cart_count": count}
 
 def main_menu(request):
-    qs = MenuItem.objects.filter(is_active=True, parent__isnull=True).order_by('order','id')
-    # Filtrado por staff
+    # Filtra raíz (sin padre) y solo activos
+    roots_qs = MenuItem.objects.filter(is_active=True, parent__isnull=True).order_by('order','id')
+
+    # Si no es staff, no mostrar items solo para staff
     if not request.user.is_staff:
-        qs = qs.filter(staff_only=False)
+        roots_qs = roots_qs.filter(staff_only=False)
 
-    # prefetch de hijos visibles
-    children = MenuItem.objects.filter(is_active=True, parent__in=qs).order_by('order','id')
+    # Prefetch de hijos también filtrados por activo y staff
+    children_qs = MenuItem.objects.filter(is_active=True).order_by('order','id')
     if not request.user.is_staff:
-        children = children.filter(staff_only=False)
+        children_qs = children_qs.filter(staff_only=False)
 
-    child_map = {}
-    for c in children:
-        child_map.setdefault(c.parent_id, []).append(c)
+    roots_qs = roots_qs.prefetch_related(Prefetch('children', queryset=children_qs))
 
-    items = []
-    for m in qs:
-        items.append({
-            "title": m.title, "url": m.url, "new": m.open_in_new_tab,
-            "children": child_map.get(m.id, [])
-        })
-    return {"main_menu": items}
+    # Retorna un queryset de MenuItem (objetos) con .children ya filtrados
+    return {"main_menu": roots_qs}

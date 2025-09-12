@@ -6,31 +6,34 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarsDefault">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          {% for it in main_menu %}
-            {% if it.children %}
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="{{ it.url }}" data-bs-toggle="dropdown" {% if it.new %}target="_blank" rel="noopener"{% endif %}>{{ it.title }}</a>
-                <ul class="dropdown-menu">
-                  {% for ch in it.children %}
-                    <li>
-                      <a class="dropdown-item" href="{{ ch.url }}" {% if ch.open_in_new_tab %}target="_blank" rel="noopener"{% endif %}>{{ ch.title }}</a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </li>
-            {% else %}
-              <li class="nav-item">
-                <a class="nav-link" href="{{ it.url }}" {% if it.new %}target="_blank" rel="noopener"{% endif %}>{{ it.title }}</a>
-              </li>
-            {% endif %}
-          {% endfor %}
-        </ul>
+        {% for it in main_menu %}
+          {% if it.children.all %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="{{ it.url }}" data-bs-toggle="dropdown" {% if it.open_in_new_tab %}target="_blank" rel="noopener"{% endif %}>{{ it.title }}</a>
+              <ul class="dropdown-menu">
+                {% for ch in it.children.all %}
+                  <li>
+                    <a class="dropdown-item" href="{{ ch.url }}" {% if ch.open_in_new_tab %}target="_blank" rel="noopener"{% endif %}>{{ ch.title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ it.url }}" {% if it.open_in_new_tab %}target="_blank" rel="noopener"{% endif %}>{{ it.title }}</a>
+            </li>
+          {% endif %}
+        {% empty %}
+          {# Opcional: muestra algo si no hay menú cargado #}
+        {% endfor %}
+      </ul>
+
       <div class="d-flex">
         {% if request.user.is_authenticated %}
           {% if request.user.is_staff %}
             <a class="btn btn-outline-primary me-2" href="/panel/">Panel</a>
           {% endif %}
-          <a class="btn btn-primary" href="/admin/logout/">Cerrar sesión</a>
+          <a class="btn btn-primary" href="{% url 'logout' %}">Cerrar sesión</a>
         {% else %}
           <a class="btn btn-primary" href="/admin/login/">Iniciar sesión</a>
         {% endif %}
