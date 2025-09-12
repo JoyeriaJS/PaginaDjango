@@ -23,25 +23,25 @@
           {% for it in items %}
           <tr>
             <td>
-              {% if it.image %}
-                <img src="{{ it.image.image.url }}" class="img-thumbnail" style="width:60px;height:60px;object-fit:cover;">
+              {% if it.image_url %}
+                <img src="{{ it.image_url }}" class="img-thumbnail" style="width:60px;height:60px;object-fit:cover;">
               {% else %}
                 <div class="bg-light text-muted d-flex align-items-center justify-content-center" style="width:60px;height:60px;border:1px solid #e5e5e5;border-radius:.25rem;">–</div>
               {% endif %}
             </td>
             <td>
-              <a href="{% url 'core:product_detail' it.product.pk %}" class="text-decoration-none">{{ it.product.name }}</a>
-              <div class="small text-muted">{{ it.product.category.name }}</div>
+              <a href="{% url 'core:product_detail' it.id %}" class="text-decoration-none">{{ it.name }}</a>
+              {% if it.category %}<div class="small text-muted">{{ it.category }}</div>{% endif %}
             </td>
             <td>
-              <input type="number" name="qty_{{ it.product.pk }}" value="{{ it.qty }}" min="1" class="form-control">
+              <input type="number" name="qty_{{ it.id }}" value="{{ it.qty }}" min="1" class="form-control">
             </td>
             <td>${{ it.price }}</td>
-            <td>${{ it.total }}</td>
+            <td><span data-line-total="{{ it.id }}">${{ it.total }}</span></td>
             <td class="text-end">
               <button class="btn btn-sm btn-outline-danger"
                       type="submit"
-                      formaction="{% url 'core:remove_from_cart' it.product.pk %}"
+                      formaction="{% url 'core:remove_from_cart' it.id %}"
                       formmethod="post">
                 Quitar
               </button>
@@ -63,15 +63,9 @@
 
     <div class="d-flex justify-content-end mt-3">
       <div class="card p-3" style="min-width:320px">
-        <div class="d-flex justify-content-between"><span>Subtotal</span><strong>${{ subtotal }}</strong></div>
-        {% if tax != 0 %}
-          <div class="d-flex justify-content-between"><span>Impuestos</span><strong>${{ tax }}</strong></div>
-        {% endif %}
-        {% if shipping != 0 %}
-          <div class="d-flex justify-content-between"><span>Envío</span><strong>${{ shipping }}</strong></div>
-        {% endif %}
+        <div class="d-flex justify-content-between"><span>Subtotal</span><strong id="cart-subtotal">${{ subtotal }}</strong></div>
         <hr class="my-2">
-        <div class="d-flex justify-content-between fs-5"><span>Total</span><strong>${{ grand_total }}</strong></div>
+        <div class="d-flex justify-content-between fs-5"><span>Total</span><strong id="cart-grandtotal">${{ grand_total }}</strong></div>
         <div class="mt-2">
           <a class="btn btn-success w-100 disabled" href="#">Pagar (próximamente)</a>
         </div>
