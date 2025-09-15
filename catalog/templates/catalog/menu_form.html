@@ -1,48 +1,21 @@
 {% extends "catalog/base_admin.html" %}
-{% block title %}Menú superior{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h1 class="h4 m-0">Menú superior</h1>
-  <a href="{% url 'catalog:menu_create' %}" class="btn btn-primary">Nuevo</a>
+  <h1 class="h4 m-0">{{ title }}</h1>
+  <a href="{% url 'catalog:menu_list' %}" class="btn btn-outline-secondary">Volver</a>
 </div>
-
-<div class="table-responsive">
-  <table class="table table-striped align-middle">
-    <thead><tr><th>Nombre</th><th>URL</th><th>Orden</th><th>Visible</th><th>Staff</th><th class="text-end">Acciones</th></tr></thead>
-    <tbody>
-      {% for m in roots %}
-      <tr class="table-secondary">
-        <td class="fw-semibold">{{ m.title }}</td>
-        <td>{{ m.url }}</td>
-        <td>{{ m.order }}</td>
-        <td>{{ m.is_active|yesno:"Sí,No" }}</td>
-        <td>{{ m.staff_only|yesno:"Sí,No" }}</td>
-        <td class="text-end">
-          <a class="btn btn-sm btn-outline-primary" href="{% url 'catalog:menu_edit' m.pk %}">Editar</a>
-          <form action="{% url 'catalog:menu_delete' m.pk %}" method="post" class="d-inline">
-            {% csrf_token %}<button class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar {{ m.title|escapejs }}?')">Eliminar</button>
-          </form>
-        </td>
-      </tr>
-      {% for c in m.children.all %}
-      <tr>
-        <td>— {{ c.title }}</td>
-        <td>{{ c.url }}</td>
-        <td>{{ c.order }}</td>
-        <td>{{ c.is_active|yesno:"Sí,No" }}</td>
-        <td>{{ c.staff_only|yesno:"Sí,No" }}</td>
-        <td class="text-end">
-          <a class="btn btn-sm btn-outline-primary" href="{% url 'catalog:menu_edit' c.pk %}">Editar</a>
-          <form action="{% url 'catalog:menu_delete' c.pk %}" method="post" class="d-inline">
-            {% csrf_token %}<button class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar {{ c.title|escapejs }}?')">Eliminar</button>
-          </form>
-        </td>
-      </tr>
-      {% endfor %}
-      {% empty %}
-      <tr><td colspan="6" class="text-center text-muted py-4">Sin elementos</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
+<form method="post" class="card p-3">
+  {% csrf_token %}
+  <div class="row g-3">
+    <div class="col-md-6">{{ form.title.label_tag }} {{ form.title }}</div>
+    <div class="col-md-6">{{ form.url.label_tag }} {{ form.url }}</div>
+    <div class="col-md-3">{{ form.order.label_tag }} {{ form.order }}</div>
+    <div class="col-md-3">{{ form.parent.label_tag }} {{ form.parent }}</div>
+    <div class="col-md-2 form-check">{{ form.is_active }} {{ form.is_active.label_tag }}</div>
+    <div class="col-md-2 form-check">{{ form.open_in_new_tab }} {{ form.open_in_new_tab.label_tag }}</div>
+    <div class="col-md-2 form-check">{{ form.staff_only }} {{ form.staff_only.label_tag }}</div>
+  </div>
+  <div class="mt-3"><button class="btn btn-primary">Guardar</button></div>
+</form>
 {% endblock %}

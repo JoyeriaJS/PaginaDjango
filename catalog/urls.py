@@ -24,6 +24,7 @@ urlpatterns = [
     path('menu/nuevo/', views.menu_create, name='menu_create'),
     path('menu/<int:pk>/editar/', views.menu_edit, name='menu_edit'),
     path('menu/<int:pk>/eliminar/', views.menu_delete, name='menu_delete'),
+    path('menu/ping/', views.menu_ping, name='menu_ping'),
     path('descuentos/', views.discount_list, name='discount_list'),
     path('descuentos/nuevo/', views.discount_create, name='discount_create'),
     path('descuentos/<int:pk>/editar/', views.discount_edit, name='discount_edit'),

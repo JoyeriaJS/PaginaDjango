@@ -8,6 +8,8 @@ from .forms import MenuItemForm
 from cms.models import MenuItem
 from .forms import DiscountForm
 from .models import Discount
+from django.http import HttpResponse
+from django.db.models import Prefetch
 
 
 from .forms import ProductForm, ProductImageForm, CategoryForm, MaterialForm
@@ -253,6 +255,7 @@ def discount_delete(request, pk):
         return redirect('catalog:discount_list')
     return render(request, 'catalog/confirm_delete.html', {'obj': obj, 'type': 'descuento'})
 
+def _is_staff(u): return u.is_staff
 # --- MENU ---
 @login_required
 @user_passes_test(lambda u: u.is_staff)
@@ -262,7 +265,17 @@ def menu_list(request):
     return render(request, 'catalog/menu_list.html', {'roots': roots})
 
 @login_required
-@user_passes_test(lambda u: u.is_staff)
+@user_passes_test(_is_staff)
+def menu_list(request):
+    roots = (MenuItem.objects
+             .filter(parent__isnull=True)
+             .order_by('order', 'id')
+             .prefetch_related(Prefetch('children',
+                                        queryset=MenuItem.objects.order_by('order','id'))))
+    return render(request, 'catalog/menu_list.html', {'roots': roots})
+
+@login_required
+@user_passes_test(_is_staff)
 def menu_create(request):
     if request.method == 'POST':
         form = MenuItemForm(request.POST)
@@ -275,7 +288,7 @@ def menu_create(request):
     return render(request, 'catalog/menu_form.html', {'form': form, 'title': 'Nuevo elemento'})
 
 @login_required
-@user_passes_test(lambda u: u.is_staff)
+@user_passes_test(_is_staff)
 def menu_edit(request, pk):
     obj = get_object_or_404(MenuItem, pk=pk)
     if request.method == 'POST':
@@ -289,7 +302,7 @@ def menu_edit(request, pk):
     return render(request, 'catalog/menu_form.html', {'form': form, 'title': 'Editar elemento'})
 
 @login_required
-@user_passes_test(lambda u: u.is_staff)
+@user_passes_test(_is_staff)
 def menu_delete(request, pk):
     obj = get_object_or_404(MenuItem, pk=pk)
     if request.method == 'POST':
@@ -297,3 +310,11 @@ def menu_delete(request, pk):
         messages.success(request, 'Elemento eliminado.')
         return redirect('catalog:menu_list')
     return render(request, 'catalog/confirm_delete.html', {'obj': obj, 'type': 'elemento de menú'})
+
+
+def _is_staff(u): return u.is_staff
+
+@login_required
+@user_passes_test(_is_staff)
+def menu_ping(request):
+    return HttpResponse("OK /panel/menu/ping/ (llegamos a las URLs y permisos)")
