@@ -185,20 +185,6 @@
     </div>
   </div>
 </section>
-<section class="py-4 bg-light">
-  <div class="container">
-    <div class="swiper brands-swiper">
-      <div class="swiper-wrapper align-items-center">
-        {% comment %} Reemplaza por logos propios (PNG/SVG) en /static/img/brands/ {% endcomment %}
-        {% for i in "123456"|make_list %}
-        <div class="swiper-slide">
-          <img src="{% static 'img/brands/brand' %}{{ forloop.counter }}.png" alt="Marca {{ forloop.counter }}" loading="lazy" style="height:40px; width:auto;">
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-</section>
 
 
 <section id="contacto" class="py-5">
