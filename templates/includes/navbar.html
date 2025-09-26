@@ -5,6 +5,10 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarsDefault">
+      <form class="d-flex me-auto ms-lg-3 my-2 my-lg-0" role="search" method="get" action="{% url 'core:search' %}">
+    <input class="form-control" type="search" placeholder="Buscar productos…" aria-label="Buscar" name="q" value="{{ request.GET.q }}">
+  </form>
+
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           {% for it in main_menu %}
             {% if it.children %}

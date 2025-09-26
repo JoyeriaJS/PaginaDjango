@@ -1,71 +1,105 @@
 {% extends "base_site.html" %}
 {% block title %}{{ product.name }} — Artesanías Pachy{% endblock %}
-
 {% block content %}
 <div class="container py-4">
+  <!-- migas -->
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'core:category_list' product.category_id %}">{{ product.category.name }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+    </ol>
+  </nav>
+
   <div class="row g-4">
     <div class="col-lg-6">
-      {% with main=images.first %}
-        {% if main %}
-          <div class="ratio ratio-1x1 rounded-4 overflow-hidden shadow-sm mb-3">
-            <img src="{{ main.image.url }}" alt="{{ main.alt|default:product.name }}" class="w-100 h-100" style="object-fit:cover;">
+      <!-- Galería simple -->
+      <div class="thumb-1x1 mb-3">
+        {% with img=product.images.first %}
+          {% if img %}<img src="{{ img.image.url }}" alt="{{ product.name }}" loading="lazy">{% endif %}
+        {% endwith %}
+      </div>
+      <div class="d-flex gap-2">
+        {% for im in product.images.all|slice:":5" %}
+          <div class="thumb-1x1" style="width:88px;">
+            <img src="{{ im.image.url }}" alt="{{ product.name }} {{ forloop.counter }}" loading="lazy">
           </div>
-        {% else %}
-          <div class="ratio ratio-1x1 bg-light rounded-4 d-flex align-items-center justify-content-center text-muted mb-3">Sin imagen</div>
-        {% endif %}
-      {% endwith %}
-
-      {% if images|length > 1 %}
-      <div class="d-flex gap-2 flex-wrap">
-        {% for img in images %}
-          <a href="{{ img.image.url }}" target="_blank" class="d-block">
-            <img src="{{ img.image.url }}" class="rounded" style="width:80px;height:80px;object-fit:cover;" alt="{{ img.alt|default:product.name }}">
-          </a>
         {% endfor %}
       </div>
-      {% endif %}
     </div>
 
     <div class="col-lg-6">
-      <h1 class="h3 mb-1">{{ product.name }}</h1>
-      <div class="text-muted mb-2">{{ product.category.name }}</div>
-      <div class="h4 mb-3">${{ product.price }}</div>
+      <h1 class="h3 mb-2">{{ product.name }}</h1>
+      <div class="small text-muted mb-2">{{ product.category.name }}</div>
+      <div class="display-6 fw-bold mb-3">${{ product.price }}</div>
 
-      {% if product.description %}
-        <p class="text-muted">{{ product.description }}</p>
-      {% endif %}
-
-      <form method="post" action="{% url 'core:add_to_cart' product.pk %}" class="d-flex gap-2 align-items-center">
+      <form method="post" action="{% url 'core:add_to_cart' product.id %}" class="d-flex gap-2 mb-3">
         {% csrf_token %}
-        <label class="small text-muted mb-0" for="qty">Cantidad</label>
-        <input type="number" id="qty" name="qty" value="1" min="1" class="form-control" style="max-width:100px;">
-        <button class="btn btn-primary">Agregar al carrito</button>
+        <input type="number" name="qty" value="1" min="1" class="form-control" style="max-width:120px">
+        <button class="btn btn-primary btn-lg">Agregar al carrito</button>
       </form>
+
+      <!-- Acordeón -->
+      <div class="accordion" id="accDetails">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="h1">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#c1">Descripción</button>
+          </h2>
+          <div id="c1" class="accordion-collapse collapse show" data-bs-parent="#accDetails">
+            <div class="accordion-body">
+              {{ product.description|linebreaks }}
+            </div>
+          </div>
+        </div>
+        {% if product.materials.exists %}
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="h2">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2">Materiales</button>
+          </h2>
+          <div id="c2" class="accordion-collapse collapse" data-bs-parent="#accDetails">
+            <div class="accordion-body">
+              <ul class="mb-0">
+                {% for m in product.materials.all %}
+                  <li>{{ m.name }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
     </div>
   </div>
 
+  <!-- Relacionados -->
   {% if related %}
-  <hr class="my-5">
+  <hr class="my-4">
   <h2 class="h5 mb-3">También te puede interesar</h2>
   <div class="row g-3">
     {% for p in related %}
     <div class="col-6 col-md-3">
-      <a class="card h-100 text-decoration-none" href="{% url 'core:product_detail' p.pk %}">
-        {% with img=p.images.first %}
-          {% if img %}
-            <img src="{{ img.image.url }}" class="card-img-top" alt="{{ img.alt|default:p.name }}">
-          {% else %}
-            <div class="ratio ratio-1x1 bg-light d-flex align-items-center justify-content-center text-muted">Sin imagen</div>
-          {% endif %}
-        {% endwith %}
+      <a class="card text-decoration-none card-elev h-100" href="{% url 'core:product_detail' p.pk %}">
+        <div class="thumb-1x1">
+          {% with im=p.images.first %}{% if im %}<img src="{{ im.image.url }}" alt="{{ p.name }}" loading="lazy">{% endif %}{% endwith %}
+        </div>
         <div class="card-body">
-          <div class="h6 mb-1 text-dark">{{ p.name }}</div>
-          <div class="fw-semibold">${{ p.price }}</div>
+          <div class="small text-muted">{{ p.category.name }}</div>
+          <div class="fw-semibold text-dark">{{ p.name }}</div>
+          <div class="fw-bold mt-1">${{ p.price }}</div>
         </div>
       </a>
     </div>
     {% endfor %}
   </div>
   {% endif %}
+</div>
+
+<!-- CTA pegajoso (mobile) -->
+<div class="d-lg-none position-fixed bottom-0 start-0 end-0 bg-white border-top p-2">
+  <form method="post" action="{% url 'core:add_to_cart' product.id %}" class="d-flex gap-2">
+    {% csrf_token %}
+    <input type="number" name="qty" value="1" min="1" class="form-control" style="max-width:120px">
+    <button class="btn btn-primary flex-fill">Agregar — ${{ product.price }}</button>
+  </form>
 </div>
 {% endblock %}

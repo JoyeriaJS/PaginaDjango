@@ -41,10 +41,35 @@ def category_products(request, pk):
         "products": products,
     })
 
+# -------------Search -------------------
+def search(request):
+    q = request.GET.get("q", "").strip()
+    results = Product.objects.filter(is_active=True)
+    if q:
+        results = results.filter(name__icontains=q)
+    results = results.order_by("-created_at")[:48]
+    return render(request, "core/search.html", {"q": q, "results": results})
+
 def category_list(request, category_id):
     cat = get_object_or_404(Category, pk=category_id)
-    qs = Product.objects.filter(is_active=True, category=cat).order_by('-created_at')
+    qs = Product.objects.filter(is_active=True, category=cat)
+
+    q = request.GET.get("q")
+    if q:
+        qs = qs.filter(name__icontains=q)
+
+    sort = request.GET.get("sort")
+    if sort == "price_asc":
+        qs = qs.order_by("price")
+    elif sort == "price_desc":
+        qs = qs.order_by("-price")
+    elif sort == "new":
+        qs = qs.order_by("-created_at")
+    else:
+        qs = qs.order_by("-created_at")
+
     return render(request, "core/category_list.html", {"category": cat, "products": qs})
+
 
 # ---------- CARRITO (basado en sesión) ----------
 CART_SESSION_KEY = "cart"
