@@ -68,7 +68,16 @@ def category_list(request, category_id):
     else:
         qs = qs.order_by("-created_at")
 
-    return render(request, "core/category_list.html", {"category": cat, "products": qs})
+    paginator = Paginator(qs, 12)  # 12 por página
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "core/category_list.html", {
+        "category": cat,
+        "products": page_obj,
+        "page_obj": page_obj,
+        "paginator": paginator,
+    })
 
 
 # ---------- CARRITO (basado en sesión) ----------

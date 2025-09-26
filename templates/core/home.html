@@ -153,6 +153,53 @@
     </div>
   </div>
 </section>
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-3">
+      <h2 class="h4 m-0">Lo que dicen nuestros clientes</h2>
+    </div>
+
+    <div class="swiper testimonials-swiper">
+      <div class="swiper-wrapper">
+        {% comment %} Sustituye por datos reales cuando quieras {% endcomment %}
+        <div class="swiper-slide">
+          <div class="card shadow-sm p-4 h-100">
+            <p class="mb-3">“Compré un set de aros y colgante: la calidad del lapislázuli es excelente y el acabado muy fino.”</p>
+            <div class="small text-muted">— Camila A.</div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="card shadow-sm p-4 h-100">
+            <p class="mb-3">“Atención rápida y muy cercana. ¡La pieza llegó preciosa!”</p>
+            <div class="small text-muted">— Jorge M.</div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="card shadow-sm p-4 h-100">
+            <p class="mb-3">“Me encantó poder personalizar. Se nota el trabajo artesanal.”</p>
+            <div class="small text-muted">— Daniela R.</div>
+          </div>
+        </div>
+      </div>
+      <div class="swiper-pagination mt-3"></div>
+    </div>
+  </div>
+</section>
+<section class="py-4 bg-light">
+  <div class="container">
+    <div class="swiper brands-swiper">
+      <div class="swiper-wrapper align-items-center">
+        {% comment %} Reemplaza por logos propios (PNG/SVG) en /static/img/brands/ {% endcomment %}
+        {% for i in "123456"|make_list %}
+        <div class="swiper-slide">
+          <img src="{% static 'img/brands/brand' %}{{ forloop.counter }}.png" alt="Marca {{ forloop.counter }}" loading="lazy" style="height:40px; width:auto;">
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <section id="contacto" class="py-5">
   <div class="container">

@@ -1,28 +1,42 @@
-<footer class="bg-dark text-light mt-5">
+<footer class="mt-5 border-top bg-light">
   <div class="container py-5">
     <div class="row g-4">
-      <div class="col-md-6">
+      <div class="col-12 col-md-4">
         <h5 class="mb-3">Artesanías Pachy</h5>
-        <p class="text-white-50">Piezas únicas en lapislázuli, hechas a mano en Chile.</p>
+        <p class="text-muted mb-2">Joyería en lapislázuli hecha a mano en Chile. Piezas únicas con historia y materiales nobles.</p>
+        <div class="d-flex gap-3 mt-3">
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener" class="link-secondary">Instagram</a>
+          <a href="https://www.facebook.com/" target="_blank" rel="noopener" class="link-secondary">Facebook</a>
+          <a href="mailto:contacto@artesaniaspachy.cl" class="link-secondary">Email</a>
+        </div>
       </div>
-      <div class="col-md-3">
-        <h6 class="mb-3">Secciones</h6>
-        <ul class="list-unstyled text-white-50">
-          <li><a class="link-light link-opacity-75" href="#categorias">Categorías</a></li>
-          <li><a class="link-light link-opacity-75" href="#nuevos">Novedades</a></li>
-          <li><a class="link-light link-opacity-75" href="#nosotros">Nosotros</a></li>
+
+      <div class="col-12 col-md-4">
+        <h6 class="mb-2">Contacto</h6>
+        <ul class="list-unstyled text-muted mb-3">
+          <li>📍 Santiago, Chile</li>
+          <li>✉️ contacto@artesaniaspachy.cl</li>
+          <li>📞 +56 9 1234 5678</li>
         </ul>
+        <a href="mailto:contacto@artesaniaspachy.cl" class="btn btn-outline-primary btn-sm">Escríbenos</a>
       </div>
-      <div class="col-md-3">
-        <h6 class="mb-3">Contacto</h6>
-        <ul class="list-unstyled text-white-50">
-          <li>Email: contacto@artesaniaspachy.cl</li>
-          <li>Instagram: @artesaniaspachy</li>
-        </ul>
+
+      <div class="col-12 col-md-4">
+        <h6 class="mb-2">Dónde estamos</h6>
+        <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow-sm">
+          <!-- Reemplaza el src por tu dirección exacta (Google Maps Embed) -->
+          <iframe
+            src="https://www.google.com/maps?q=Santiago,+Chile&output=embed"
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
-    <div class="border-top border-secondary mt-4 pt-3 small text-white-50">
-      © {{ now|default:"" }} Artesanías Pachy. Todos los derechos reservados.
+
+    <div class="d-flex justify-content-between align-items-center pt-4 mt-4 border-top">
+      <div class="small text-muted">© {{ now|date:"Y" }} Artesanías Pachy. Todos los derechos reservados.</div>
+      <div class="small">
+        <a href="/politica-privacidad" class="text-muted text-decoration-none">Política de privacidad</a>
+      </div>
     </div>
   </div>
 </footer>
