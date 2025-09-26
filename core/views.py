@@ -41,6 +41,10 @@ def category_products(request, pk):
         "products": products,
     })
 
+def category_list(request, category_id):
+    cat = get_object_or_404(Category, pk=category_id)
+    qs = Product.objects.filter(is_active=True, category=cat).order_by('-created_at')
+    return render(request, "core/category_list.html", {"category": cat, "products": qs})
 
 # ---------- CARRITO (basado en sesión) ----------
 CART_SESSION_KEY = "cart"

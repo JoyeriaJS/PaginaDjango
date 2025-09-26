@@ -13,7 +13,12 @@
     <link rel="icon" href="{% static 'img/favicon.ico' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'css/site.css' %}" rel="stylesheet">
-    {% block extra_head %}{% endblock %}
+    {% block extra_head %}
+  <!-- AOS (scroll animations) -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <!-- Swiper (hero / logos / testimonios) -->
+  <link href="https://unpkg.com/swiper@9/swiper-bundle.min.css" rel="stylesheet">
+    {% endblock %}
   </head>
   <body>
     {% include "includes/navbar.html" %}
@@ -31,7 +36,23 @@
 
     {% include "includes/footer.html" %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    {% block extra_js %}{% endblock %}
+    {% block extra_js %}
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://unpkg.com/swiper@9/swiper-bundle.min.js"></script>
+  <script>
+    AOS.init({ once: true, duration: 700, offset: 80 });
+
+    // Carrusel (hero o logos)
+    window.addEventListener('load', () => {
+      const heroSwiper = new Swiper('.hero-swiper', {
+        loop: true,
+        autoplay: { delay: 4000 },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        effect: 'fade',
+      });
+    });
+  </script>
+    {% endblock %}
 
     {# --- BOTÓN FLOTANTE DE CARRITO (usa cart_count del context processor) --- #}
     <a href="{% url 'core:cart_detail' %}"
