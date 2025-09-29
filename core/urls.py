@@ -19,4 +19,5 @@ urlpatterns = [
     path('categoria/<int:pk>/', views.category_products, name='category_products'),
     path('carrito/cupon/aplicar/', views.apply_coupon, name='apply_coupon'),
     path('carrito/cupon/quitar/', views.remove_coupon, name='remove_coupon'),
+    path("checkout/mercadopago/", views.mp_checkout, name="mp_checkout"),
 ]

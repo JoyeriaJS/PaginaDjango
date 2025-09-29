@@ -92,8 +92,12 @@
           <span>Total</span>
           <strong id="cart-grandtotal">${{ grand_total }}</strong>
         </div>
+
+        {# --- BOTÓN MERCADO PAGO (usa este misma <form> con csrf y cantidades) --- #}
         <div class="mt-2">
-          <a class="btn btn-success w-100" href="{% url 'core:mp_create_preference' %}">Pagar con Mercado Pago</a>
+          <button class="btn btn-success w-100" type="submit" formaction="{% url 'core:mp_checkout' %}">
+            Pagar con Mercado Pago
+          </button>
         </div>
       </div>
     </div>
