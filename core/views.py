@@ -10,7 +10,14 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from decimal import Decimal, ROUND_HALF_UP
-
+import mercadopago
+from django.shortcuts import redirect
+from django.conf import settings
+from django.urls import reverse
+from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, HttpResponseBadRequest
+from catalog.models import Product
 
 
 def home(request):
@@ -321,3 +328,137 @@ def remove_coupon(request):
         request.session.modified = True
         messages.success(request, "Cupón quitado.")
     return redirect('core:cart_detail')
+
+
+#Mercado Pago views
+def _cart_lines_from_session(request):
+    """
+    Convierte el carrito de sesión en items MP.
+    Asume request.session['cart'] = { "product_id": qty, ... }
+    """
+    cart = request.session.get("cart", {}) or {}
+    if not isinstance(cart, dict) or not cart:
+        return []
+
+    # obtengo productos existentes
+    product_ids = [int(pid) for pid in cart.keys() if str(pid).isdigit()]
+    products = Product.objects.filter(id__in=product_ids, is_active=True)
+
+    items = []
+    for p in products:
+        qty = int(cart.get(str(p.id)) or cart.get(p.id) or 0)
+        if qty < 1:
+            continue
+        # tomo primera imagen si hay
+        img = None
+        try:
+            first_img = p.images.first()
+            if first_img:
+                img = first_img.image.url
+        except Exception:
+            img = None
+
+        items.append({
+            "id": str(p.id),
+            "title": p.name,
+            "quantity": qty,
+            "currency_id": "CLP",
+            "unit_price": float(p.price),
+            "picture_url": img,
+        })
+    return items
+
+def mp_checkout(request):
+    """
+    Crea la preferencia y redirige a Mercado Pago.
+    Se usa desde el botón 'Pagar con Mercado Pago' en el carrito.
+    """
+    if request.method != "POST":
+        return redirect("core:cart_detail")
+
+    if not settings.MP_ACCESS_TOKEN:
+        messages.error(request, "Falta configurar MP_ACCESS_TOKEN en el servidor.")
+        return redirect("core:cart_detail")
+
+    items = _cart_lines_from_session(request)
+    if not items:
+        messages.error(request, "Tu carrito está vacío.")
+        return redirect("core:cart_detail")
+
+    sdk = mercadopago.SDK(settings.MP_ACCESS_TOKEN)
+
+    success_url  = request.build_absolute_uri(reverse("core:mp_success"))
+    failure_url  = request.build_absolute_uri(reverse("core:mp_failure"))
+    pending_url  = request.build_absolute_uri(reverse("core:mp_pending"))
+    notif_url    = request.build_absolute_uri(reverse("core:mp_webhook"))  # opcional
+
+    preference = {
+        "items": items,
+        "back_urls": {
+            "success": success_url,
+            "failure": failure_url,
+            "pending": pending_url,
+        },
+        "auto_return": "approved",
+        # puedes comentar notification_url hasta que montemos webhook
+        "notification_url": notif_url,
+        # datos del comprador si está logueado
+        "payer": {
+            "name": request.user.get_full_name() if request.user.is_authenticated else "",
+            "email": request.user.email if request.user.is_authenticated else "",
+        },
+    }
+
+    try:
+        pref_res = sdk.preference().create(preference)
+        data = pref_res.get("response", {})
+        init_point = data.get("init_point")  # producción
+        sandbox_point = data.get("sandbox_init_point")  # sandbox
+        url = init_point or sandbox_point
+        if not url:
+            messages.error(request, "No se pudo crear la preferencia de pago.")
+            return redirect("core:cart_detail")
+        return redirect(url)
+    except Exception as e:
+        messages.error(request, f"Error iniciando pago: {e}")
+        return redirect("core:cart_detail")
+
+
+def _clear_cart(request):
+    if "cart" in request.session:
+        del request.session["cart"]
+        request.session.modified = True
+
+def mp_success(request):
+    """
+    Vuelta de éxito. Aún sin guardar en BD.
+    Limpia carrito y muestra mensaje.
+    """
+    _clear_cart(request)
+    messages.success(request, "¡Pago aprobado! Gracias por tu compra.")
+    return redirect("/")
+
+def mp_failure(request):
+    messages.error(request, "El pago fue rechazado o cancelado. Puedes intentar nuevamente.")
+    return redirect("core:cart_detail")
+
+def mp_pending(request):
+    messages.info(request, "Tu pago quedó en estado pendiente. Te avisaremos al confirmarse.")
+    return redirect("/")
+
+
+# --- Webhook (opcional por ahora) --------------------------------------------
+@csrf_exempt
+def mp_webhook(request):
+    """
+    Punto de entrada para notificaciones de MP.
+    Hoy solo responde 200 OK.
+    Cuando quieras persistir la orden, validamos y guardamos aquí.
+    """
+    if request.method != "POST":
+        return HttpResponseBadRequest("Invalid method")
+    # Si definiste un secreto, puedes validarlo con un header propio (ej: X-Webhook-Token)
+    # token = request.headers.get("X-Webhook-Token")
+    # if settings.MP_WEBHOOK_SECRET and token != settings.MP_WEBHOOK_SECRET:
+    #     return HttpResponse(status=401)
+    return HttpResponse(status=200)

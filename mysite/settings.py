@@ -110,6 +110,11 @@ if not DATABASE_URL:
 
 DATABASES = {"default": dj_database_url.config(default=DATABASE_URL, conn_max_age=600)}
 
+# --- Mercado Pago (env) ------------------------------------------------------
+MP_ACCESS_TOKEN = os.getenv("MP_ACCESS_TOKEN", "")
+MP_PUBLIC_KEY   = os.getenv("MP_PUBLIC_KEY", "")
+MP_WEBHOOK_SECRET = os.getenv("MP_WEBHOOK_SECRET", "")  # opcional, para webhook
+
 # --- Password validators -----------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},

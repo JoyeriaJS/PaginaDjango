@@ -19,5 +19,13 @@ urlpatterns = [
     path('categoria/<int:pk>/', views.category_products, name='category_products'),
     path('carrito/cupon/aplicar/', views.apply_coupon, name='apply_coupon'),
     path('carrito/cupon/quitar/', views.remove_coupon, name='remove_coupon'),
+
+    #Mercado Pago
+    path("checkout/mercadopago/", views.mp_checkout, name="mp_checkout"),
+    path("pago/exito/", views.mp_success, name="mp_success"),
+    path("pago/fallo/", views.mp_failure, name="mp_failure"),
+    path("pago/pendiente/", views.mp_pending, name="mp_pending"),
+    # opcional webhook (lo podemos activar después):
+    path("mp/webhook/", views.mp_webhook, name="mp_webhook"),
     
 ]
