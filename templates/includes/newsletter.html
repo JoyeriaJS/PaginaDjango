@@ -1,0 +1,19 @@
+<section class="py-5 section-muted">
+  <div class="container">
+    <div class="card p-4 p-md-5 card-elev">
+      <div class="row g-3 align-items-center">
+        <div class="col-md-6">
+          <h3 class="h5 mb-1">¿Te contamos nuestras novedades?</h3>
+          <p class="text-muted mb-0">Lanza­mientos, ofertas y piezas únicas, directo a tu correo.</p>
+        </div>
+        <div class="col-md-6">
+          <form method="post" action="/suscripcion/" class="d-flex gap-2">
+            {% csrf_token %}
+            <input class="form-control" type="email" name="email" placeholder="Tu email" required>
+            <button class="btn btn-primary">Suscribirme</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

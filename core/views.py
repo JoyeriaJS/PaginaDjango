@@ -23,12 +23,11 @@ def home(request):
 
 # ---------- PRODUCTO (página pública de detalle) ----------
 def product_detail(request, pk):
-    product = get_object_or_404(Product.objects.select_related('category'), pk=pk, is_active=True)
-    images = product.images.all()  # la primera es principal por el ordering
-    related = Product.objects.filter(is_active=True, category=product.category).exclude(pk=product.pk).order_by('-created_at')[:8]
+    product = get_object_or_404(Product.objects.select_related('category').prefetch_related('images'), pk=pk, is_active=True)
+    related = (Product.objects.filter(is_active=True, category=product.category)
+               .exclude(pk=product.pk).prefetch_related('images')[:8])
     return render(request, "core/product_detail.html", {
         "product": product,
-        "images": images,
         "related": related,
     })
 

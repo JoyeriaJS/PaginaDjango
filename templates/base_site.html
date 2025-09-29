@@ -233,5 +233,33 @@
        style="right:16px; bottom:16px; width:56px; height:56px; display:grid; place-items:center; z-index:1050;">
       <span style="font-size:22px; line-height:1;">💬</span>
     </a>
+
+    <script>
+  // Mini gallery: click en thumbnails cambia la principal
+  document.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button.thumb-64[data-src]');
+    if (!btn) return;
+    const targetSel = btn.getAttribute('data-target');
+    const src = btn.getAttribute('data-src');
+    const cont = document.querySelector(targetSel);
+    if (!cont) return;
+    const img = cont.querySelector('img');
+    if (img) img.src = src;
+    cont.setAttribute('data-zoom', src);
+  });
+
+  // Zoom modal
+  document.addEventListener('click', (e)=>{
+    const box = e.target.closest('#pd-main');
+    if (!box) return;
+    const src = box.getAttribute('data-zoom');
+    const modalImg = document.getElementById('imgZoomTarget');
+    if (!src || !modalImg) return;
+    modalImg.src = src;
+    const modal = new bootstrap.Modal(document.getElementById('imgZoomModal'));
+    modal.show();
+  });
+</script>
+
   </body>
 </html>
