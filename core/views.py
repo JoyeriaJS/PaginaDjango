@@ -49,31 +49,32 @@ def search(request):
     results = results.order_by("-created_at")[:48]
     return render(request, "core/search.html", {"q": q, "results": results})
 
-def category_list(request, category_id):
-    cat = get_object_or_404(Category, pk=category_id)
-    qs = Product.objects.filter(is_active=True, category=cat)
+def category_list(request, pk):
+    category = get_object_or_404(Category, pk=pk)
 
-    q = request.GET.get("q")
+    qs = Product.objects.filter(is_active=True, category=category).select_related('category').prefetch_related('images')
+
+    q = request.GET.get('q')
     if q:
         qs = qs.filter(name__icontains=q)
 
-    sort = request.GET.get("sort")
-    if sort == "price_asc":
-        qs = qs.order_by("price")
-    elif sort == "price_desc":
-        qs = qs.order_by("-price")
-    elif sort == "new":
-        qs = qs.order_by("-created_at")
+    sort = request.GET.get('sort')
+    if sort == 'price_asc':
+        qs = qs.order_by('price', '-created_at')
+    elif sort == 'price_desc':
+        qs = qs.order_by('-price', '-created_at')
+    elif sort == 'new':
+        qs = qs.order_by('-created_at')
     else:
-        qs = qs.order_by("-created_at")
+        qs = qs.order_by('-created_at')
 
-    paginator = Paginator(qs, 12)  # 12 por página
-    page_number = request.GET.get("page")
+    paginator = Paginator(qs, 12)
+    page_number = request.GET.get('page') or 1
     page_obj = paginator.get_page(page_number)
 
     return render(request, "core/category_list.html", {
-        "category": cat,
-        "products": page_obj,
+        "category": category,
+        "products": page_obj.object_list,
         "page_obj": page_obj,
         "paginator": paginator,
     })
