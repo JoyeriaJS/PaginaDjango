@@ -50,31 +50,44 @@ def search(request):
     return render(request, "core/search.html", {"q": q, "results": results})
 
 def category_list(request, pk):
-    category = get_object_or_404(Category, pk=pk)
+    category = Category.objects.get(pk=pk)
 
-    qs = (Product.objects
-          .filter(is_active=True, category=category)
-          .select_related('category')
-          .prefetch_related('images'))
+    qs = Product.objects.filter(is_active=True, category=category)
 
-    q = request.GET.get('q')
+    # --- filtros ---
+    q = (request.GET.get("q") or "").strip()
     if q:
-        qs = qs.filter(name__icontains=q)
+        qs = qs.filter(Q(name__icontains=q) | Q(description__icontains=q))
 
-    sort = request.GET.get('sort')
-    if sort == 'price_asc':
-        qs = qs.order_by('price', '-created_at')
-    elif sort == 'price_desc':
-        qs = qs.order_by('-price', '-created_at')
-    elif sort == 'new':
-        qs = qs.order_by('-created_at')
+    try:
+        min_price = int(request.GET.get("min", "") or 0)
+    except ValueError:
+        min_price = 0
+    try:
+        max_price = int(request.GET.get("max", "") or 0)
+    except ValueError:
+        max_price = 0
+
+    if min_price > 0:
+        qs = qs.filter(price__gte=min_price)
+    if max_price > 0:
+        qs = qs.filter(price__lte=max_price)
+
+    # --- orden ---
+    sort = request.GET.get("sort") or ""
+    if sort == "price_asc":
+        qs = qs.order_by("price", "-created_at")
+    elif sort == "price_desc":
+        qs = qs.order_by("-price", "-created_at")
     else:
-        qs = qs.order_by('-created_at')
+        # "new" u vacío -> más nuevos primero
+        qs = qs.order_by("-created_at")
 
+    # --- paginación ---
     paginator = Paginator(qs, 12)
-    page_obj = paginator.get_page(request.GET.get('page') or 1)
+    page_obj = paginator.get_page(request.GET.get("page"))
 
-    return render(request, "core/category_products.html", {  # <-- aquí el cambio
+    return render(request, "core/category_products.html", {
         "category": category,
         "products": page_obj.object_list,
         "page_obj": page_obj,
