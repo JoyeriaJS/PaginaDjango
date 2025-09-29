@@ -101,7 +101,7 @@
 
   {% else %}
     <div class="alert alert-info">Tu carrito está vacío.</div>
-    <a href="/" class="btn btn-primary">Ir a comprar</a>
+    <a class="btn btn-success w-100" href="{% url 'core:mp_create_preference' %}">Pagar con Mercado Pago</a>
   {% endif %}
 </div>
 {% endblock %}

@@ -10,6 +10,8 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from decimal import Decimal, ROUND_HALF_UP
+from .models import Order, OrderItem
+
 
 def home(request):
     categories = Category.objects.annotate(n=Count('products')).order_by('-n','name')[:8]
