@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from decimal import Decimal, ROUND_HALF_UP
-from .models import Order, OrderItem
+
 
 
 def home(request):
@@ -22,6 +22,7 @@ def home(request):
         "banners_hero": Banner.objects.filter(is_active=True, position=Banner.HOME_HERO).order_by('order','-updated_at')[:6],
         "banners_strip": Banner.objects.filter(is_active=True, position=Banner.HOME_STRIP).order_by('order','-updated_at')[:6],
     })
+
 
 # ---------- PRODUCTO (página pública de detalle) ----------
 def product_detail(request, pk):
