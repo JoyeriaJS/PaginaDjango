@@ -1,0 +1,9 @@
+{% extends "base_site.html" %}
+{% block title %}Pago fallido{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="h4 mb-3">No se pudo procesar el pago</h1>
+  <p class="text-muted">Intenta nuevamente o elige otro medio de pago.</p>
+  <a href="{% url 'core:cart_detail' %}" class="btn btn-outline-primary mt-2">Volver al carrito</a>
+</div>
+{% endblock %}
