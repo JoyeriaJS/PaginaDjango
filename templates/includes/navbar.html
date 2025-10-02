@@ -1,42 +1,59 @@
+{% load i18n %}
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
   <div class="container">
     <a class="navbar-brand fw-bold" href="/">Artesanías Pachy</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsDefault">
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="{% trans 'Alternar navegación' %}">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarsDefault">
-      <form class="d-flex me-auto ms-lg-3 my-2 my-lg-0" role="search" method="get" action="{% url 'core:search' %}">
-    <input class="form-control" type="search" placeholder="Buscar productos…" aria-label="Buscar" name="q" value="{{ request.GET.q }}">
-  </form>
 
+    <div class="collapse navbar-collapse" id="navbarsDefault">
+      {# --- Buscador --- #}
+      <form class="d-flex me-auto ms-lg-3 my-2 my-lg-0" role="search" method="get" action="{% url 'core:search' %}">
+        <input class="form-control" type="search" placeholder="{% trans 'Buscar productos…' %}" aria-label="{% trans 'Buscar' %}" name="q" value="{{ request.GET.q }}">
+      </form>
+
+      {# --- Menú dinámico --- #}
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          {% for it in main_menu %}
-            {% if it.children %}
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="{{ it.url }}" data-bs-toggle="dropdown" {% if it.new %}target="_blank" rel="noopener"{% endif %}>{{ it.title }}</a>
-                <ul class="dropdown-menu">
-                  {% for ch in it.children %}
-                    <li>
-                      <a class="dropdown-item" href="{{ ch.url }}" {% if ch.open_in_new_tab %}target="_blank" rel="noopener"{% endif %}>{{ ch.title }}</a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </li>
-            {% else %}
-              <li class="nav-item">
-                <a class="nav-link" href="{{ it.url }}" {% if it.new %}target="_blank" rel="noopener"{% endif %}>{{ it.title }}</a>
-              </li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-      <div class="d-flex">
+        {% for it in main_menu %}
+          {% if it.children %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="{{ it.url }}" data-bs-toggle="dropdown" {% if it.new %}target="_blank" rel="noopener"{% endif %}>{{ it.title }}</a>
+              <ul class="dropdown-menu">
+                {% for ch in it.children %}
+                  <li>
+                    <a class="dropdown-item" href="{{ ch.url }}" {% if ch.open_in_new_tab %}target="_blank" rel="noopener"{% endif %}>{{ ch.title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ it.url }}" {% if it.new %}target="_blank" rel="noopener"{% endif %}>{{ it.title }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+
+      <div class="d-flex align-items-center">
+        {# --- Selector de idioma ES/EN --- #}
+        <form method="post" action="{% url 'set_language' %}" class="me-2 d-none d-lg-block">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <select name="language" class="form-select form-select-sm" onchange="this.form.submit()" style="width:auto">
+            <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>ES</option>
+            <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
+          </select>
+        </form>
+
+        {# --- Botones sesión/panel --- #}
         {% if request.user.is_authenticated %}
           {% if request.user.is_staff %}
-            <a class="btn btn-outline-primary me-2" href="/panel/">Panel</a>
+            <a class="btn btn-outline-primary me-2" href="/panel/">{% trans 'Panel' %}</a>
           {% endif %}
-          <a class="btn btn-primary" href="/admin/logout/">Cerrar sesión</a>
+          <a class="btn btn-primary" href="/admin/logout/">{% trans 'Cerrar sesión' %}</a>
         {% else %}
-          <a class="btn btn-primary" href="/admin/login/">Iniciar sesión</a>
+          <a class="btn btn-primary" href="/admin/login/">{% trans 'Iniciar sesión' %}</a>
         {% endif %}
       </div>
     </div>

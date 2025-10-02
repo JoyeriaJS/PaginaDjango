@@ -27,6 +27,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('panel/', include('catalog.urls', namespace='catalog')),  #CRUD
     path('panel/', include('cms.urls', namespace='cms')),
+     # i18n (set_language)
+    path('i18n/', include('django.conf.urls.i18n')),  # <--- AÑADE ESTO
     
 ]
 
