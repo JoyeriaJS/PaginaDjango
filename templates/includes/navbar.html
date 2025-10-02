@@ -49,6 +49,7 @@
         {% csrf_token %}
         <input type="hidden" name="language" value="{{ request.LANGUAGE_CODE }}">
         <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        
       </form>
 
       {# --- Botones sesión/panel --- #}
