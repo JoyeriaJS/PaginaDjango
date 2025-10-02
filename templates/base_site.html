@@ -283,6 +283,42 @@
     location.reload();
   }
 </script>
+<script>
+  // Google Translate init (si carga el script de Google)
+  function googleTranslateElementInit() {
+    try {
+      new google.translate.TranslateElement({
+        pageLanguage: 'es',
+        includedLanguages: 'en,es',
+        autoDisplay: false
+      }, 'gt-placeholder');
+    } catch (e) {}
+  }
+
+  // Cambiador unificado:
+  // - Si está Google Translate -> traduce toda la página (incluye textos de BD)
+  // - Si no está Google -> usa Django set_language (solo textos marcados con {% trans %})
+  window.changeLang = function(lang){
+    var useGoogle = (typeof google !== 'undefined' && google.translate && google.translate.TranslateElement);
+    if (useGoogle) {
+      // set cookie de Google Translate
+      var cookieValue = (lang === 'en') ? 'es|en' : 'es|es';
+      document.cookie = 'googtrans=/' + cookieValue + '; path=/';
+      document.cookie = 'googtrans=/' + cookieValue + '; path=/; domain=' + location.hostname.replace(/^www\./,'');
+      location.reload();
+    } else {
+      // Respaldo Django i18n
+      var f = document.getElementById('lang-fallback-form');
+      if (!f) return;
+      f.querySelector('input[name="language"]').value = lang;
+      f.submit();
+    }
+  };
+</script>
+
+<!-- Contenedor invisible de Google Translate -->
+<div id="gt-placeholder" style="display:none"></div>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 
   </body>

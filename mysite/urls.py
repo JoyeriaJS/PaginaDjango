@@ -19,6 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.conf.urls.i18n import i18n_patterns
 
 
 
