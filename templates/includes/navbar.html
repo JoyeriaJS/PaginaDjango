@@ -35,16 +35,16 @@
         {% endfor %}
       </ul>
 
-      {# --- Selector de idioma (Google Translate si está disponible; si no, Django i18n) --- #}
+      {# --- Selector de idioma --- #}
       <div class="me-2 d-none d-lg-block">
         <select class="form-select form-select-sm" style="width:auto"
-                onchange="window.changeLang && window.changeLang(this.value)">
+                onchange="(window.changeLang ? changeLang(this.value) : (window.fallbackSetLang && fallbackSetLang(this.value)))">
           <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>ES</option>
           <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
         </select>
       </div>
 
-      {# --- Formulario oculto para set_language (respaldo Django) --- #}
+      {# --- Formulario oculto para set_language (fallback Django) --- #}
       <form id="lang-fallback-form" action="{% url 'set_language' %}" method="post" class="d-none">
         {% csrf_token %}
         <input type="hidden" name="language" value="{{ request.LANGUAGE_CODE }}">
