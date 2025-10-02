@@ -267,56 +267,96 @@
       });
     </script>
 
-    <!-- Google Translate (una sola vez) -->
-    <script>
-      // Limpieza básica si la cookie de Google apunta a EN por defecto no deseado
-      (function(){
-        const ck = document.cookie;
-        if (ck.includes('googtrans=/es|en') && (location.pathname === '/' || !document.referrer)) {
-          // Si por alguna razón quedó forzado a EN, lo regresamos a ES en la primera carga
-          document.cookie = 'googtrans=/es|es; path=/';
-          document.cookie = 'googtrans=/es|es; path=/; domain=' + location.hostname.replace(/^www\./,'');
-        }
-      })();
+    <!-- Google Translate (perezoso; ES por defecto) -->
+          <div id="gt-placeholder" style="display:none"></div>
+          <script>
+          (function(){
+            // --- helpers cookies googtrans ---
+            function setLangCookie(lang){
+              var v = (lang === 'en') ? 'es|en' : 'es|es';
+              // host-only
+              document.cookie = 'googtrans=/'+v+'; path=/';
+              // domain explícito (incluye quitar www)
+              var d1 = location.hostname;
+              var d2 = location.hostname.replace(/^www\./,'');
+              [d1,d2].forEach(function(d){
+                if (!d) return;
+                document.cookie = 'googtrans=/'+v+'; path=/; domain='+d;
+              });
+            }
+            function getLangFromCookie(){
+              return /(?:^|; )googtrans=\/es\|en(?:;|$)/.test(document.cookie) ? 'en' : 'es';
+            }
 
-      function googleTranslateElementInit() {
-        try {
-          new google.translate.TranslateElement({
-            pageLanguage: 'es',
-            includedLanguages: 'en,es',
-            autoDisplay: false
-          }, 'gt-placeholder');
-        } catch (e) {}
-      }
+            // --- carga perezosa del script de Google ---
+            var gtLoaded=false, gtLoading=false;
+            function loadGT(callback){
+              if (gtLoaded){ callback && callback(); return; }
+              if (gtLoading){ return; }
+              gtLoading = true;
+              var s = document.createElement('script');
+              s.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+              s.onload = function(){ gtLoaded = true; gtLoading = false; callback && callback(); };
+              document.head.appendChild(s);
+            }
 
-      // Cambiador unificado para el selector del navbar
-      window.changeLang = function(lang){
-        var useGoogle = (typeof google !== 'undefined' && google.translate && google.translate.TranslateElement);
-        if (useGoogle) {
-          var cookieValue = (lang === 'en') ? 'es|en' : 'es|es';
-          document.cookie = 'googtrans=/' + cookieValue + '; path=/';
-          document.cookie = 'googtrans=/' + cookieValue + '; path=/; domain=' + location.hostname.replace(/^www\./,'');
-          location.reload();
-        } else {
-          // Respaldo: si no carga Google, usamos set_language
-          if (window.fallbackSetLang) return window.fallbackSetLang(lang);
-          var f = document.getElementById('lang-fallback-form');
-          if (!f) return;
-          f.querySelector('input[name="language"]').value = lang;
-          f.submit();
-        }
-      };
+            // --- inicialización del widget (Google llamará a esta función) ---
+            window.googleTranslateElementInit = function(){
+              try{
+                new google.translate.TranslateElement({
+                  pageLanguage: 'es',
+                  includedLanguages: 'en,es',
+                  autoDisplay: false
+                }, 'gt-placeholder');
+              }catch(e){}
+            };
 
-      // Respaldo invocable desde el navbar si no está Google
-      window.fallbackSetLang = function(lang){
-        var f = document.getElementById('lang-fallback-form');
-        if (!f) return;
-        f.querySelector('input[name="language"]').value = lang;
-        f.submit();
-      };
-    </script>
-    <div id="gt-placeholder" style="display:none"></div>
-    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+            // Aplica el idioma en el combo del widget (cuando ya existe)
+            function applyGoogleLang(lang){
+              if (typeof google === 'undefined' || !google.translate) return false;
+              var tries = 0;
+              (function tick(){
+                tries++;
+                var combo = document.querySelector('.goog-te-combo');
+                if (combo){
+                  combo.value = (lang === 'en') ? 'en' : '';
+                  combo.dispatchEvent(new Event('change'));
+                  return;
+                }
+                if (tries < 40){ setTimeout(tick, 100); } // seguir buscando hasta 4s
+              })();
+              return true;
+            }
+
+            // API para el <select> del navbar
+            window.changeLang = function(lang){
+              setLangCookie(lang);
+              if (lang === 'en'){
+                // cargar Google y aplicar traducción
+                loadGT(function(){
+                  applyGoogleLang('en');
+                  // En algunos navegadores ayuda un reload suave
+                  setTimeout(function(){ location.reload(); }, 300);
+                });
+              } else {
+                // volver a español natural (sin traducción)
+                location.reload();
+              }
+            };
+
+            // Estado inicial: si cookie dice EN, cargamos Google y aplicamos
+            var initial = getLangFromCookie();
+            if (initial === 'en'){
+              loadGT(function(){ applyGoogleLang('en'); });
+            }
+            // sincroniza selector del navbar (si ya está en el DOM)
+            window.addEventListener('DOMContentLoaded', function(){
+              var sel = document.getElementById('lang-switcher');
+              if (sel){ sel.value = initial; }
+            });
+          })();
+          </script>
+
 
   </body>
 </html>
