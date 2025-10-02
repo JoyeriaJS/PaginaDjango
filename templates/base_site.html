@@ -1,6 +1,6 @@
 {% load static %}
 <!doctype html>
-<html lang="es">
+<html lang="{{ request.LANGUAGE_CODE|default:'es' }}">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -269,6 +269,16 @@
 
     <!-- Google Translate (una sola vez) -->
     <script>
+      // Limpieza básica si la cookie de Google apunta a EN por defecto no deseado
+      (function(){
+        const ck = document.cookie;
+        if (ck.includes('googtrans=/es|en') && (location.pathname === '/' || !document.referrer)) {
+          // Si por alguna razón quedó forzado a EN, lo regresamos a ES en la primera carga
+          document.cookie = 'googtrans=/es|es; path=/';
+          document.cookie = 'googtrans=/es|es; path=/; domain=' + location.hostname.replace(/^www\./,'');
+        }
+      })();
+
       function googleTranslateElementInit() {
         try {
           new google.translate.TranslateElement({
@@ -288,12 +298,21 @@
           document.cookie = 'googtrans=/' + cookieValue + '; path=/; domain=' + location.hostname.replace(/^www\./,'');
           location.reload();
         } else {
-          // Respaldo: si no carga Google, el navbar envía set_language (ver navbar)
+          // Respaldo: si no carga Google, usamos set_language
+          if (window.fallbackSetLang) return window.fallbackSetLang(lang);
           var f = document.getElementById('lang-fallback-form');
           if (!f) return;
           f.querySelector('input[name="language"]').value = lang;
           f.submit();
         }
+      };
+
+      // Respaldo invocable desde el navbar si no está Google
+      window.fallbackSetLang = function(lang){
+        var f = document.getElementById('lang-fallback-form');
+        if (!f) return;
+        f.querySelector('input[name="language"]').value = lang;
+        f.submit();
       };
     </script>
     <div id="gt-placeholder" style="display:none"></div>
