@@ -35,16 +35,14 @@
         {% endfor %}
       </ul>
 
-      <div class="d-flex align-items-center">
-        {# --- Selector de idioma ES/EN --- #}
-        <form method="post" action="{% url 'set_language' %}" class="me-2 d-none d-lg-block">
-          {% csrf_token %}
-          <input type="hidden" name="next" value="{{ request.get_full_path }}">
-          <select name="language" class="form-select form-select-sm" onchange="this.form.submit()" style="width:auto">
-            <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>ES</option>
-            <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
-          </select>
-        </form>
+      <div class="me-2 d-none d-lg-block">
+        <select class="form-select form-select-sm" style="width:auto"
+                onchange="this.value==='en' ? setGoogleLang('en') : setGoogleLang('es')">
+          <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>ES</option>
+          <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
+        </select>
+      </div>
+
 
         {# --- Botones sesión/panel --- #}
         {% if request.user.is_authenticated %}

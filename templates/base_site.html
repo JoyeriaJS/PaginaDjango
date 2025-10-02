@@ -260,6 +260,30 @@
     modal.show();
   });
 </script>
+  <script>
+  // Inicializa Google Translate
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'es',
+      includedLanguages: 'en,es',
+      autoDisplay: false
+    }, 'gt-placeholder');
+  }
+</script>
+<div id="gt-placeholder" style="display:none"></div>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+  // Helper para forzar traducción vía cookie
+  function setGoogleLang(lang) {
+    // lang: 'es' o 'en'
+    var cookieValue = lang === 'es' ? 'es|es' : 'es|en';
+    document.cookie = 'googtrans=/' + cookieValue + ';path=/';
+    document.cookie = 'googtrans=/' + cookieValue + ';path=/;domain=' + window.location.hostname.replace(/^www\./,'');
+    location.reload();
+  }
+</script>
+
 
   </body>
 </html>
