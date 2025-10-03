@@ -77,25 +77,3 @@ footer .link-secondary:hover { color:#0d6efd; }
 
 /* Swiper paginations dentro de cards oscuras, opcional */
 .testimonials-swiper .swiper-pagination-bullet-active { background:#0d6efd; }
-
-/* Elevación y hover */
-.card-elev { border: 1px solid #eee; transition: transform .2s ease, box-shadow .2s ease; }
-.card-elev:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(0,0,0,.06); }
-
-/* Badges en imagen */
-.thumb-1x1 { position: relative; aspect-ratio: 1/1; overflow: hidden; border-radius: .75rem; background:#f8f9fa; }
-.product-badge { position:absolute; top:8px; left:8px; padding:.25rem .5rem; font-size:.75rem; border-radius:999px; background:#0d6efd; color:#fff; }
-
-/* Precio */
-.price { font-weight:700; letter-spacing: .2px; }
-.price .old { color:#999; text-decoration:line-through; font-weight:500; margin-right:.25rem; }
-
-/* Skeleton */
-.skel { background: linear-gradient(90deg,#f0f0f0 25%,#f6f6f6 37%,#f0f0f0 63%); background-size:400% 100%; animation: shimmer 1.4s ease infinite; }
-@keyframes shimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
-
-/* Mini chips */
-.chip { display:inline-block; padding:.25rem .5rem; font-size:.75rem; border-radius:999px; background:#eef5ff; color:#0d6efd; }
-
-/* USP strip */
-.usp-strip { font-weight:500; }
