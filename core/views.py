@@ -18,6 +18,9 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseBadRequest
 from catalog.models import Product
+from django.utils import timezone
+from cms.models import Review
+from .forms import ReviewForm
 
 
 def home(request):
@@ -462,3 +465,36 @@ def mp_webhook(request):
     # if settings.MP_WEBHOOK_SECRET and token != settings.MP_WEBHOOK_SECRET:
     #     return HttpResponse(status=401)
     return HttpResponse(status=200)
+
+    #Resena
+    def submit_review(request):
+    if request.method != "POST":
+        return redirect("/")
+
+    form = ReviewForm(request.POST)
+    if not form.is_valid():
+        messages.error(request, "Revisa los datos del formulario.")
+        return redirect(request.META.get("HTTP_REFERER", "/"))
+
+    # Honeypot
+    if form.cleaned_data.get("website"):
+        messages.error(request, "No pudimos procesar tu reseña.")
+        return redirect(request.META.get("HTTP_REFERER", "/"))
+
+    # Rate limit simple por sesión (1 envío cada 2 minutos)
+    last = request.session.get("last_review_sent_at")
+    now = timezone.now().timestamp()
+    if last and (now - float(last) < 120):
+        messages.warning(request, "Gracias, ya recibimos tu reseña recientemente.")
+        return redirect(request.META.get("HTTP_REFERER", "/"))
+
+    Review.objects.create(
+        name=form.cleaned_data["name"],
+        email=form.cleaned_data.get("email", ""),
+        rating=form.cleaned_data["rating"],
+        comment=form.cleaned_data["comment"],
+        is_approved=False,  # moderada por admin
+    )
+    request.session["last_review_sent_at"] = now
+    messages.success(request, "¡Gracias! Tu reseña quedó enviada y será publicada tras revisión.")
+    return redirect(request.META.get("HTTP_REFERER", "/"))

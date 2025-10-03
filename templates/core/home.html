@@ -46,10 +46,7 @@
 </section>
 {% endif %}
 
-
 {% include "includes/occasions.html" %}
-
-
 
 <section id="categorias" class="py-5 section-muted">
   <div class="container">
@@ -84,7 +81,6 @@
   </div>
 </section>
 
-
 <section id="nuevos" class="py-5">
   <div class="container">
     <div class="d-flex justify-content-between align-items-end mb-3">
@@ -97,11 +93,9 @@
     <div class="row g-3">
       {% for p in latest_products %}
       <div class="col-6 col-md-3">
-        <!-- Enlace al detalle del producto -->
         <a class="card h-100 product-card card-elev text-decoration-none" href="{% url 'core:product_detail' p.pk %}">
           {% with img=p.images.first %}
           {% if img %}
-            <!-- lazy-load aplicado -->
             <img src="{{ img.image.url }}" loading="lazy" class="card-img-top" alt="{{ img.alt|default:p.name }}">
           {% else %}
             <div class="ratio ratio-1x1 bg-light d-flex align-items-center justify-content-center text-muted">Sin imagen</div>
@@ -159,40 +153,10 @@
   </div>
 </section>
 
-<section class="py-5 bg-white">
-  <div class="container">
-    <div class="d-flex justify-content-between align-items-end mb-3">
-      <h2 class="h4 m-0">Lo que dicen nuestros clientes</h2>
-    </div>
+{# === Reseñas dinámicas con moderación (carrusel + formulario) === #}
+{% include "includes/testimonials_dynamic.html" %}
 
-    <div class="swiper testimonials-swiper">
-      <div class="swiper-wrapper">
-        {% comment %} Sustituye por datos reales cuando quieras {% endcomment %}
-        <div class="swiper-slide">
-          <div class="card shadow-sm p-4 h-100">
-            <p class="mb-3">“Compré un set de aros y colgante: la calidad del lapislázuli es excelente y el acabado muy fino.”</p>
-            <div class="small text-muted">— Camila A.</div>
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="card shadow-sm p-4 h-100">
-            <p class="mb-3">“Atención rápida y muy cercana. ¡La pieza llegó preciosa!”</p>
-            <div class="small text-muted">— Jorge M.</div>
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="card shadow-sm p-4 h-100">
-            <p class="mb-3">“Me encantó poder personalizar. Se nota el trabajo artesanal.”</p>
-            <div class="small text-muted">— Daniela R.</div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-pagination mt-3"></div>
-    </div>
-  </div>
-</section>
-
-{# === NUEVOS INCLUDES: newsletter + FAQs === #}
+{# === Newsletter + FAQs === #}
 {% include "includes/newsletter.html" %}
 {% include "includes/faqs.html" %}
 
@@ -211,4 +175,3 @@
 </section>
 
 {% endblock %}
-{% include "includes/newsletter.html" %}
