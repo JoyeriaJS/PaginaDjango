@@ -55,3 +55,16 @@ class MenuItem(models.Model):
 
     def __str__(self):
         return self.title
+
+class SiteSettings(models.Model):
+    brand_name = models.CharField("Nombre de marca", max_length=120, default="Artesanías Pachy")
+    logo = models.ImageField("Logo (PNG/SVG/JPG)", upload_to="brand/", blank=True, null=True)
+    logo_width = models.PositiveIntegerField("Ancho del logo (px en navbar)", default=140)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Ajustes del sitio"
+        verbose_name_plural = "Ajustes del sitio"
+
+    def __str__(self):
+        return "Ajustes del sitio"

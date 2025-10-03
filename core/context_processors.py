@@ -28,3 +28,10 @@ def main_menu(request):
             "children": child_map.get(m.id, [])
         })
     return {"main_menu": items}
+
+    # core/context_processors.py  (ya existe; agrega esto)
+def site_settings(request):
+    from cms.models import SiteSettings
+    # Trae el único registro; si no existe, lo crea con valores por defecto.
+    ss, _ = SiteSettings.objects.get_or_create(id=1)
+    return {"site_settings": ss}
