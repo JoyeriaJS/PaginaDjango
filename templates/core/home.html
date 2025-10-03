@@ -4,6 +4,8 @@
 {% block content %}
 
 {% if banners_hero %}
+{% include "includes/usp_strip.html" %}
+
 <section class="hero-xl">
   <div class="container">
     <div class="row align-items-center g-4">
@@ -190,6 +192,7 @@
 {# === NUEVOS INCLUDES: newsletter + FAQs === #}
 {% include "includes/newsletter.html" %}
 {% include "includes/faqs.html" %}
+{% include "includes/trustbar.html" %}
 
 <section id="contacto" class="py-5">
   <div class="container">
@@ -206,3 +209,4 @@
 </section>
 
 {% endblock %}
+{% include "includes/newsletter.html" %}

@@ -28,4 +28,5 @@ urlpatterns = [
     # opcional webhook (lo podemos activar después):
     path("mp/webhook/", views.mp_webhook, name="mp_webhook"),
     
+    
 ]
