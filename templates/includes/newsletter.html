@@ -7,7 +7,7 @@
           <p class="text-muted mb-0">Lanzamientos, ofertas y piezas únicas, directo a tu correo.</p>
         </div>
         <div class="col-md-6">
-          <form method="post" action="{% url 'core:subscribe' %}" class="d-flex gap-2">
+
             {% csrf_token %}
             <input class="form-control" type="email" name="email" placeholder="Tu email" required>
             <button class="btn btn-primary">Suscribirme</button>
