@@ -165,32 +165,8 @@
       <h2 class="h4 m-0">Lo que dicen nuestros clientes</h2>
     </div>
 
-    <div class="swiper testimonials-swiper">
-      <div class="swiper-wrapper">
-        {% comment %} Sustituye por datos reales cuando quieras {% endcomment %}
-        <div class="swiper-slide">
-          <div class="card shadow-sm p-4 h-100">
-            <p class="mb-3">“Compré un set de aros y colgante: la calidad del lapislázuli es excelente y el acabado muy fino.”</p>
-            <div class="small text-muted">— Camila A.</div>
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="card shadow-sm p-4 h-100">
-            <p class="mb-3">“Atención rápida y muy cercana. ¡La pieza llegó preciosa!”</p>
-            <div class="small text-muted">— Jorge M.</div>
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="card shadow-sm p-4 h-100">
-            <p class="mb-3">“Me encantó poder personalizar. Se nota el trabajo artesanal.”</p>
-            <div class="small text-muted">— Daniela R.</div>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-pagination mt-3"></div>
-    </div>
-  </div>
-</section>
+   {% include "includes/testimonials_dynamic.html" %}
+
 
 {# === NUEVOS INCLUDES: newsletter + FAQs === #}
 {% include "includes/newsletter.html" %}

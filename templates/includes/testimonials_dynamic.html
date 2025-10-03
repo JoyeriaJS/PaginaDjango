@@ -1,0 +1,72 @@
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-3">
+      <h2 class="h4 m-0">Lo que dicen nuestros clientes</h2>
+    </div>
+
+    <div class="swiper testimonials-swiper">
+      <div class="swiper-wrapper">
+        {% for r in approved_reviews %}
+        <div class="swiper-slide">
+          <div class="card shadow-sm p-4 h-100">
+            <div class="d-flex align-items-center mb-2">
+              {# estrellas #}
+              <div class="me-2" aria-label="{{ r.rating }} de 5">
+                {% for i in "12345"|make_list %}
+                  {% if forloop.counter <= r.rating %}
+                    ★
+                  {% else %}
+                    ☆
+                  {% endif %}
+                {% endfor %}
+              </div>
+              <div class="small text-muted">{{ r.name }}</div>
+            </div>
+            <p class="mb-0">{{ r.comment }}</p>
+          </div>
+        </div>
+        {% empty %}
+        <div class="swiper-slide">
+          <div class="card shadow-sm p-4 h-100">
+            <p class="mb-1">Sé la primera persona en dejarnos una reseña ✨</p>
+            <div class="small text-muted">Tu opinión ayuda a otros compradores.</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="swiper-pagination mt-3"></div>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="card p-3 card-elev">
+      <h3 class="h6 mb-2">Dejar una reseña</h3>
+      <form method="post" action="{% url 'core:submit_review' %}" class="row g-2">
+        {% csrf_token %}
+        <input type="text" name="website" style="display:none"> {# honeypot #}
+        <div class="col-md-4">
+          <input class="form-control" name="name" placeholder="Tu nombre" required>
+        </div>
+        <div class="col-md-4">
+          <input class="form-control" type="email" name="email" placeholder="Tu email (opcional)">
+        </div>
+        <div class="col-md-4">
+          <select class="form-select" name="rating" required>
+            <option value="5">5 estrellas</option>
+            <option value="4">4 estrellas</option>
+            <option value="3">3 estrellas</option>
+            <option value="2">2 estrellas</option>
+            <option value="1">1 estrella</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <textarea class="form-control" name="comment" rows="3" placeholder="Cuenta tu experiencia..." required></textarea>
+        </div>
+        <div class="col-12 text-end">
+          <button class="btn btn-primary">Enviar reseña</button>
+        </div>
+      </form>
+      <div class="small text-muted mt-2">Las reseñas se publican previo filtro editorial.</div>
+    </div>
+  </div>
+</section>

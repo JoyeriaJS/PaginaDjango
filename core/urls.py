@@ -27,6 +27,9 @@ urlpatterns = [
     path("pago/pendiente/", views.mp_pending, name="mp_pending"),
     # opcional webhook (lo podemos activar después):
     path("mp/webhook/", views.mp_webhook, name="mp_webhook"),
+
+    #RESEÑAS
+    path("resenas/enviar/", views.submit_review, name="submit_review"),
     
     
 ]
