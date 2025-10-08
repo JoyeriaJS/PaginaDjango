@@ -109,7 +109,11 @@ def category_list(request, pk):
 CART_SESSION_KEY = "cart"
 
 def _get_cart(session):
-    return session.get(CART_SESSION_KEY, {})
+    cart = session.get("cart", {})
+    # cart = { "product_id_str": {"qty": int} }
+    if not isinstance(cart, dict):
+        cart = {}
+    return cart
 
 def _save_cart(session, cart):
     session[CART_SESSION_KEY] = cart
@@ -144,34 +148,61 @@ def _cart_summary(cart):
     count = sum(cart.values())
     return items, subtotal, tax, shipping, grand_total, count
 
+
 def add_to_cart(request, pk):
-    product = get_object_or_404(Product, pk=pk, is_active=True)
-    if request.method == "POST":
-        try:
-            qty = int(request.POST.get("qty", "1"))
-        except ValueError:
-            qty = 1
-        qty = max(1, min(qty, 999))
-        cart = _get_cart(request.session)
-        pid = str(product.pk)
-        cart[pid] = cart.get(pid, 0) + qty
-        _save_cart(request.session, cart)
-        items, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
+    if request.method != "POST":
+        return HttpResponseBadRequest("Invalid method")
 
-        # AJAX -> JSON
-        if request.headers.get("x-requested-with") == "XMLHttpRequest":
-            return JsonResponse({
-                "ok": True,
-                "message": f"Agregado {qty}× “{product.name}”",
-                "cart_count": count,
-                "subtotal": str(subtotal),
-                "grand_total": str(grand_total),
-            })
+    product = get_object_or_404(Product, pk=pk)
+    try:
+        qty = int(request.POST.get("qty", "1"))
+    except ValueError:
+        qty = 1
+    qty = max(1, qty)
 
-        messages.success(request, f"Agregado {qty}× “{product.name}”.")
-        return redirect('core:cart_detail')
+    # Stock None => ilimitado; si no, validar
+    stock = product.stock  # puede ser None
+    cart = _get_cart(request.session)
+    pid = str(product.pk)
+    current_qty = int(cart.get(pid, {}).get("qty", 0))
 
-    return redirect('core:product_detail', pk=pk)
+    if stock is not None:
+        # disponible remanente considerando lo que ya hay en el carrito
+        remaining = max(0, stock - current_qty)
+        if remaining <= 0:
+            # sin stock para agregar
+            msg = f"“{product.name}” está agotado y no se puede agregar."
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({"ok": False, "error": msg}, status=400)
+            messages.error(request, msg)
+            return redirect("core:cart_detail")
+
+        # recortar la cantidad solicitada al máximo disponible
+        if qty > remaining:
+            qty = remaining
+            # si quedara en 0, evitar añadir
+            if qty <= 0:
+                msg = f"“{product.name}” está agotado y no se puede agregar."
+                if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                    return JsonResponse({"ok": False, "error": msg}, status=400)
+                messages.error(request, msg)
+                return redirect("core:cart_detail")
+
+    # aplicar en carrito
+    new_qty = current_qty + qty
+    cart[pid] = {"qty": new_qty}
+    request.session["cart"] = cart
+    request.session.modified = True
+
+    # respuesta
+    msg_ok = f"Agregaste “{product.name}” ({qty} ud)."
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        # si tienes un helper para contar, cámbialo aquí:
+        cart_count = sum(i["qty"] for i in cart.values())
+        return JsonResponse({"ok": True, "message": msg_ok, "cart_count": cart_count})
+    messages.success(request, msg_ok)
+    return redirect("core:cart_detail")
+
 
 def remove_from_cart(request, pk):
     if request.method != "POST":
@@ -197,38 +228,57 @@ def remove_from_cart(request, pk):
 
 def update_cart(request):
     if request.method != "POST":
-        return redirect('core:cart_detail')
+        return HttpResponseBadRequest("Invalid method")
 
-    cart = {}
-    for key, value in request.POST.items():
-        if key.startswith("qty_"):
-            pid = key.replace("qty_", "")
-            try:
-                qty = int(value)
-            except ValueError:
-                qty = 1
-            if qty > 0:
-                cart[pid] = min(qty, 999)
+    cart = _get_cart(request.session)
+    changed_msgs = []
 
-    _save_cart(request.session, cart)
-    items, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
+    for pid, item in list(cart.items()):
+        # espera campos tipo qty_<id>
+        field = f"qty_{pid}"
+        if field not in request.POST:
+            continue
+        try:
+            new_qty = int(request.POST[field])
+        except ValueError:
+            new_qty = 1
+        new_qty = max(0, new_qty)
+
+        product = Product.objects.filter(pk=pid).first()
+        if not product:
+            cart.pop(pid, None)
+            continue
+
+        stock = product.stock
+        if stock is not None and new_qty > stock:
+            new_qty = stock
+            changed_msgs.append(f"La cantidad de “{product.name}” se ajustó al stock disponible ({stock}).")
+
+        if new_qty <= 0:
+            cart.pop(pid, None)
+        else:
+            cart[pid] = {"qty": new_qty}
+
+    request.session["cart"] = cart
+    request.session.modified = True
 
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
-        # devolvemos totales y el listado mínimo para que el front actualice
+        # recalcula totales si usas esa respuesta en AJAX
+        cart_count = sum(i["qty"] for i in cart.values())
+        # aquí pon tu lógica de precios/totales
         return JsonResponse({
             "ok": True,
-            "cart_count": count,
-            "subtotal": str(subtotal),
-            "grand_total": str(grand_total),
-            "lines": [
-                {"id": it["id"], "qty": it["qty"], "line_total": str(it["total"])}
-                for it in items
-            ],
-            "empty": count == 0,
+            "cart_count": cart_count,
+            # "subtotal": ...,
+            # "grand_total": ...,
+            # "lines": [{"id": pid, "line_total": ...}, ...]
+            "messages": changed_msgs,
+            "empty": (cart_count == 0),
         })
 
-    messages.success(request, "Carrito actualizado.")
-    return redirect('core:cart_detail')
+    for m in changed_msgs:
+        messages.warning(request, m)
+    return redirect("core:cart_detail")
 
 def clear_cart(request):
     if request.method != "POST":
