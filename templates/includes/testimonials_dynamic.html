@@ -16,8 +16,8 @@
                   {% if forloop.counter <= r.rating %}⭐{% else %}☆{% endif %}
                 {% endfor %}
               </div>
-              <p class="mb-3">{{ r.comment|linebreaksbr }}</p>
-              <div class="small text-muted">— {{ r.name }}{% if r.city %}, {{ r.city }}{% endif %}</div>
+              <p class="mb-3">“{{ r.comment }}”</p>
+              <div class="small text-muted">— {{ r.name }}</div>
             </div>
           </div>
           {% endfor %}
@@ -25,43 +25,7 @@
         <div class="swiper-pagination mt-3"></div>
       </div>
     {% else %}
-      <div class="card p-4">
-        <p class="text-muted mb-0">Sé la primera persona en dejar una reseña ✨</p>
-      </div>
+      <div class="text-muted">Aún no hay reseñas aprobadas.</div>
     {% endif %}
-  </div>
-</section>
-
-{# Formulario de envío simple #}
-<section class="py-4">
-  <div class="container">
-    <div class="card p-4">
-      <h3 class="h6 mb-3">Deja tu reseña</h3>
-      <form method="post" action="{% url 'core:send_review' %}" class="row g-2">
-        {% csrf_token %}
-        <div class="col-md-4">
-          <input class="form-control" name="name" placeholder="Tu nombre" required>
-        </div>
-        <div class="col-md-4">
-          <input class="form-control" name="city" placeholder="Ciudad (opcional)">
-        </div>
-        <div class="col-md-4">
-          <select name="rating" class="form-select">
-            <option value="5">5 estrellas</option>
-            <option value="4">4 estrellas</option>
-            <option value="3">3 estrellas</option>
-            <option value="2">2 estrellas</option>
-            <option value="1">1 estrella</option>
-          </select>
-        </div>
-        <div class="col-12">
-          <textarea class="form-control" name="comment" rows="3" placeholder="Tu experiencia" required></textarea>
-        </div>
-        <div class="col-12 text-end">
-          <button class="btn btn-primary">Enviar</button>
-        </div>
-      </form>
-      <p class="small text-muted mb-0 mt-2">Tu reseña será publicada una vez aprobada por el equipo.</p>
-    </div>
   </div>
 </section>

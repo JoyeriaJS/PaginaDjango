@@ -468,12 +468,25 @@ def mp_webhook(request):
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from cms.models import Review
+from django.apps import apps
 
 def home(request):
     # ... tu lógica actual (banners, categorías, latest_products, etc.)
-    approved_reviews = Review.objects.filter(is_approved=True)[:12]  # últimas 12 aprobadas
+    approved_reviews = []
+    try:
+        Review = apps.get_model('cms', 'Review')
+        if Review is not None:
+            approved_reviews = (
+                Review.objects
+                .filter(is_approved=True)
+                .only('name', 'rating', 'comment', 'created_at', 'is_approved')  # <- evita pedir city/email
+                [:12]
+            )
+    except Exception:
+        approved_reviews = []
+
     ctx = {
-        # ... lo que ya pasas hoy
+        # ... lo que ya envías hoy
         "approved_reviews": approved_reviews,
     }
     return render(request, "core/home.html", ctx)
