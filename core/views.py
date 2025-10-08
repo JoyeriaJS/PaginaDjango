@@ -203,6 +203,29 @@ def add_to_cart(request, pk):
     messages.success(request, msg_ok)
     return redirect("core:cart_detail")
 
+def get_normalized_cart(session):
+    cart = session.get("cart", {})
+    # Si es lista antigua -> pásala a dict nuevo
+    if isinstance(cart, list):
+        new = {}
+        for it in cart:
+            try:
+                pid = str(it.get("id"))
+                qty = int(it.get("qty", 0) or 0)
+                if pid and qty > 0:
+                    new[pid] = {"qty": qty}
+            except Exception:
+                pass
+        session["cart"] = new
+        session.modified = True
+        return new
+    # Si no es dict -> reinicia
+    if not isinstance(cart, dict):
+        session["cart"] = {}
+        session.modified = True
+        return {}
+    return cart
+
 
 def remove_from_cart(request, pk):
     if request.method != "POST":
