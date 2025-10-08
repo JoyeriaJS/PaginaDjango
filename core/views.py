@@ -119,22 +119,21 @@ def _save_cart(session, cart):
     session[CART_SESSION_KEY] = cart
     session.modified = True
 
+# core/views.py
+from decimal import Decimal, ROUND_HALF_UP
+
 def _cart_summary(cart):
     """
-    Devuelve: (items, subtotal, tax, shipping, grand_total, count)
-    items = [{id, name, qty, price, total, image_url, category}]
+    Calcula resumen del carrito en enteros (CLP), compatible con Mercado Pago.
+    Devuelve:
+      items, subtotal, tax, shipping, grand_total, count
     """
     items = []
-    subtotal = Decimal("0.00")
-    tax = Decimal("0.00")
-    shipping = Decimal("0.00")
-
-    if Product is None:
-        # Por si falla el import del modelo
-        return items, subtotal, tax, shipping, subtotal, 0
+    subtotal = Decimal("0")
+    tax = Decimal("0")
+    shipping = Decimal("0")
 
     for pid, data in cart.items():
-        # qty seguro como int
         qty = 0
         if isinstance(data, dict):
             raw_q = data.get("qty", 0)
@@ -149,43 +148,54 @@ def _cart_summary(cart):
                 qty = int(data or 0)
             except Exception:
                 qty = 0
+
         if qty <= 0:
             continue
 
-        # Busca producto
         try:
             p = Product.objects.select_related("category").prefetch_related("images").get(pk=pid)
         except Product.DoesNotExist:
             continue
 
-        price = p.price or Decimal("0.00")
-        # AQUI estaba tu error: asegúrate que qty sea int, nunca dict
-        line_total = price * qty
+        # Asegurar que el precio sea Decimal
+        price = Decimal(p.price or 0)
+
+        # Total por línea y redondeo
+        line_total = (price * qty).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+
         img_url = None
-        try:
-            first_img = getattr(p, "images", None)
-            if first_img:
-                first_img = first_img.first()
-                if first_img:
-                    img_url = first_img.image.url
-        except Exception:
-            pass
+        if hasattr(p, "images") and p.images.exists():
+            img_url = p.images.first().image.url
 
         items.append({
             "id": p.pk,
             "name": p.name,
             "qty": qty,
-            "price": price,
-            "total": line_total,
+            "price": int(price),        # número entero
+            "total": int(line_total),   # número entero
             "image_url": img_url,
-            "category": getattr(getattr(p, "category", None), "name", ""),
+            "category": getattr(p.category, "name", ""),
         })
 
         subtotal += line_total
 
+    # Totales redondeados
+    subtotal = subtotal.quantize(Decimal("1"), rounding=ROUND_HALF_UP)
     grand_total = subtotal + tax + shipping
+    grand_total = grand_total.quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+
     count = sum(i["qty"] for i in items)
-    return items, subtotal, tax, shipping, grand_total, count
+
+    # Convertir todos los valores a int antes de devolver
+    return (
+        items,
+        int(subtotal),
+        int(tax),
+        int(shipping),
+        int(grand_total),
+        int(count),
+    )
+
 
 
 
