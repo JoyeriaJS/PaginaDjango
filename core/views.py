@@ -471,9 +471,8 @@ from cms.models import Review
 from django.apps import apps
 
 def home(request):
-    # ... tu lógica actual (banners, categorías, productos, etc.)
+    # ... resto de tu lógica (banners, categorías, etc.)
 
-    # --- Reseñas aprobadas (sin pedir created_at porque no existe en el modelo) ---
     approved_reviews = []
     try:
         Review = apps.get_model('cms', 'Review')
@@ -481,13 +480,14 @@ def home(request):
             approved_reviews = (
                 Review.objects
                 .filter(is_approved=True)
-                .only('name', 'rating', 'comment', 'is_approved')  # ← sin created_at
+                .only('name', 'rating', 'comment', 'created_at', 'is_approved')  # <- incluye created_at
+                .order_by('-created_at')  # <- CAMBIO CLAVE: antes era 'created'
             )[:12]
     except Exception:
         approved_reviews = []
 
     ctx = {
-        # ... el resto de tu contexto
+        # ... lo demás
         "approved_reviews": approved_reviews,
     }
     return render(request, "core/home.html", ctx)
