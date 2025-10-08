@@ -462,4 +462,43 @@ def mp_webhook(request):
     # if settings.MP_WEBHOOK_SECRET and token != settings.MP_WEBHOOK_SECRET:
     #     return HttpResponse(status=401)
     return HttpResponse(status=200)
-    
+
+
+# core/views.py
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from cms.models import Review
+
+def home(request):
+    # ... tu lógica actual (banners, categorías, latest_products, etc.)
+    approved_reviews = Review.objects.filter(is_approved=True)[:12]  # últimas 12 aprobadas
+    ctx = {
+        # ... lo que ya pasas hoy
+        "approved_reviews": approved_reviews,
+    }
+    return render(request, "core/home.html", ctx)
+
+def send_review(request):
+    if request.method != "POST":
+        return redirect("/")
+
+    name = (request.POST.get("name") or "").strip()
+    city = (request.POST.get("city") or "").strip()
+    rating = int(request.POST.get("rating") or 5)
+    comment = (request.POST.get("comment") or "").strip()
+
+    if not name or not comment:
+        messages.error(request, "Por favor indica tu nombre y comentario.")
+        return redirect(request.META.get("HTTP_REFERER", "/"))
+
+    rating = max(1, min(5, rating))  # clamp 1..5
+
+    Review.objects.create(
+        name=name,
+        city=city,
+        rating=rating,
+        comment=comment,
+        is_approved=False,  # queda pendiente de aprobación en el admin
+    )
+    messages.success(request, "¡Gracias! Tu reseña fue enviada y será revisada antes de publicarse.")
+    return redirect(request.META.get("HTTP_REFERER", "/"))

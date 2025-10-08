@@ -29,7 +29,7 @@ urlpatterns = [
     path("mp/webhook/", views.mp_webhook, name="mp_webhook"),
 
     #RESEÑAS
-    
+    path("opiniones/enviar/", views.send_review, name="send_review"),
     
     
     
