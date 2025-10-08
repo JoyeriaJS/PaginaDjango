@@ -470,6 +470,29 @@ from django.shortcuts import redirect
 from django.views.decorators.http import require_POST
 from django.apps import apps
 
+def home(request):
+    # ... tu lógica actual (banners, categorías, latest_products, etc.)
+    approved_reviews = []
+    try:
+        Review = apps.get_model("cms", "Review")
+        if Review:
+            approved_reviews = Review.objects.filter(is_approved=True).order_by("-created_at")[:16]
+    except Exception:
+        approved_reviews = []
+    ctx = {
+        # ... lo que ya pasas
+        "approved_reviews": approved_reviews,
+    }
+    return render(request, "core/home.html", ctx)
+
+
+
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.views.decorators.http import require_POST
+from django.apps import apps
+
+
 @require_POST
 def review_submit(request):
     """
@@ -503,17 +526,3 @@ def review_submit(request):
 
     return redirect(request.META.get("HTTP_REFERER", "/") + "#testimonios")
 
-def home(request):
-    # ... tu lógica actual (banners, categorías, latest_products, etc.)
-    approved_reviews = []
-    try:
-        Review = apps.get_model("cms", "Review")
-        if Review:
-            approved_reviews = Review.objects.filter(is_approved=True).order_by("-created_at")[:16]
-    except Exception:
-        approved_reviews = []
-    ctx = {
-        # ... lo que ya pasas
-        "approved_reviews": approved_reviews,
-    }
-    return render(request, "core/home.html", ctx)

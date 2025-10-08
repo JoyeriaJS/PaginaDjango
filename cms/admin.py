@@ -1,6 +1,7 @@
 # cms/admin.py
 from django.contrib import admin
 from cms.models import Review
+admin.site.register(Review)
 
 
 @admin.register(Review)
