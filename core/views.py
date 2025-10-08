@@ -464,4 +464,56 @@ def mp_webhook(request):
     return HttpResponse(status=200)
 
 
+# core/views.py (añade al final del archivo)
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.views.decorators.http import require_POST
+from django.apps import apps
 
+@require_POST
+def review_submit(request):
+    """
+    Recibe reseñas públicas. Las deja en is_approved=False.
+    Anti-spam sencillo: campo oculto 'website' debe venir vacío.
+    """
+    # Honeypot
+    if request.POST.get("website"):
+        messages.error(request, "Hubo un problema con tu envío.")
+        return redirect(request.META.get("HTTP_REFERER", "/") + "#testimonios")
+
+    name = (request.POST.get("name") or "").strip()
+    rating = int(request.POST.get("rating") or 5)
+    comment = (request.POST.get("comment") or "").strip()
+
+    if not name or not comment or rating not in [1,2,3,4,5]:
+        messages.error(request, "Por favor completa nombre, comentario y puntuación.")
+        return redirect(request.META.get("HTTP_REFERER", "/") + "#testimonios")
+
+    Review = apps.get_model("cms", "Review")
+    try:
+        Review.objects.create(
+            name=name, rating=rating, comment=comment, is_approved=False
+        )
+        messages.success(
+            request,
+            "¡Gracias! Tu reseña fue enviada y será publicada cuando la aprobemos."
+        )
+    except Exception:
+        messages.error(request, "No pudimos guardar tu reseña. Inténtalo más tarde.")
+
+    return redirect(request.META.get("HTTP_REFERER", "/") + "#testimonios")
+
+def home(request):
+    # ... tu lógica actual (banners, categorías, latest_products, etc.)
+    approved_reviews = []
+    try:
+        Review = apps.get_model("cms", "Review")
+        if Review:
+            approved_reviews = Review.objects.filter(is_approved=True).order_by("-created_at")[:16]
+    except Exception:
+        approved_reviews = []
+    ctx = {
+        # ... lo que ya pasas
+        "approved_reviews": approved_reviews,
+    }
+    return render(request, "core/home.html", ctx)

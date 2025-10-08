@@ -56,5 +56,25 @@ class MenuItem(models.Model):
     def __str__(self):
         return self.title
 
+#RESEÑA
+
+class Review(models.Model):
+    RATING_CHOICES = [(i, str(i)) for i in range(1, 5+1)]
+
+    name = models.CharField("Nombre", max_length=120)
+    rating = models.PositiveSmallIntegerField("Puntuación", choices=RATING_CHOICES, default=5)
+    comment = models.TextField("Comentario", max_length=1200)
+    is_approved = models.BooleanField("Aprobado para mostrar", default=False)
+    created_at = models.DateTimeField("Creado", auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]   # <- importante: usamos created_at (no 'created')
+        verbose_name = "Reseña"
+        verbose_name_plural = "Reseñas"
+
+    def __str__(self):
+        return f"{self.name} ({self.rating}★)"
+
+
 
 
