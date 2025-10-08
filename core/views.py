@@ -120,33 +120,73 @@ def _save_cart(session, cart):
     session.modified = True
 
 def _cart_summary(cart):
-    pids = [int(pid) for pid in cart.keys()] or []
-    products = Product.objects.filter(pk__in=pids, is_active=True).select_related('category')
-    pmap = {p.pk: p for p in products}
+    """
+    Devuelve: (items, subtotal, tax, shipping, grand_total, count)
+    items = [{id, name, qty, price, total, image_url, category}]
+    """
     items = []
     subtotal = Decimal("0.00")
-    for pid_str, qty in cart.items():
-        pid = int(pid_str)
-        product = pmap.get(pid)
-        if not product:
+    tax = Decimal("0.00")
+    shipping = Decimal("0.00")
+
+    if Product is None:
+        # Por si falla el import del modelo
+        return items, subtotal, tax, shipping, subtotal, 0
+
+    for pid, data in cart.items():
+        # qty seguro como int
+        qty = 0
+        if isinstance(data, dict):
+            raw_q = data.get("qty", 0)
+            if isinstance(raw_q, dict):
+                raw_q = raw_q.get("qty", 0)
+            try:
+                qty = int(raw_q or 0)
+            except Exception:
+                qty = 0
+        else:
+            try:
+                qty = int(data or 0)
+            except Exception:
+                qty = 0
+        if qty <= 0:
             continue
-        price = Decimal(str(product.price))
-        total = price * qty
+
+        # Busca producto
+        try:
+            p = Product.objects.select_related("category").prefetch_related("images").get(pk=pid)
+        except Product.DoesNotExist:
+            continue
+
+        price = p.price or Decimal("0.00")
+        # AQUI estaba tu error: asegúrate que qty sea int, nunca dict
+        line_total = price * qty
+        img_url = None
+        try:
+            first_img = getattr(p, "images", None)
+            if first_img:
+                first_img = first_img.first()
+                if first_img:
+                    img_url = first_img.image.url
+        except Exception:
+            pass
+
         items.append({
-            "id": pid,
-            "name": product.name,
-            "category": product.category.name if product.category_id else "",
+            "id": p.pk,
+            "name": p.name,
             "qty": qty,
             "price": price,
-            "total": total,
-            "image_url": getattr(product.images.first(), "image", None).url if product.images.first() else None,
+            "total": line_total,
+            "image_url": img_url,
+            "category": getattr(getattr(p, "category", None), "name", ""),
         })
-        subtotal += total
-    shipping = Decimal("0.00")
-    tax = Decimal("0.00")
-    grand_total = subtotal + shipping + tax
-    count = sum(cart.values())
+
+        subtotal += line_total
+
+    grand_total = subtotal + tax + shipping
+    count = sum(i["qty"] for i in items)
     return items, subtotal, tax, shipping, grand_total, count
+
 
 
 def add_to_cart(request, pk):
@@ -204,27 +244,80 @@ def add_to_cart(request, pk):
     return redirect("core:cart_detail")
 
 def get_normalized_cart(session):
-    cart = session.get("cart", {})
-    # Si es lista antigua -> pásala a dict nuevo
+    """
+    Normaliza el carrito a formato:
+      {"<product_id_str>": {"qty": int}}
+    Acepta formatos viejos (lista de dicts) o valores raros y sanea.
+    """
+    cart = session.get("cart") or {}
+
+    # Lista antigua: [{"id": 123, "qty": 2}, ...]
     if isinstance(cart, list):
         new = {}
         for it in cart:
+            if not isinstance(it, dict):
+                continue
+            pid = it.get("id") or it.get("pk")
+            if pid is None:
+                continue
+            raw_q = it.get("qty", 0)
+            if isinstance(raw_q, dict):
+                raw_q = raw_q.get("qty", 0)
             try:
-                pid = str(it.get("id"))
-                qty = int(it.get("qty", 0) or 0)
-                if pid and qty > 0:
-                    new[pid] = {"qty": qty}
+                qty = int(raw_q or 0)
             except Exception:
-                pass
+                qty = 0
+            if qty > 0:
+                new[str(pid)] = {"qty": qty}
         session["cart"] = new
         session.modified = True
         return new
-    # Si no es dict -> reinicia
+
+    # Si no es dict, resetea
     if not isinstance(cart, dict):
         session["cart"] = {}
         session.modified = True
         return {}
+
+    # Es dict: asegurar que todos tengan {"qty": int}
+    changed = False
+    keys = list(cart.keys())
+    for k in keys:
+        v = cart.get(k)
+        # soportar número suelto
+        if not isinstance(v, dict):
+            try:
+                q = int(v or 0)
+            except Exception:
+                q = 0
+            if q > 0:
+                cart[k] = {"qty": q}
+            else:
+                cart.pop(k, None)
+            changed = True
+            continue
+
+        # v es dict, pero qty podría ser otro dict
+        raw_q = v.get("qty", 0)
+        if isinstance(raw_q, dict):
+            raw_q = raw_q.get("qty", 0)
+        try:
+            q = int(raw_q or 0)
+        except Exception:
+            q = 0
+
+        if q > 0:
+            v["qty"] = q
+        else:
+            cart.pop(k, None)
+        changed = True
+
+    if changed:
+        session["cart"] = cart
+        session.modified = True
+
     return cart
+
 
 
 def remove_from_cart(request, pk):
@@ -314,28 +407,20 @@ def clear_cart(request):
     return redirect('core:cart_detail')
 
 def cart_detail(request):
-    cart = _get_cart(request.session)
+    cart = get_normalized_cart(request.session)
     items, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
 
-    discount_code = request.session.get("coupon")
-    discount_amount = Decimal("0.00")
-    if discount_code:
-        d = _find_discount_by_code(discount_code)
-        if d:
-            discount_amount = _discount_amount_for_cart(d, items, subtotal)
-
-    # aplicar descuento al total
-    grand_total = max(Decimal("0.00"), grand_total - discount_amount)
-
-    return render(request, "core/cart.html", {
+    ctx = {
         "items": items,
         "subtotal": subtotal,
-        "shipping": shipping,
         "tax": tax,
-        "discount_amount": discount_amount,
-        "discount_code": discount_code if discount_amount > 0 else None,
+        "shipping": shipping,
         "grand_total": grand_total,
-    })
+        # Si usas cupones:
+        "discount_code": request.session.get("coupon"),
+        "discount_amount": request.session.get("discount_amount", 0),
+    }
+    return render(request, "core/cart.html", ctx)
     
 #DESCUENTOS
 def _find_discount_by_code(code):
