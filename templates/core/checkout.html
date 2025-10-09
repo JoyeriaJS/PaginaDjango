@@ -1,0 +1,142 @@
+{% extends "base_site.html" %}
+{% load static %}
+{% block title %}Checkout — Artesanías Pachy{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h1 class="h3 mb-3">Finalizar compra</h1>
+
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <div class="card card-elev p-3">
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+          {% endif %}
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nombre</label>
+              {{ form.first_name|as_widget:{"class":"form-control"} }}
+              {{ form.first_name.errors }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Apellido</label>
+              {{ form.last_name|as_widget:{"class":"form-control"} }}
+              {{ form.last_name.errors }}
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">RUT</label>
+              {{ form.rut|as_widget:{"class":"form-control","placeholder":"12.345.678-5"} }}
+              {{ form.rut.errors }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Teléfono</label>
+              {{ form.phone|as_widget:{"class":"form-control","placeholder":"+569..."} }}
+              {{ form.phone.errors }}
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Email</label>
+              {{ form.email|as_widget:{"class":"form-control"} }}
+              {{ form.email.errors }}
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Dirección</label>
+              {{ form.address_line|as_widget:{"class":"form-control","placeholder":"Calle 123, depto..."} }}
+              {{ form.address_line.errors }}
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Comuna</label>
+              {{ form.comuna|as_widget:{"class":"form-control"} }}
+              {{ form.comuna.errors }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Ciudad</label>
+              {{ form.ciudad|as_widget:{"class":"form-control"} }}
+              {{ form.ciudad.errors }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Región</label>
+              {{ form.region|as_widget:{"class":"form-control"} }}
+              {{ form.region.errors }}
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Código Postal (opcional)</label>
+              {{ form.postal_code|as_widget:{"class":"form-control"} }}
+              {{ form.postal_code.errors }}
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Envío</label>
+              {{ form.shipping_method|as_widget:{"class":"form-select"} }}
+              {{ form.shipping_method.errors }}
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Notas del pedido (opcional)</label>
+              {{ form.notes|as_widget:{"class":"form-control"} }}
+              {{ form.notes.errors }}
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 mt-3">
+            <button class="btn btn-outline-secondary" type="submit" name="save">Guardar</button>
+            <button class="btn btn-primary" type="submit" name="pay">Guardar y pagar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card p-3">
+        <h5 class="mb-3">Resumen</h5>
+
+        <ul class="list-group list-group-flush mb-3">
+          {% for it in items %}
+          <li class="list-group-item d-flex justify-content-between">
+            <div>
+              <div class="fw-semibold">{{ it.name }}</div>
+              <div class="small text-muted">x{{ it.qty }}</div>
+            </div>
+            <div class="text-end">
+              <div>${{ it.total }}</div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+
+        <div class="d-flex justify-content-between">
+          <span>Subtotal</span>
+          <strong>${{ subtotal }}</strong>
+        </div>
+        {% if tax and tax > 0 %}
+        <div class="d-flex justify-content-between">
+          <span>Impuestos</span>
+          <strong>${{ tax }}</strong>
+        </div>
+        {% endif %}
+        {% if shipping and shipping > 0 %}
+        <div class="d-flex justify-content-between">
+          <span>Envío</span>
+          <strong>${{ shipping }}</strong>
+        </div>
+        {% endif %}
+        <hr>
+        <div class="d-flex justify-content-between fs-5">
+          <span>Total</span>
+          <strong>${{ grand_total }}</strong>
+        </div>
+
+        <a href="{% url 'core:cart_detail' %}" class="btn btn-link mt-2">Volver al carrito</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

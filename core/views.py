@@ -18,6 +18,8 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseBadRequest
 from catalog.models import Product
+from .forms import CheckoutForm
+
 
 
 def home(request):
@@ -538,55 +540,89 @@ def _cart_lines_from_session(request):
 
 def mp_checkout(request):
     """
-    Crea la preferencia y redirige a Mercado Pago.
-    Se usa desde el botón 'Pagar con Mercado Pago' en el carrito.
+    Crea la preferencia en Mercado Pago usando:
+    - ítems del carrito (desde sesión)
+    - datos del checkout (request.session['checkout_data'])
+    Acepta GET o POST (por si vienes desde /checkout/ con un link/botón).
     """
-    if request.method != "POST":
+    # ✔️ Permite GET o POST
+    if request.method not in ("GET", "POST"):
         return redirect("core:cart_detail")
 
+    # ✔️ Token configurado
     if not settings.MP_ACCESS_TOKEN:
         messages.error(request, "Falta configurar MP_ACCESS_TOKEN en el servidor.")
         return redirect("core:cart_detail")
 
-    items = _cart_lines_from_session(request)
+    # ✔️ Carrito con ítems
+    items = _cart_lines_from_session(request)  # <- tu helper actual
     if not items:
         messages.error(request, "Tu carrito está vacío.")
         return redirect("core:cart_detail")
 
+    # ✔️ Datos de checkout (obligatorios para pagar)
+    checkout_data = request.session.get("checkout_data")
+    if not checkout_data:
+        messages.warning(request, "Completa tus datos de envío y contacto.")
+        return redirect("core:checkout")
+
+    # Payer (tomamos del checkout; si el user está logueado puedes sobreescribir email)
+    payer = {
+        "name": checkout_data.get("first_name", ""),
+        "surname": checkout_data.get("last_name", ""),
+        "email": checkout_data.get("email", ""),
+        "phone": {"number": checkout_data.get("phone", "")},
+        "identification": {"type": "RUT", "number": checkout_data.get("rut", "")},
+        "address": {
+            "zip_code": checkout_data.get("postal_code", "") or "",
+            "street_name": checkout_data.get("address_line", "") or "",
+        },
+    }
+
+    # Metadata útil para tu backoffice / webhook
+    metadata = {
+        "shipping_method": checkout_data.get("shipping_method"),
+        "address_line": checkout_data.get("address_line"),
+        "comuna": checkout_data.get("comuna"),
+        "ciudad": checkout_data.get("ciudad"),
+        "region": checkout_data.get("region"),
+        "notes": checkout_data.get("notes"),
+        # Podrías agregar un ID temporal de pedido si lo generas aquí:
+        # "tmp_order_id": request.session.session_key,
+    }
+
     sdk = mercadopago.SDK(settings.MP_ACCESS_TOKEN)
 
-    success_url  = request.build_absolute_uri(reverse("core:mp_success"))
-    failure_url  = request.build_absolute_uri(reverse("core:mp_failure"))
-    pending_url  = request.build_absolute_uri(reverse("core:mp_pending"))
-    notif_url    = request.build_absolute_uri(reverse("core:mp_webhook"))  # opcional
+    success_url = request.build_absolute_uri(reverse("core:mp_success"))
+    failure_url = request.build_absolute_uri(reverse("core:mp_failure"))
+    pending_url = request.build_absolute_uri(reverse("core:mp_pending"))
+    notif_url   = request.build_absolute_uri(reverse("core:mp_webhook"))  # opcional; comenta si no lo usarás todavía
 
     preference = {
-        "items": items,
+        "items": items,                        # <- ya en CLP y enteros (como dejamos el carrito)
+        "payer": payer,
+        "metadata": metadata,
         "back_urls": {
             "success": success_url,
             "failure": failure_url,
             "pending": pending_url,
         },
         "auto_return": "approved",
-        # puedes comentar notification_url hasta que montemos webhook
-        "notification_url": notif_url,
-        # datos del comprador si está logueado
-        "payer": {
-            "name": request.user.get_full_name() if request.user.is_authenticated else "",
-            "email": request.user.email if request.user.is_authenticated else "",
-        },
+        "binary_mode": True,                   # opcional: solo aprueba/rechaza (sin 'pending' intermedio)
+        "statement_descriptor": "ARTES PACHY", # cómo se verá en el extracto (máx 22 chars)
+        "notification_url": notif_url,         # comenta esta línea si aún no configuras webhook público
+        # "external_reference": f"CHK-{request.session.session_key}",  # opcional
     }
 
     try:
         pref_res = sdk.preference().create(preference)
         data = pref_res.get("response", {})
-        init_point = data.get("init_point")  # producción
-        sandbox_point = data.get("sandbox_init_point")  # sandbox
-        url = init_point or sandbox_point
-        if not url:
+        # En modo producción usa init_point; en sandbox usa sandbox_init_point
+        init_point = data.get("init_point") or data.get("sandbox_init_point")
+        if not init_point:
             messages.error(request, "No se pudo crear la preferencia de pago.")
             return redirect("core:cart_detail")
-        return redirect(url)
+        return redirect(init_point)
     except Exception as e:
         messages.error(request, f"Error iniciando pago: {e}")
         return redirect("core:cart_detail")
@@ -633,3 +669,45 @@ def mp_webhook(request):
 
 
 
+#checkout form
+def checkout(request):
+    """
+    Muestra y procesa el formulario de checkout.
+    Guarda los datos en request.session['checkout_data'].
+    Luego redirige a Mercado Pago (mp_checkout) o vuelve al carrito.
+    """
+    # Protección: si el carrito está vacío, volver al carrito
+    cart = request.session.get("cart") or {}
+    items, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
+    if count <= 0:
+        messages.info(request, "Tu carrito está vacío.")
+        return redirect("core:cart_detail")
+
+    # Precarga con lo que hubiera en sesión
+    initial = request.session.get("checkout_data") or {}
+
+    if request.method == "POST":
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            request.session["checkout_data"] = form.cleaned_data
+            request.session.modified = True
+
+            # ¿viene con intención de pagar?
+            if "pay" in request.POST:
+                return redirect("core:mp_checkout")
+            else:
+                messages.success(request, "Datos guardados.")
+                return redirect("core:checkout")
+    else:
+        form = CheckoutForm(initial=initial)
+
+    ctx = {
+        "form": form,
+        "items": items,
+        "subtotal": subtotal,
+        "tax": tax,
+        "shipping": shipping,
+        "grand_total": grand_total,
+        "count": count,
+    }
+    return render(request, "core/checkout.html", ctx)

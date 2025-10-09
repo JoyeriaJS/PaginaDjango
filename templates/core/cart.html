@@ -110,7 +110,7 @@
           {# FORM 4: MERCADO PAGO (BOTÓN PAGAR) #}
           <form class="mt-2" method="post" action="{% url 'core:mp_checkout' %}">
             {% csrf_token %}
-            <button class="btn btn-success w-100" type="submit">Pagar con Mercado Pago</button>
+            <a class="btn btn-success w-100" href="{% url 'core:checkout' %}">Ir a pagar</a>
           </form>
         </div>
       </div>
