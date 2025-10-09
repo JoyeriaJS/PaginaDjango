@@ -19,69 +19,69 @@
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label">Nombre</label>
-              {{ form.first_name|as_widget:{"class":"form-control"} }}
+              {{ form.first_name }}
               {{ form.first_name.errors }}
             </div>
             <div class="col-md-6">
               <label class="form-label">Apellido</label>
-              {{ form.last_name|as_widget:{"class":"form-control"} }}
+              {{ form.last_name }}
               {{ form.last_name.errors }}
             </div>
 
             <div class="col-md-6">
               <label class="form-label">RUT</label>
-              {{ form.rut|as_widget:{"class":"form-control","placeholder":"12.345.678-5"} }}
+              {{ form.rut }}
               {{ form.rut.errors }}
             </div>
             <div class="col-md-6">
               <label class="form-label">Teléfono</label>
-              {{ form.phone|as_widget:{"class":"form-control","placeholder":"+569..."} }}
+              {{ form.phone }}
               {{ form.phone.errors }}
             </div>
 
             <div class="col-12">
               <label class="form-label">Email</label>
-              {{ form.email|as_widget:{"class":"form-control"} }}
+              {{ form.first_email }}
               {{ form.email.errors }}
             </div>
 
             <div class="col-12">
               <label class="form-label">Dirección</label>
-              {{ form.address_line|as_widget:{"class":"form-control","placeholder":"Calle 123, depto..."} }}
+              {{ form.first_adress }}
               {{ form.address_line.errors }}
             </div>
 
             <div class="col-md-4">
               <label class="form-label">Comuna</label>
-              {{ form.comuna|as_widget:{"class":"form-control"} }}
+              {{ form.first_comuna }}
               {{ form.comuna.errors }}
             </div>
             <div class="col-md-4">
               <label class="form-label">Ciudad</label>
-              {{ form.ciudad|as_widget:{"class":"form-control"} }}
+              {{ form.first_ciudad }}
               {{ form.ciudad.errors }}
             </div>
             <div class="col-md-4">
               <label class="form-label">Región</label>
-              {{ form.region|as_widget:{"class":"form-control"} }}
+              {{ form.region }}
               {{ form.region.errors }}
             </div>
 
             <div class="col-md-6">
               <label class="form-label">Código Postal (opcional)</label>
-              {{ form.postal_code|as_widget:{"class":"form-control"} }}
+              {{ form.postal_code }}
               {{ form.postal_code.errors }}
             </div>
 
             <div class="col-md-6">
               <label class="form-label">Envío</label>
-              {{ form.shipping_method|as_widget:{"class":"form-select"} }}
+              {{ form.shipping_method }}
               {{ form.shipping_method.errors }}
             </div>
 
             <div class="col-12">
               <label class="form-label">Notas del pedido (opcional)</label>
-              {{ form.notes|as_widget:{"class":"form-control"} }}
+              {{ form.notes }}
               {{ form.notes.errors }}
             </div>
           </div>
