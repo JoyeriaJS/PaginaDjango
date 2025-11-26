@@ -1,67 +1,91 @@
 {% load i18n %}
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+<nav class="navbar navbar-expand-lg bg-white shadow-sm py-3">
   <div class="container">
-    <a class="navbar-brand fw-bold" href="/">Artesanías Pachy</a>
 
-    
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="{% trans 'Alternar navegación' %}">
+    <!-- Branding -->
+    <a class="navbar-brand fw-bold fs-4" href="/" style="letter-spacing:-.5px;">
+      Artesanías Pachy
+    </a>
+
+    <!-- Toggler -->
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsDefault">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarsDefault">
-      {# --- Buscador --- #}
-      <form class="d-flex me-auto ms-lg-3 my-2 my-lg-0" role="search" method="get" action="{% url 'core:search' %}">
-        <input class="form-control" type="search" placeholder="{% trans 'Buscar productos…' %}" aria-label="{% trans 'Buscar' %}" name="q" value="{{ request.GET.q }}">
+
+      <!-- SEARCH -->
+      <form class="d-flex ms-lg-4 my-3 my-lg-0 flex-grow-1" role="search" method="get" action="{% url 'core:search' %}"
+            style="max-width:360px;">
+        <input class="form-control rounded-pill px-3"
+               type="search"
+               placeholder="{% trans 'Buscar productos…' %}"
+               name="q"
+               value="{{ request.GET.q }}">
       </form>
 
-      {# --- Menú dinámico --- #}
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <!-- MENU -->
+      <ul class="navbar-nav mx-lg-3 mb-2 mb-lg-0 gap-lg-2">
+
         {% for it in main_menu %}
           {% if it.children %}
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="{{ it.url }}" data-bs-toggle="dropdown" {% if it.new %}target="_blank" rel="noopener"{% endif %}>{{ it.title }}</a>
-              <ul class="dropdown-menu">
+              <a class="nav-link dropdown-toggle fw-medium" href="{{ it.url }}"
+                 data-bs-toggle="dropdown"
+                 {% if it.new %}target="_blank" rel="noopener"{% endif %}>
+                {{ it.title }}
+              </a>
+              <ul class="dropdown-menu shadow-sm border-0 rounded-3 py-2">
                 {% for ch in it.children %}
                   <li>
-                    <a class="dropdown-item" href="{{ ch.url }}" {% if ch.open_in_new_tab %}target="_blank" rel="noopener"{% endif %}>{{ ch.title }}</a>
+                    <a class="dropdown-item py-2 fw-medium"
+                       href="{{ ch.url }}"
+                       {% if ch.open_in_new_tab %}target="_blank" rel="noopener"{% endif %}>
+                      {{ ch.title }}
+                    </a>
                   </li>
                 {% endfor %}
               </ul>
             </li>
           {% else %}
             <li class="nav-item">
-              <a class="nav-link" href="{{ it.url }}" {% if it.new %}target="_blank" rel="noopener"{% endif %}>{{ it.title }}</a>
+              <a class="nav-link fw-medium" href="{{ it.url }}"
+                 {% if it.new %}target="_blank" rel="noopener"{% endif %}>
+                {{ it.title }}
+              </a>
             </li>
           {% endif %}
         {% endfor %}
       </ul>
 
-      {# --- Selector de idioma --- #}
-          <select id="lang-switcher"
-            class="form-select form-select-sm"
-            style="width:auto"
-            onchange="window.changeLang && window.changeLang(this.value)">
+      <!-- IDIOMA -->
+      <select id="lang-switcher"
+              class="form-select form-select-sm rounded-pill ms-lg-3"
+              style="width:auto"
+              onchange="window.changeLang && window.changeLang(this.value)">
         <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>ES</option>
         <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
       </select>
 
-      {# --- Formulario oculto para set_language (fallback Django) --- #}
+      <!-- FALLBACK DJANGO -->
       <form id="lang-fallback-form" action="{% url 'set_language' %}" method="post" class="d-none">
         {% csrf_token %}
         <input type="hidden" name="language" value="{{ request.LANGUAGE_CODE }}">
         <input type="hidden" name="next" value="{{ request.get_full_path }}">
-
       </form>
 
-      {# --- Botones sesión/panel --- #}
-      {% if request.user.is_authenticated %}
-        {% if request.user.is_staff %}
-          <a class="btn btn-outline-primary me-2" href="/panel/">{% trans 'Panel' %}</a>
+      <!-- SESIÓN -->
+      <div class="ms-lg-3 mt-3 mt-lg-0 d-flex gap-2">
+        {% if request.user.is_authenticated %}
+          {% if request.user.is_staff %}
+            <a class="btn btn-outline-primary btn-sm rounded-pill px-3" href="/panel/">{% trans 'Panel' %}</a>
+          {% endif %}
+          <a class="btn btn-primary btn-sm rounded-pill px-3" href="/admin/logout/">{% trans 'Cerrar sesión' %}</a>
+        {% else %}
+          <a class="btn btn-primary btn-sm rounded-pill px-3" href="/admin/login/">{% trans 'Iniciar sesión' %}</a>
         {% endif %}
-        <a class="btn btn-primary" href="/admin/logout/">{% trans 'Cerrar sesión' %}</a>
-      {% else %}
-        <a class="btn btn-primary" href="/admin/login/">{% trans 'Iniciar sesión' %}</a>
-      {% endif %}
+      </div>
+
     </div>
   </div>
 </nav>

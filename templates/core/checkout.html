@@ -3,140 +3,203 @@
 {% block title %}Checkout — Artesanías Pachy{% endblock %}
 
 {% block content %}
+
 <div class="container py-4">
-  <h1 class="h3 mb-3">Finalizar compra</h1>
+
+  <!-- Título -->
+  <h1 class="h3 fw-bold mb-4">Finalizar compra</h1>
 
   <div class="row g-4">
+
+    <!-- ========================================================= -->
+    <!-- IZQUIERDA: FORMULARIO DE DATOS DEL CLIENTE -->
+    <!-- ========================================================= -->
     <div class="col-lg-7">
-      <div class="card card-elev p-3">
+
+      <div class="card border-0 shadow-sm rounded-4 p-4">
+
         <form method="post" novalidate>
           {% csrf_token %}
 
           {% if form.non_field_errors %}
-            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+          <div class="alert alert-danger rounded-3">
+            {{ form.non_field_errors }}
+          </div>
           {% endif %}
 
           <div class="row g-3">
+
+            <!-- Nombre -->
             <div class="col-md-6">
-              <label class="form-label">Nombre</label>
+              <label class="form-label fw-semibold">Nombre</label>
               {{ form.first_name }}
-              {{ form.first_name.errors }}
+              <div class="text-danger small">{{ form.first_name.errors }}</div>
             </div>
+
+            <!-- Apellido -->
             <div class="col-md-6">
-              <label class="form-label">Apellido</label>
+              <label class="form-label fw-semibold">Apellido</label>
               {{ form.last_name }}
-              {{ form.last_name.errors }}
+              <div class="text-danger small">{{ form.last_name.errors }}</div>
             </div>
 
+
+            <!-- RUT -->
             <div class="col-md-6">
-              <label class="form-label">RUT</label>
+              <label class="form-label fw-semibold">RUT</label>
               {{ form.rut }}
-              {{ form.rut.errors }}
+              <div class="text-danger small">{{ form.rut.errors }}</div>
             </div>
+
+            <!-- Teléfono -->
             <div class="col-md-6">
-              <label class="form-label">Teléfono</label>
+              <label class="form-label fw-semibold">Teléfono</label>
               {{ form.phone }}
-              {{ form.phone.errors }}
+              <div class="text-danger small">{{ form.phone.errors }}</div>
             </div>
 
+
+            <!-- Email -->
             <div class="col-12">
-              <label class="form-label">Email</label>
+              <label class="form-label fw-semibold">Email</label>
               {{ form.email }}
-              {{ form.email.errors }}
+              <div class="text-danger small">{{ form.email.errors }}</div>
             </div>
 
+
+            <!-- Dirección -->
             <div class="col-12">
-              <label class="form-label">Dirección</label>
+              <label class="form-label fw-semibold">Dirección</label>
               {{ form.address_line }}
-              {{ form.address_line.errors }}
+              <div class="text-danger small">{{ form.address_line.errors }}</div>
             </div>
 
+
+            <!-- Comuna -->
             <div class="col-md-4">
-              <label class="form-label">Comuna</label>
+              <label class="form-label fw-semibold">Comuna</label>
               {{ form.comuna }}
-              {{ form.comuna.errors }}
+              <div class="text-danger small">{{ form.comuna.errors }}</div>
             </div>
+
+            <!-- Ciudad -->
             <div class="col-md-4">
-              <label class="form-label">Ciudad</label>
+              <label class="form-label fw-semibold">Ciudad</label>
               {{ form.ciudad }}
-              {{ form.ciudad.errors }}
+              <div class="text-danger small">{{ form.ciudad.errors }}</div>
             </div>
+
+            <!-- Región -->
             <div class="col-md-4">
-              <label class="form-label">Región</label>
+              <label class="form-label fw-semibold">Región</label>
               {{ form.region }}
-              {{ form.region.errors }}
+              <div class="text-danger small">{{ form.region.errors }}</div>
             </div>
 
+
+            <!-- Código Postal -->
             <div class="col-md-6">
-              <label class="form-label">Código Postal (opcional)</label>
+              <label class="form-label fw-semibold">Código Postal (opcional)</label>
               {{ form.postal_code }}
-              {{ form.postal_code.errors }}
+              <div class="text-danger small">{{ form.postal_code.errors }}</div>
             </div>
 
+            <!-- Método envío -->
             <div class="col-md-6">
-              <label class="form-label">Envío</label>
+              <label class="form-label fw-semibold">Método de envío</label>
               {{ form.shipping_method }}
-              {{ form.shipping_method.errors }}
+              <div class="text-danger small">{{ form.shipping_method.errors }}</div>
             </div>
 
+
+            <!-- Notas -->
             <div class="col-12">
-              <label class="form-label">Notas del pedido (opcional)</label>
+              <label class="form-label fw-semibold">Notas del pedido (opcional)</label>
               {{ form.notes }}
-              {{ form.notes.errors }}
+              <div class="text-danger small">{{ form.notes.errors }}</div>
             </div>
+
           </div>
 
-          <div class="d-flex gap-2 mt-3">
-            <button class="btn btn-outline-secondary" type="submit" name="save">Guardar</button>
-            <button class="btn btn-primary" type="submit" name="pay">Guardar y pagar</button>
+          <!-- BOTONES -->
+          <div class="d-flex gap-2 mt-4">
+            <button class="btn btn-outline-secondary rounded-pill px-4"
+                    type="submit" name="save">
+              Guardar
+            </button>
+
+            <button class="btn btn-primary rounded-pill px-4"
+                    type="submit" name="pay">
+              Guardar y pagar
+            </button>
           </div>
+
         </form>
+
       </div>
+
     </div>
 
+
+
+    <!-- ========================================================= -->
+    <!-- DERECHA: RESUMEN DEL PEDIDO -->
+    <!-- ========================================================= -->
     <div class="col-lg-5">
-      <div class="card p-3">
-        <h5 class="mb-3">Resumen</h5>
+
+      <div class="card shadow-sm border-0 rounded-4 p-4">
+
+        <h5 class="fw-bold mb-3">Resumen del pedido</h5>
 
         <ul class="list-group list-group-flush mb-3">
           {% for it in items %}
-          <li class="list-group-item d-flex justify-content-between">
+          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
             <div>
               <div class="fw-semibold">{{ it.name }}</div>
               <div class="small text-muted">x{{ it.qty }}</div>
             </div>
-            <div class="text-end">
-              <div>${{ it.total }}</div>
-            </div>
+            <div class="fw-semibold">${{ it.total }}</div>
           </li>
           {% endfor %}
         </ul>
 
-        <div class="d-flex justify-content-between">
-          <span>Subtotal</span>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-muted">Subtotal</span>
           <strong>${{ subtotal }}</strong>
         </div>
+
         {% if tax and tax > 0 %}
-        <div class="d-flex justify-content-between">
-          <span>Impuestos</span>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-muted">Impuestos</span>
           <strong>${{ tax }}</strong>
         </div>
         {% endif %}
+
         {% if shipping and shipping > 0 %}
-        <div class="d-flex justify-content-between">
-          <span>Envío</span>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-muted">Envío</span>
           <strong>${{ shipping }}</strong>
         </div>
         {% endif %}
+
         <hr>
-        <div class="d-flex justify-content-between fs-5">
+
+        <div class="d-flex justify-content-between fs-5 fw-bold">
           <span>Total</span>
-          <strong>${{ grand_total }}</strong>
+          <span>${{ grand_total }}</span>
         </div>
 
-        <a href="{% url 'core:cart_detail' %}" class="btn btn-link mt-2">Volver al carrito</a>
+        <a href="{% url 'core:cart_detail' %}"
+           class="btn btn-link mt-2 text-decoration-none">
+          Volver al carrito
+        </a>
+
       </div>
+
     </div>
+
   </div>
+
 </div>
+
 {% endblock %}

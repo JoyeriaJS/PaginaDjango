@@ -1,45 +1,79 @@
-<section class="py-5 bg-white">
+<section class="py-5 bg-light">
   <div class="container">
-    <h2 class="h4 mb-3">Preguntas frecuentes</h2>
-    <div class="accordion" id="faqAcc">
+
+    <h3 class="fw-bold text-center mb-4">Preguntas frecuentes</h3>
+
+    <div class="accordion accordion-flush" id="faqAccordion">
+
+      <!-- FAQ 1 -->
       <div class="accordion-item">
-        <h2 class="accordion-header" id="q1">
-          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#a1">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-semibold"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#faq1">
+            ¿Cuánto tarda el envío?
+          </button>
+        </h2>
+        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body text-muted">
+            Enviamos a todo Chile. El tiempo habitual es de 2 a 5 días hábiles según la comuna.
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ 2 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-semibold"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#faq2">
+            ¿Puedo cambiar un producto?
+          </button>
+        </h2>
+        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body text-muted">
+            Sí. Puedes realizar cambios dentro de los 10 días posteriores a la compra.
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ 3 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-semibold"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#faq3">
             ¿Los productos son de lapislázuli auténtico?
           </button>
         </h2>
-        <div id="a1" class="accordion-collapse collapse show" data-bs-parent="#faqAcc">
+        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
           <div class="accordion-body text-muted">
-            Sí, trabajamos con lapislázuli chileno seleccionado, verificado por nuestros artesanos.
+            Sí. Trabajamos exclusivamente con lapislázuli chileno auténtico, certificado y de alta calidad.
           </div>
         </div>
       </div>
 
+      <!-- FAQ 4 -->
       <div class="accordion-item">
-        <h2 class="accordion-header" id="q2">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a2">
-            ¿Hacen piezas a medida?
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fw-semibold"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#faq4">
+            ¿Hacen piezas personalizadas?
           </button>
         </h2>
-        <div id="a2" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
           <div class="accordion-body text-muted">
-            Sí, podemos personalizar medidas, terminaciones y combinaciones de materiales. Escríbenos a contacto@artesaniaspachy.cl.
+            Sí. Podemos crear piezas personalizadas en base a tu diseño o preferencias.
           </div>
         </div>
       </div>
 
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="q3">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a3">
-            ¿Cuáles son los tiempos de despacho?
-          </button>
-        </h2>
-        <div id="a3" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
-          <div class="accordion-body text-muted">
-            En stock: 2–4 días hábiles. Personalizados: coordinamos el plazo según complejidad.
-          </div>
-        </div>
-      </div>
     </div>
+
   </div>
 </section>
