@@ -1,166 +1,46 @@
 {% load static %}
-<!doctype html>
-<html lang="{{ request.LANGUAGE_CODE|default:'es' }}">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
     <title>{% block title %}Artesanías Pachy{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}Joyería y artesanías en lapislázuli hechas en Chile.{% endblock %}">
-    <meta property="og:title" content="{% block og_title %}Artesanías Pachy{% endblock %}">
-    <meta property="og:description" content="{% block og_desc %}Joyería y artesanías en lapislázuli hechas en Chile.{% endblock %}">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ request.build_absolute_uri }}">
 
-    <link rel="icon" href="{% static 'img/favicon.ico' %}">
-
-    <!-- Fonts premium estilo BlueCast -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
-
-    <!-- Bootstrap -->
+    <!-- BOOTSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Tu CSS -->
-    <link href="{% static 'css/site.css' %}" rel="stylesheet">
+    <!-- AOS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
 
-    <style>
-      /* ======== ESTILO GLOBAL (BlueCast + Promano) ======== */
+    <!-- ICONS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
 
-      body {
-        font-family: 'Inter', sans-serif;
-        background: #f8f9fb;
-        color: #1a1a1a;
-        scroll-behavior: smooth;
-      }
+    <!-- ESTILOS DEL SITIO -->
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+</head>
 
-      /* NAVBAR (más premium, más limpio) */
-      .navbar {
-        background: #ffffff;
-        padding: 18px 0 !important;
-        border-bottom: 1px solid rgba(0,0,0,0.05);
-        box-shadow: 0 3px 14px rgba(0,0,0,0.04);
-      }
-      .navbar-brand {
-        font-weight: 700;
-        font-size: 1.45rem;
-        font-family: "Playfair Display";
-        letter-spacing: -0.5px;
-      }
-      .nav-link {
-        font-weight: 500;
-        padding: 8px 14px !important;
-        margin: 0 4px;
-        color: #333 !important;
-        transition: .2s;
-      }
-      .nav-link:hover {
-        color: #0d6efd !important;
-      }
+<body>
 
-      /* AREA DE CONTENIDO PRINCIPAL */
-      main {
-        padding-top: 30px;
-        padding-bottom: 50px;
-      }
-
-      /* FOOTER estilo Promano (oscuro, elegante) */
-      footer {
-        background: #0f0f0f;
-        padding: 45px 0;
-        color: #ddd;
-      }
-      footer h5 {
-        font-weight: 600;
-        margin-bottom: 16px;
-      }
-      footer a {
-        color: #ccc;
-        text-decoration: none;
-      }
-      footer a:hover {
-        color: #fff;
-      }
-
-      /* BOTÓN FLOTANTE CARRITO */
-      .floating-cart {
-        right: 16px;
-        bottom: 80px;
-        border-radius: 12px;
-        padding: 12px 18px;
-        font-weight: 600;
-        background: #0d6efd;
-        box-shadow: 0 6px 25px rgba(0,0,0,0.18);
-      }
-
-      /* WhatsApp circular */
-      .whatsapp-btn {
-        right: 16px;
-        bottom: 16px;
-        width: 56px; height: 56px;
-        display: grid; place-items: center;
-        font-size: 23px;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-      }
-    </style>
-
-    {% block extra_head %}
-      <!-- AOS -->
-      <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
-      <!-- Swiper -->
-      <link href="https://unpkg.com/swiper@9/swiper-bundle.min.css" rel="stylesheet">
-    {% endblock %}
-  </head>
-
-  <body>
-
+    {# ---------------- NAVBAR ---------------- #}
     {% include "includes/navbar.html" %}
 
-    {% if messages %}
-      <div class="container mt-3">
-        {% for m in messages %}
-          <div class="alert alert-{{ m.tags|default:'info' }} mb-2 shadow-sm" role="alert">{{ m }}</div>
-        {% endfor %}
-      </div>
+    {# ---------------- HERO SOLO EN HOME ---------------- #}
+    {% if request.resolver_match.url_name == "home" %}
+        {% include "core/_banners.html" %}
     {% endif %}
 
-    <main>
-      {% block content %}{% endblock %}
+    <main class="py-4" style="position:relative; z-index:5;">
+        {% block content %}{% endblock %}
     </main>
 
     {% include "includes/footer.html" %}
 
-    <!-- Bootstrap JS -->
+    <!-- JS BOOTSTRAP -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    {% block extra_js %}
-      <!-- AOS + Swiper -->
-      <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-      <script src="https://unpkg.com/swiper@9/swiper-bundle.min.js"></script>
+    <!-- AOS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>AOS.init();</script>
 
-      <!-- Tus Swipers y efectos (NO SE TOCAN) -->
-      {{ block.super }}
-    {% endblock %}
-
-    <!-- Botón flotante del carrito (mejor diseño) -->
-    <a href="{% url 'core:cart_detail' %}"
-       class="btn btn-primary position-fixed floating-cart d-flex align-items-center gap-2"
-       style="z-index: 1040;">
-      <span class="bi bi-bag"></span>
-      <span>Carrito</span>
-      {% if cart_count %}
-        <span class="badge bg-light text-primary">{{ cart_count }}</span>
-      {% endif %}
-    </a>
-
-    <!-- WhatsApp flotante -->
-    <a href="https://wa.me/56912345678" target="_blank" rel="noopener"
-       class="btn btn-success rounded-circle shadow whatsapp-btn position-fixed"
-       style="z-index:1050;">
-      💬
-    </a>
-
-    <!-- (NO MODIFICO NADA DE TU LÓGICA: carrito AJAX, zoom, traducción, toast, etc.) -->
-    {{ block.super }}
-
-  </body>
+</body>
 </html>
