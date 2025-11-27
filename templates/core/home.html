@@ -267,20 +267,40 @@
   <script src="https://unpkg.com/swiper@9/swiper-bundle.min.js"></script>
 
   <script>
+    // =============================
+    // HERO MIX (banners + productos)
+    // =============================
     new Swiper('.hero-mix-swiper', {
       loop: true,
-      autoplay: { delay: 4200 },
-      effect: 'fade',
-      pagination: { el: '.hero-mix-swiper .swiper-pagination', clickable: true }
+      autoplay: {
+        delay: 3800,             // tiempo detenido por slide
+        disableOnInteraction: false
+      },
+      speed: 700,                 // velocidad del cambio (más suave)
+      effect: 'slide',            // NO usar fade, genera problemas en loop
+      pagination: {
+        el: '.hero-mix-swiper .swiper-pagination',
+        clickable: true
+      }
     });
 
+    // =============================
+    // TESTIMONIOS
+    // =============================
     new Swiper('.testimonials-swiper', {
       loop: true,
       autoplay: { delay: 5000 },
-      pagination: { el: '.testimonials-swiper .swiper-pagination', clickable: true },
       slidesPerView: 1,
       spaceBetween: 16,
-      breakpoints: { 768:{slidesPerView:2}, 1200:{slidesPerView:3} }
+      pagination: {
+        el: '.testimonials-swiper .swiper-pagination',
+        clickable: true
+      },
+      breakpoints: {
+        768: { slidesPerView: 2 },
+        1200: { slidesPerView: 3 }
+      }
     });
   </script>
 {% endblock %}
+
