@@ -88,21 +88,20 @@
       </script>
     {% endblock %}
 
-    {# --- BOTÓN DE CARRITO (ALINEADO EN NAVBAR) --- #}
-      <li class="nav-item ms-2">
-        <a href="{% url 'core:cart_detail' %}"
-          class="btn btn-primary d-flex align-items-center gap-2 position-relative">
-          <span class="bi bi-bag"></span>
-          <span>Carrito</span>
-
-          {% if cart_count %}
-            <span class="badge bg-light text-primary position-absolute"
-                  style="top: -6px; right: -6px;">
-              {{ cart_count }}
-            </span>
-          {% endif %}
-        </a>
-      </li>
+    <!-- Botón de carrito -->
+    <li class="nav-item ms-2">
+      <a href="{% url 'core:cart_detail' %}"
+        class="btn btn-primary d-flex align-items-center gap-2 position-relative">
+        <span class="bi bi-bag"></span>
+        <span>Carrito</span>
+        {% if cart_count %}
+          <span class="badge bg-light text-primary position-absolute"
+                style="top: -6px; right: -6px;">
+            {{ cart_count }}
+          </span>
+        {% endif %}
+      </a>
+    </li>
 
     <!-- JS del carrito (AJAX agregar/actualizar/quitar/vaciar) -->
     <script>
