@@ -99,3 +99,17 @@ footer .link-secondary:hover { color:#0d6efd; }
 
 /* USP strip */
 .usp-strip { font-weight:500; }
+
+.hero-product-card {
+  width: 140px;
+  display: inline-block;
+  text-align: center;
+}
+
+.hero-product-img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #ddd;
+}
