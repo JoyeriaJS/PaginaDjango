@@ -1,117 +1,67 @@
-{% load static %}
-
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-2">
+{% load i18n %}
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
   <div class="container">
+    <a class="navbar-brand fw-bold" href="/">Artesanías Pachy</a>
 
-    <!-- ======================= -->
-    <!-- LOGOTIPO -->
-    <!-- ======================= -->
-    <span class="fw-bold" style="letter-spacing:-0.5px; font-size:18px;">
-    Artesanías Pachy
-    </span>
-
-
-    <!-- Toggle móvil -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarMain">
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="{% trans 'Alternar navegación' %}">
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    <div class="collapse navbar-collapse" id="navbarsDefault">
+      {# --- Buscador --- #}
+      <form class="d-flex me-auto ms-lg-3 my-2 my-lg-0" role="search" method="get" action="{% url 'core:search' %}">
+        <input class="form-control" type="search" placeholder="{% trans 'Buscar productos…' %}" aria-label="{% trans 'Buscar' %}" name="q" value="{{ request.GET.q }}">
+      </form>
 
-    <!-- ======================= -->
-    <!-- MENÚ -->
-    <!-- ======================= -->
-    <div class="collapse navbar-collapse" id="navbarMain">
-
-      <!-- IZQUIERDA -->
+      {# --- Menú dinámico --- #}
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-        <li class="nav-item">
-          <a class="nav-link" href="/">Inicio</a>
-        </li>
-
-        <!-- Categorías dinámicas -->
-        {% if categories_nav %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-            Categorías
-          </a>
-          <ul class="dropdown-menu shadow-sm border-0">
-            {% for c in categories_nav %}
-            <li>
-              <a class="dropdown-item"
-                 href="{% url 'core:category_list' c.pk %}">
-                {{ c.name }}
-              </a>
+        {% for it in main_menu %}
+          {% if it.children %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="{{ it.url }}" data-bs-toggle="dropdown" {% if it.new %}target="_blank" rel="noopener"{% endif %}>{{ it.title }}</a>
+              <ul class="dropdown-menu">
+                {% for ch in it.children %}
+                  <li>
+                    <a class="dropdown-item" href="{{ ch.url }}" {% if ch.open_in_new_tab %}target="_blank" rel="noopener"{% endif %}>{{ ch.title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
             </li>
-            {% endfor %}
-          </ul>
-        </li>
-        {% endif %}
-
-        <li class="nav-item">
-          <a class="nav-link" href="/#nuevos">Novedades</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="/#contacto">Contacto</a>
-        </li>
-
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ it.url }}" {% if it.new %}target="_blank" rel="noopener"{% endif %}>{{ it.title }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
       </ul>
 
-
-
-      <!-- ======================= -->
-      <!-- DERECHA (LOGIN + IDIOMA + CARRITO) -->
-      <!-- ======================= -->
-      <ul class="navbar-nav ms-auto align-items-center gap-3">
-
-        <!-- Login / Logout -->
-        {% if request.user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'core:logout' %}">Cerrar sesión</a>
-        </li>
-        {% else %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'core:login' %}">Ingresar</a>
-        </li>
-        <li class="nav-item">
-          <a class="btn btn-outline-primary btn-sm" href="{% url 'core:register' %}">
-            Crear cuenta
-          </a>
-        </li>
-        {% endif %}
-
-        <!-- Selector idioma -->
-        <li class="nav-item">
+      {# --- Selector de idioma --- #}
           <select id="lang-switcher"
-                  class="form-select form-select-sm"
-                  style="width:110px;"
-                  onchange="changeLang(this.value)">
-            <option value="es">🇨🇱 Español</option>
-            <option value="en">🇺🇸 English</option>
-          </select>
-        </li>
+            class="form-select form-select-sm"
+            style="width:auto"
+            onchange="window.changeLang && window.changeLang(this.value)">
+        <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>ES</option>
+        <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
+      </select>
 
-        <!-- Carrito -->
-        <li class="nav-item">
-          <a class="btn btn-primary rounded-pill px-3 d-flex align-items-center gap-2 position-relative"
-             href="{% url 'core:cart_detail' %}">
-            <span class="bi bi-bag"></span>
-            <span class="fw-semibold">Carrito</span>
+      {# --- Formulario oculto para set_language (fallback Django) --- #}
+      <form id="lang-fallback-form" action="{% url 'set_language' %}" method="post" class="d-none">
+        {% csrf_token %}
+        <input type="hidden" name="language" value="{{ request.LANGUAGE_CODE }}">
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
 
-            {% if cart_count %}
-              <span class="badge bg-light text-primary position-absolute"
-                    style="top:-6px; right:-6px;">
-                {{ cart_count }}
-              </span>
-            {% endif %}
-          </a>
-        </li>
+      </form>
 
-      </ul>
-
+      {# --- Botones sesión/panel --- #}
+      {% if request.user.is_authenticated %}
+        {% if request.user.is_staff %}
+          <a class="btn btn-outline-primary me-2" href="/panel/">{% trans 'Panel' %}</a>
+        {% endif %}
+        <a class="btn btn-primary" href="/admin/logout/">{% trans 'Cerrar sesión' %}</a>
+      {% else %}
+        <a class="btn btn-primary" href="/admin/login/">{% trans 'Iniciar sesión' %}</a>
+      {% endif %}
     </div>
-
   </div>
 </nav>

@@ -1,130 +1,125 @@
 {% extends "base_site.html" %}
 {% block title %}Carrito — Artesanías Pachy{% endblock %}
-
 {% block content %}
-<div class="container py-5">
-
-  <h1 class="h4 fw-bold mb-4">Tu carrito</h1>
+<div class="container py-4">
+  <h1 class="h3 mb-3">Carrito</h1>
 
   {% if items %}
-  
-  <form method="post" action="{% url 'core:update_cart' %}">
-    {% csrf_token %}
+    {# ========== FORM 1: ACTUALIZAR CANTIDADES (SOLO LA TABLA) ========== #}
+    <form method="post" action="{% url 'core:update_cart' %}">
+      {% csrf_token %}
 
-    <div class="table-responsive">
-      <table class="table align-middle">
-        <thead class="text-muted small">
-          <tr>
-            <th style="width:90px;"></th>
-            <th>Producto</th>
-            <th class="text-center" style="width:120px;">Cantidad</th>
-            <th class="text-end" style="width:150px;">Total</th>
-            <th></th>
-          </tr>
-        </thead>
-        
-        <tbody>
-
-          {% for line in items %}
-          <tr>
-
-            <td>
-              {% if line.image_url %}
-              <img src="{{ line.image_url }}"
-                   class="rounded"
-                   style="width:75px;height:75px;object-fit:cover;">
-              {% else %}
-              <div class="ratio ratio-1x1 bg-light rounded" style="width:75px;"></div>
-              {% endif %}
-            </td>
-
-            <td>
-              <a href="{% url 'core:product_detail' line.id %}"
-                 class="text-dark fw-semibold text-decoration-none">
-                {{ line.name }}
-              </a>
-              <div class="small text-muted">
-                {{ line.category }}
-              </div>
-            </td>
-
-            <td class="text-center">
-              <input type="number"
-                     name="qty_{{ line.id }}"
-                     value="{{ line.qty }}"
-                     min="1"
-                     class="form-control form-control-sm text-center"
-                     style="width:70px;">
-            </td>
-
-            <td class="text-end">
-              <span data-line-total="{{ line.id }}">
-                ${{ line.total }}
-              </span>
-            </td>
-
-            <td class="text-end">
-              <button type="submit"
-                      formmethod="post"
-                      formaction="{% url 'core:remove_from_cart' line.id %}"
-                      class="btn btn-sm btn-light border">
-                ✕
-              </button>
-            </td>
-
-          </tr>
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th style="width:80px">Img</th>
+              <th>Producto</th>
+              <th style="width:140px">Cantidad</th>
+              <th style="width:120px">Precio</th>
+              <th style="width:120px">Total</th>
+              <th style="width:110px"></th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for it in items %}
+            <tr>
+              <td>
+                {% if it.image_url %}
+                  <img src="{{ it.image_url }}" class="img-thumbnail" style="width:60px;height:60px;object-fit:cover;">
+                {% else %}
+                  <div class="bg-light text-muted d-flex align-items-center justify-content-center" style="width:60px;height:60px;border:1px solid #e5e5e5;border-radius:.25rem;">–</div>
+                {% endif %}
+              </td>
+              <td>
+                <a href="{% url 'core:product_detail' it.id %}" class="text-decoration-none">{{ it.name }}</a>
+                {% if it.category %}<div class="small text-muted">{{ it.category }}</div>{% endif %}
+              </td>
+              <td>
+                <input type="number" name="qty_{{ it.id }}" value="{{ it.qty }}" min="1" class="form-control">
+              </td>
+              <td>${{ it.price }}</td>
+              <td><span data-line-total="{{ it.id }}">${{ it.total }}</span></td>
+              <td class="text-end">
+                {# FORM 1.1: QUITAR LÍNEA (FORM INDEPENDIENTE POR FILA) #}
+                <form method="post" action="{% url 'core:remove_from_cart' it.id %}" class="d-inline">
+                  {% csrf_token %}
+                  <button class="btn btn-sm btn-outline-danger">Quitar</button>
+                </form>
+              </td>
+            </tr>
           {% endfor %}
-
-        </tbody>
-
-      </table>
-    </div>
-
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mt-4 gap-3">
-
-      <form method="post" action="{% url 'core:clear_cart' %}">
-        {% csrf_token %}
-        <button class="btn btn-outline-secondary">
-          Vaciar carrito
-        </button>
-      </form>
-
-      <div class="text-end">
-
-        <div class="fw-semibold small text-muted">Subtotal</div>
-        <div class="h5 fw-bold mb-2" id="cart-subtotal">
-          ${{ subtotal }}
-        </div>
-
-        <div class="fw-semibold small text-muted">Total</div>
-        <div class="h4 fw-bold mb-3" id="cart-grandtotal">
-          ${{ grand_total }}
-        </div>
-
-        <a class="btn btn-primary btn-lg rounded-pill px-5"
-           href="{% url 'core:checkout' %}">
-          Ir al pago
-        </a>
+          </tbody>
+        </table>
       </div>
 
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-primary">Actualizar</button>
+      </div>
+    </form>
+    {# ========== /FORM 1 ========== #}
+
+    <div class="row mt-3">
+      <div class="col-12 col-lg-6">
+        {# FORM 2: VACIAR CARRITO #}
+        <form method="post" action="{% url 'core:clear_cart' %}" class="d-inline">
+          {% csrf_token %}
+          <button class="btn btn-outline-danger">Vaciar carrito</button>
+        </form>
+        <a href="/" class="btn btn-outline-secondary ms-2">Seguir comprando</a>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="card p-3 mt-3 mt-lg-0" style="min-width:320px">
+          <div class="small text-muted mt-2">
+            Al pagar aceptas nuestros
+            <a href="/terminos/" class="text-decoration-none">Términos</a> y
+            <a href="/cambios-devoluciones/" class="text-decoration-none">Política de Cambios</a>.
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <span>Subtotal</span>
+            <strong id="cart-subtotal">${{ subtotal }}</strong>
+          </div>
+
+          {# FORM 3: CUPÓN (aplicar / quitar) #}
+          <form class="mt-2 d-flex gap-2" method="post" action="{% url 'core:apply_coupon' %}">
+            {% csrf_token %}
+            {% if discount_code %}
+              <input class="form-control" value="{{ discount_code }}" disabled>
+              <button formaction="{% url 'core:remove_coupon' %}" class="btn btn-outline-danger">Quitar cupón</button>
+            {% else %}
+              <input name="coupon" class="form-control" placeholder="Código de descuento">
+              <button class="btn btn-outline-primary">Aplicar</button>
+            {% endif %}
+          </form>
+
+          {% if discount_amount and discount_amount > 0 %}
+            <div class="d-flex justify-content-between text-success mt-2">
+              <span>Descuento</span>
+              <strong>- ${{ discount_amount }}</strong>
+            </div>
+          {% endif %}
+
+          <hr class="my-2">
+          <div class="d-flex justify-content-between fs-5">
+            <span>Total</span>
+            <strong id="cart-grandtotal">${{ grand_total }}</strong>
+          </div>
+
+          {# FORM 4: MERCADO PAGO (BOTÓN PAGAR) #}
+          <form class="mt-2" method="post" action="{% url 'core:mp_checkout' %}">
+            {% csrf_token %}
+            <a class="btn btn-success w-100" href="{% url 'core:checkout' %}">Ir a pagar</a>
+          </form>
+        </div>
+      </div>
     </div>
 
-  </form>
-
   {% else %}
-
-  <div class="text-center py-5">
-    <div class="display-6 mb-3">🛒</div>
-    <h2 class="h5 fw-bold mb-3">Tu carrito está vacío</h2>
-    <p class="text-muted mb-4">
-      Cuando agregues productos aparecerán aquí.
-    </p>
-    <a href="/" class="btn btn-primary rounded-pill px-4">
-      Ver productos
-    </a>
-  </div>
-
+    <div class="alert alert-info">Tu carrito está vacío.</div>
+    <a href="/" class="btn btn-primary">Ir a comprar</a>
   {% endif %}
-
 </div>
+
 {% endblock %}

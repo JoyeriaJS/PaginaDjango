@@ -3,303 +3,212 @@
 
 {% block content %}
 
-<!-- ======================= -->
-<!-- USP strip -->
-<!-- ======================= -->
+{% if banners_hero %}
 {% include "includes/usp_strip.html" %}
 
-
-
-<!-- ======================= -->
-<!-- HERO PRINCIPAL (V2 PRO) -->
-<!-- ======================= -->
-<section class="py-5 hero-xl">
+<section class="hero-xl">
   <div class="container">
-    <div class="row align-items-center g-5">
-
-      <!-- TEXTO -->
+    <div class="row align-items-center g-4">
       <div class="col-lg-6" data-aos="fade-up">
-
-        <span class="chip mb-3">Nuevo</span>
-
-        <h1 class="display-5 fw-bold mb-3" style="letter-spacing:-1px;">
-          Joyería en Lapislázuli hecha en Chile
-        </h1>
-
-        <p class="lead text-muted" style="max-width:55ch;">
-          Piezas únicas con historia, elaboradas por artesanos chilenos con materiales nobles
-          y un acabado profesional. Elegancia, calidad y diseño atemporal.
-        </p>
-
-        <div class="d-flex gap-3 mt-4">
-          <a href="#categorias" class="btn btn-primary btn-lg px-4 rounded-pill">Explorar colección</a>
-          <a href="#nuevos" class="btn btn-outline-primary btn-lg px-4 rounded-pill">Novedades</a>
+        <span class="chip mb-2">Nuevo</span>
+        <h1 class="display-5 fw-bold hero-title mb-3">Joyería en Lapislázuli hecha en Chile</h1>
+        <p class="lead hero-sub">Piezas únicas con historia, materiales nobles y un acabado profesional. Descubre nuestras categorías y novedades.</p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="#categorias" class="btn btn-primary btn-lg">Explorar</a>
+          <a href="#nuevos" class="btn btn-outline-primary btn-lg">Novedades</a>
         </div>
       </div>
-
-
-      <!-- SLIDER HERO -->
       <div class="col-lg-6" data-aos="fade-left">
-        {% if banners_hero %}
-          <div class="hero-swiper swiper rounded-4 shadow-lg overflow-hidden">
-            <div class="swiper-wrapper">
-              {% for b in banners_hero %}
-                <div class="swiper-slide">
-                  <img src="{{ b.image.url }}" alt="{{ b.title|default:'Banner' }}"
-                       class="w-100"
-                       style="height:440px;object-fit:cover;">
-                </div>
-              {% endfor %}
-            </div>
-            <div class="swiper-pagination"></div>
+        <div class="hero-swiper swiper rounded-4 shadow-lg overflow-hidden">
+          <div class="swiper-wrapper">
+            {% for b in banners_hero %}
+              <div class="swiper-slide">
+                <img src="{{ b.image.url }}" alt="{{ b.title|default:'Banner' }}" class="w-100" style="height:440px;object-fit:cover;">
+              </div>
+            {% endfor %}
           </div>
-        {% else %}
-          <div class="ratio ratio-16x9 bg-light rounded-4"></div>
-        {% endif %}
+          <div class="swiper-pagination"></div>
+        </div>
       </div>
-
     </div>
   </div>
 </section>
+{% else %}
+<section class="hero-xl">
+  <div class="container text-center" data-aos="fade-up">
+    <h1 class="display-5 fw-bold hero-title mb-3">Joyería de lapislázuli hecha en Chile</h1>
+    <p class="lead hero-sub mx-auto">Piezas únicas, diseño atemporal y materiales nobles. Conoce nuestra colección.</p>
+    <div class="mt-3">
+      <a href="#nuevos" class="btn btn-primary btn-lg me-2">Ver novedades</a>
+      <a href="#categorias" class="btn btn-outline-primary btn-lg">Explorar categorías</a>
+    </div>
+  </div>
+</section>
+{% endif %}
 
 
-
-<!-- ======================= -->
-<!-- OCASIONES / PROMOS -->
-<!-- ======================= -->
 {% include "includes/occasions.html" %}
 
 
 
-<!-- ======================= -->
-<!-- CATEGORÍAS DESTACADAS -->
-<!-- ======================= -->
 <section id="categorias" class="py-5 section-muted">
   <div class="container">
-
-    <div class="d-flex justify-content-between align-items-end mb-4">
-      <h2 class="h3 fw-bold m-0">Categorías destacadas</h2>
+    <div class="d-flex justify-content-between align-items-end mb-3">
+      <h2 class="h3 m-0">Categorías destacadas</h2>
       {% if request.user.is_staff %}
         <a href="/panel/categorias/" class="small text-decoration-none">Gestionar categorías →</a>
       {% endif %}
     </div>
 
-    <div class="row g-4">
-
+    <div class="row g-3">
       {% for c in categories %}
       <div class="col-6 col-md-3" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:1 }}0">
-
         <a class="text-decoration-none" href="{% url 'core:category_list' c.pk %}">
-          <div class="card card-elev h-100 p-3 text-center border-0 shadow-sm">
-
-            <div class="thumb-1x1 mb-3 rounded-3 overflow-hidden">
+          <div class="card card-elev h-100 text-center p-3">
+            <div class="thumb-1x1 mb-3">
               {% with prod=c.products.first %}
                 {% if prod and prod.images.first %}
                   <img src="{{ prod.images.first.image.url }}" alt="{{ c.name }}">
                 {% endif %}
               {% endwith %}
             </div>
-
-            <h3 class="h6 text-dark mb-1 fw-semibold">{{ c.name }}</h3>
+            <h3 class="h6 text-dark mb-1">{{ c.name }}</h3>
             <p class="small text-muted mb-0">{{ c.n }} productos</p>
-
           </div>
         </a>
-
       </div>
       {% empty %}
       <div class="col-12 text-muted">Aún no hay categorías.</div>
       {% endfor %}
-
     </div>
-
   </div>
 </section>
 
 
-
-<!-- ======================= -->
-<!-- NOVEDADES -->
-<!-- ======================= -->
 <section id="nuevos" class="py-5">
   <div class="container">
-
-    <div class="d-flex justify-content-between align-items-end mb-4">
-      <h2 class="h3 fw-bold m-0">Novedades</h2>
+    <div class="d-flex justify-content-between align-items-end mb-3">
+      <h2 class="h3 m-0">Novedades</h2>
       {% if request.user.is_staff %}
         <a href="/panel/productos/" class="small text-decoration-none">Gestionar productos →</a>
       {% endif %}
     </div>
 
-    <div class="row g-4">
+    <div class="row g-3">
       {% for p in latest_products %}
-      <div class="col-6 col-md-3" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1 }}0">
-        <a class="card h-100 product-card card-elev text-decoration-none border-0 shadow-sm"
-           href="{% url 'core:product_detail' p.pk %}">
-
+      <div class="col-6 col-md-3">
+        <!-- Enlace al detalle del producto -->
+        <a class="card h-100 product-card card-elev text-decoration-none" href="{% url 'core:product_detail' p.pk %}">
           {% with img=p.images.first %}
           {% if img %}
-            <img src="{{ img.image.url }}" loading="lazy" class="card-img-top rounded-top" alt="{{ img.alt|default:p.name }}">
+            <!-- lazy-load aplicado -->
+            <img src="{{ img.image.url }}" loading="lazy" class="card-img-top" alt="{{ img.alt|default:p.name }}">
           {% else %}
-            <div class="ratio ratio-1x1 bg-light d-flex align-items-center justify-content-center text-muted">
-              Sin imagen
-            </div>
+            <div class="ratio ratio-1x1 bg-light d-flex align-items-center justify-content-center text-muted">Sin imagen</div>
           {% endif %}
           {% endwith %}
-
           <div class="card-body">
-            <h3 class="h6 fw-semibold text-dark mb-1">{{ p.name }}</h3>
+            <h3 class="h6 card-title mb-1 text-dark">{{ p.name }}</h3>
             <div class="small text-muted mb-2">{{ p.category.name }}</div>
-            <div class="fw-bold text-dark">${{ p.price }}</div>
+            <div class="fw-semibold">${{ p.price }}</div>
           </div>
-
         </a>
       </div>
       {% empty %}
       <div class="col-12 text-muted">Aún no hay productos.</div>
       {% endfor %}
     </div>
-
   </div>
 </section>
 
-
-
-<!-- ======================= -->
-<!-- SECCIÓN ARTESANÍA (BLUECAST VIBE) -->
-<!-- ======================= -->
-<section class="py-5 bg-white">
+<section class="py-5">
   <div class="container">
-
-    <div class="row g-5 align-items-center">
-
-      <!-- Texto -->
+    <div class="row g-4 align-items-center">
       <div class="col-lg-5" data-aos="fade-right">
-        <h2 class="h3 fw-bold mb-3">Hecho a mano, con historia</h2>
-
-        <p class="text-muted mb-4">
-          Artesanía chilena con alto nivel de detalle. Cada pieza es seleccionada y creada con dedicación,
-          manteniendo la esencia del lapislázuli natural.
-        </p>
-
-        <ul class="text-muted small mb-4">
-          <li>Materiales seleccionados a mano</li>
+        <h2 class="h3 mb-2">Hecho a mano, con historia</h2>
+        <p class="text-muted mb-3">Cada pieza es elaborada por artesanos locales con técnicas tradicionales, usando lapislázuli chileno de alta calidad.</p>
+        <ul class="text-muted">
+          <li>Selección curada de materiales</li>
           <li>Producción responsable</li>
           <li>Diseño atemporal</li>
         </ul>
-
-        <a href="#nuevos" class="btn btn-outline-primary rounded-pill px-4">Ver novedades</a>
       </div>
-
-
-      <!-- 3 tarjetas -->
       <div class="col-lg-7">
         <div class="row g-3">
-
-          <div class="col-4" data-aos="fade-up">
-            <div class="card card-elev p-3 h-100 text-center shadow-sm border-0">
+          <div class="col-12 col-md-4" data-aos="fade-up">
+            <div class="card h-100 card-elev p-3 text-center">
               <div class="fw-bold mb-1">Calidad</div>
               <div class="small text-muted">Control en cada etapa</div>
             </div>
           </div>
-
-          <div class="col-4" data-aos="fade-up" data-aos-delay="80">
-            <div class="card card-elev p-3 h-100 text-center shadow-sm border-0">
+          <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="50">
+            <div class="card h-100 card-elev p-3 text-center">
               <div class="fw-bold mb-1">Origen</div>
               <div class="small text-muted">Lapislázuli chileno</div>
             </div>
           </div>
-
-          <div class="col-4" data-aos="fade-up" data-aos-delay="160">
-            <div class="card card-elev p-3 h-100 text-center shadow-sm border-0">
+          <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="card h-100 card-elev p-3 text-center">
               <div class="fw-bold mb-1">Servicio</div>
               <div class="small text-muted">Atención cercana</div>
             </div>
           </div>
-
         </div>
       </div>
-
     </div>
-
   </div>
 </section>
 
-
-
-<!-- ======================= -->
-<!-- TESTIMONIOS -->
-<!-- ======================= -->
 <section class="py-5 bg-white">
   <div class="container">
-
-    <div class="d-flex justify-content-between align-items-end mb-4">
-      <h2 class="h4 fw-bold m-0">Lo que dicen nuestros clientes</h2>
+    <div class="d-flex justify-content-between align-items-end mb-3">
+      <h2 class="h4 m-0">Lo que dicen nuestros clientes</h2>
     </div>
 
     <div class="swiper testimonials-swiper">
       <div class="swiper-wrapper">
-
+        {% comment %} Sustituye por datos reales cuando quieras {% endcomment %}
         <div class="swiper-slide">
-          <div class="card shadow-sm p-4 h-100 border-0">
+          <div class="card shadow-sm p-4 h-100">
             <p class="mb-3">“Compré un set de aros y colgante: la calidad del lapislázuli es excelente y el acabado muy fino.”</p>
             <div class="small text-muted">— Camila A.</div>
           </div>
         </div>
-
         <div class="swiper-slide">
-          <div class="card shadow-sm p-4 h-100 border-0">
+          <div class="card shadow-sm p-4 h-100">
             <p class="mb-3">“Atención rápida y muy cercana. ¡La pieza llegó preciosa!”</p>
             <div class="small text-muted">— Jorge M.</div>
           </div>
         </div>
-
         <div class="swiper-slide">
-          <div class="card shadow-sm p-4 h-100 border-0">
+          <div class="card shadow-sm p-4 h-100">
             <p class="mb-3">“Me encantó poder personalizar. Se nota el trabajo artesanal.”</p>
             <div class="small text-muted">— Daniela R.</div>
           </div>
         </div>
-
       </div>
-
       <div class="swiper-pagination mt-3"></div>
     </div>
-
   </div>
 </section>
 
-
-
-<!-- Newsletter y FAQs -->
+{# === NUEVOS INCLUDES: newsletter + FAQs === #}
 {% include "includes/newsletter.html" %}
 {% include "includes/faqs.html" %}
 
-
-
-<!-- ======================= -->
-<!-- CTA FINAL -->
-<!-- ======================= -->
 <section id="contacto" class="py-5">
   <div class="container">
-
-    <div class="row g-4 align-items-center">
-
+    <div class="row g-3 align-items-center">
       <div class="col-md-8">
-        <h3 class="h4 fw-bold mb-1">¿Tienes un pedido especial?</h3>
-        <p class="text-muted mb-0">Escríbenos y te ayudamos a crear una pieza única hecha solo para ti.</p>
+        <h3 class="h4 mb-1">¿Tienes un pedido especial?</h3>
+        <p class="text-muted mb-0">Escríbenos y te ayudamos a encontrar la pieza perfecta o a crear una a medida.</p>
       </div>
-
       <div class="col-md-4 text-md-end">
-        <a class="btn btn-primary btn-lg rounded-pill px-4" href="mailto:contacto@artesaniaspachy.cl">
-          Contactar
-        </a>
+        <a class="btn btn-primary btn-lg" href="mailto:contacto@artesaniaspachy.cl">Contactar</a>
       </div>
-
     </div>
-
   </div>
 </section>
 
-
 {% endblock %}
+{% include "includes/newsletter.html" %}

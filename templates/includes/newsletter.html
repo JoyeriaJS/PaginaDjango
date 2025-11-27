@@ -1,34 +1,19 @@
-<section class="py-5 bg-white">
+<section class="py-5 section-muted">
   <div class="container">
-
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-10 col-lg-8">
-
-        <div class="card shadow-sm border-0 rounded-4 p-4 p-md-5 text-center">
-
-          <div class="fs-1 mb-2">📬</div>
-
-          <h3 class="fw-bold mb-2">Únete a nuestro boletín</h3>
-          <p class="text-muted mb-4">
-            Recibe novedades, lanzamientos y ofertas exclusivas.  
-            No enviamos spam.
-          </p>
-
-          <form method="post" action="#" class="d-flex flex-column flex-md-row gap-2 justify-content-center">
-            {% csrf_token %}
-            <input type="email"
-                   name="email"
-                   class="form-control rounded-pill"
-                   placeholder="Tu correo electrónico">
-            <button class="btn btn-primary rounded-pill px-4">
-              Suscribirme
-            </button>
-          </form>
-
+    <div class="card p-4 p-md-5 card-elev">
+      <div class="row g-3 align-items-center">
+        <div class="col-md-6">
+          <h3 class="h5 mb-1">¿Te contamos nuestras novedades?</h3>
+          <p class="text-muted mb-0">Lanzamientos, ofertas y piezas únicas, directo a tu correo.</p>
         </div>
+        <div class="col-md-6">
 
+            {% csrf_token %}
+            <input class="form-control" type="email" name="email" placeholder="Tu email" required>
+            <button class="btn btn-primary">Suscribirme</button>
+          </form>
+        </div>
       </div>
     </div>
-
   </div>
 </section>

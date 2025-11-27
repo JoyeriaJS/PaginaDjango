@@ -1,17 +1,14 @@
 {% load cms_extras %}
 
+{# HERO #}
 {% if banners_hero %}
 <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
-
   <div class="carousel-inner">
     {% for b in banners_hero %}
     <div class="carousel-item {% if forloop.first %}active{% endif %}">
       {% with img_url=b.image.url %}
-        <img src="{% cl_transform img_url b.target_width b.target_height b.fit_mode %}" 
-             class="d-block w-100" 
-             alt="{{ b.title|default:'Banner' }}">
+        <img src="{% cl_transform img_url b.target_width b.target_height b.fit_mode %}" class="d-block w-100" alt="{{ b.title|default:'Banner' }}">
       {% endwith %}
-
       {% if b.title or b.subtitle or b.link_url %}
       <div class="carousel-caption d-none d-md-block">
         {% if b.title %}<h5>{{ b.title }}</h5>{% endif %}
@@ -22,16 +19,13 @@
     </div>
     {% endfor %}
   </div>
-
   <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon"></span>
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Anterior</span>
   </button>
-
   <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-    <span class="carousel-control-next-icon"></span>
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Siguiente</span>
   </button>
-
 </div>
 {% endif %}
