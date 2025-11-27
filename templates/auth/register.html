@@ -1,0 +1,44 @@
+{% extends "base_site.html" %}
+{% block title %}Crear cuenta — Artesanías Pachy{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width:520px;">
+
+  <h1 class="h4 fw-bold mb-4 text-center">Crear cuenta</h1>
+
+  <form method="post" class="card p-4 shadow-sm border-0">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label class="form-label">Nombre</label>
+      <input type="text" name="name" class="form-control" required placeholder="Juan Pérez">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Correo electrónico</label>
+      <input type="email" name="email" class="form-control" required placeholder="correo@ejemplo.com">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Contraseña</label>
+      <input type="password" name="password" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Repetir contraseña</label>
+      <input type="password" name="password2" class="form-control" required>
+    </div>
+
+    <button class="btn btn-primary w-100 rounded-pill mt-3">
+      Crear cuenta
+    </button>
+
+    <div class="text-center small mt-3">
+      ¿Ya tienes cuenta?
+      <a href="{% url 'core:login' %}">Iniciar sesión</a>
+    </div>
+
+  </form>
+
+</div>
+{% endblock %}

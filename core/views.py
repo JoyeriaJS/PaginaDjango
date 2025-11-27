@@ -19,6 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseBadRequest
 from catalog.models import Product
 from .forms import CheckoutForm
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -538,6 +539,7 @@ def _cart_lines_from_session(request):
         })
     return items
 
+@login_required(login_url="core:login")
 def mp_checkout(request):
     """
     Crea la preferencia en Mercado Pago usando:

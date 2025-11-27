@@ -1,57 +1,106 @@
-<footer class="mt-5 bg-dark text-light">
-  <div class="container py-5">
+{% load static %}
+
+<footer class="bg-dark text-light pt-5 pb-3 mt-5">
+
+  <div class="container">
 
     <div class="row g-4">
 
-      <!-- Col 1 - Branding -->
-      <div class="col-12 col-md-4">
-        <h5 class="fw-bold mb-3" style="letter-spacing:-.3px;">Artesanías Pachy</h5>
-        <p class="text-muted mb-3" style="max-width:38ch;">
-          Joyería en lapislázuli hecha a mano en Chile. Piezas únicas con historia y materiales nobles.
-        </p>
-
-        <div class="d-flex gap-3 mt-3">
-          <a href="https://www.instagram.com/" target="_blank" rel="noopener" class="text-decoration-none text-light">Instagram</a>
-          <a href="https://www.facebook.com/" target="_blank" rel="noopener" class="text-decoration-none text-light">Facebook</a>
-          <a href="mailto:contacto@artesaniaspachy.cl" class="text-decoration-none text-light">Email</a>
+      <!-- ========================================================= -->
+      <!-- LOGO + DESCRIPCIÓN -->
+      <!-- ========================================================= -->
+      <div class="col-md-4">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <img src="{% static 'img/logo.png' %}"
+               alt="Artesanías Pachy"
+               style="height:42px;object-fit:contain;">
+          <span class="fw-bold fs-5">Artesanías Pachy</span>
         </div>
+
+        <p class="text-muted small" style="max-width:40ch;">
+          Joyería artesanal en lapislázuli hecha en Chile.  
+          Diseño, identidad y tradición en cada pieza.
+        </p>
       </div>
 
-      <!-- Col 2 - Contacto -->
-      <div class="col-12 col-md-4">
-        <h6 class="fw-semibold mb-3">Contacto</h6>
-        <ul class="list-unstyled small text-muted mb-3">
-          <li class="mb-1">📍 Santiago, Chile</li>
-          <li class="mb-1">✉️ contacto@artesaniaspachy.cl</li>
-          <li>📞 +56 9 1234 5678</li>
+
+
+      <!-- ========================================================= -->
+      <!-- MENÚ RÁPIDO -->
+      <!-- ========================================================= -->
+      <div class="col-md-2">
+        <h6 class="fw-bold mb-3">Secciones</h6>
+        <ul class="list-unstyled text-muted small">
+          <li><a class="text-light text-decoration-none" href="/">Inicio</a></li>
+          <li><a class="text-light text-decoration-none" href="/#categorias">Categorías</a></li>
+          <li><a class="text-light text-decoration-none" href="/#nuevos">Novedades</a></li>
+          <li><a class="text-light text-decoration-none" href="/#contacto">Contacto</a></li>
+        </ul>
+      </div>
+
+
+
+      <!-- ========================================================= -->
+      <!-- CATEGORÍAS DINÁMICAS -->
+      <!-- ========================================================= -->
+      <div class="col-md-3">
+        <h6 class="fw-bold mb-3">Categorías</h6>
+        <ul class="list-unstyled text-muted small">
+
+          {% if categories_nav %}
+            {% for c in categories_nav %}
+              <li>
+                <a class="text-light text-decoration-none"
+                   href="{% url 'core:category_list' c.pk %}">
+                  {{ c.name }}
+                </a>
+              </li>
+            {% endfor %}
+          {% else %}
+            <li class="text-muted small">Sin categorías aún</li>
+          {% endif %}
+
+        </ul>
+      </div>
+
+
+
+      <!-- ========================================================= -->
+      <!-- CONTACTO -->
+      <!-- ========================================================= -->
+      <div class="col-md-3">
+        <h6 class="fw-bold mb-3">Contacto</h6>
+
+        <ul class="list-unstyled text-muted small">
+          <li class="d-flex align-items-center gap-2 mb-2">
+            <span class="bi bi-envelope"></span>
+            contacto@artesaniaspachy.cl
+          </li>
+          <li class="d-flex align-items-center gap-2 mb-2">
+            <span class="bi bi-whatsapp"></span>
+            +56 9 1234 5678
+          </li>
+          <li class="d-flex align-items-center gap-2">
+            <span class="bi bi-geo-alt"></span>
+            Santiago, Chile
+          </li>
         </ul>
 
-        <a href="mailto:contacto@artesaniaspachy.cl"
-           class="btn btn-outline-light btn-sm rounded-pill px-3">
-          Escríbenos
-        </a>
-      </div>
-
-      <!-- Col 3 - Mapa -->
-      <div class="col-12 col-md-4">
-        <h6 class="fw-semibold mb-3">Dónde estamos</h6>
-
-        <div class="ratio ratio-16x9 rounded-4 overflow-hidden shadow" style="border: 1px solid rgba(255,255,255,0.08);">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.4704430892357!2d-70.65208748793788!3d-33.43704799671625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c5a30e896471%3A0x469fba708c65fb1d!2sArtesanias%20Pachy!5e0!3m2!1ses-419!2scl!4v1759180244683!5m2!1ses-419!2scl"
-                  allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div class="d-flex gap-3 mt-3">
+          <a href="#" class="text-light fs-5"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="text-light fs-5"><i class="bi bi-facebook"></i></a>
         </div>
       </div>
 
     </div>
 
-    <!-- Footer inferior -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center pt-4 mt-4 border-top border-secondary">
-      <div class="small text-muted">
-        © {{ now|date:"Y" }} Artesanías Pachy. Todos los derechos reservados.
-      </div>
-      <div class="small mt-2 mt-md-0">
-        <a href="/politica-privacidad" class="text-muted text-decoration-none">Política de privacidad</a>
-      </div>
+
+
+    <!-- ========================================================= -->
+    <!-- COPYRIGHT -->
+    <!-- ========================================================= -->
+    <div class="border-top border-secondary mt-4 pt-3 text-center small text-muted">
+      © {{ now|date:"Y" }} Artesanías Pachy — Todos los derechos reservados.
     </div>
 
   </div>

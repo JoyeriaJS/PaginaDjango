@@ -1,91 +1,120 @@
-{% load i18n %}
-<nav class="navbar navbar-expand-lg bg-white shadow-sm py-3">
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-2">
   <div class="container">
 
-    <!-- Branding -->
-    <a class="navbar-brand fw-bold fs-4" href="/" style="letter-spacing:-.5px;">
-      Artesanías Pachy
+    <!-- ======================= -->
+    <!-- LOGOTIPO -->
+    <!-- ======================= -->
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
+      <img src="{% static 'img/logo.png' %}"
+           alt="Artesanías Pachy"
+           style="height:38px;object-fit:contain;">
+      <span class="fw-bold" style="letter-spacing:-0.5px;">Artesanías Pachy</span>
     </a>
 
-    <!-- Toggler -->
-    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsDefault">
+
+    <!-- Toggle móvil -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarMain">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarsDefault">
 
-      <!-- SEARCH -->
-      <form class="d-flex ms-lg-4 my-3 my-lg-0 flex-grow-1" role="search" method="get" action="{% url 'core:search' %}"
-            style="max-width:360px;">
-        <input class="form-control rounded-pill px-3"
-               type="search"
-               placeholder="{% trans 'Buscar productos…' %}"
-               name="q"
-               value="{{ request.GET.q }}">
-      </form>
+    <!-- ======================= -->
+    <!-- MENÚ -->
+    <!-- ======================= -->
+    <div class="collapse navbar-collapse" id="navbarMain">
 
-      <!-- MENU -->
-      <ul class="navbar-nav mx-lg-3 mb-2 mb-lg-0 gap-lg-2">
+      <!-- IZQUIERDA -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-        {% for it in main_menu %}
-          {% if it.children %}
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle fw-medium" href="{{ it.url }}"
-                 data-bs-toggle="dropdown"
-                 {% if it.new %}target="_blank" rel="noopener"{% endif %}>
-                {{ it.title }}
-              </a>
-              <ul class="dropdown-menu shadow-sm border-0 rounded-3 py-2">
-                {% for ch in it.children %}
-                  <li>
-                    <a class="dropdown-item py-2 fw-medium"
-                       href="{{ ch.url }}"
-                       {% if ch.open_in_new_tab %}target="_blank" rel="noopener"{% endif %}>
-                      {{ ch.title }}
-                    </a>
-                  </li>
-                {% endfor %}
-              </ul>
-            </li>
-          {% else %}
-            <li class="nav-item">
-              <a class="nav-link fw-medium" href="{{ it.url }}"
-                 {% if it.new %}target="_blank" rel="noopener"{% endif %}>
-                {{ it.title }}
+        <li class="nav-item">
+          <a class="nav-link" href="/">Inicio</a>
+        </li>
+
+        <!-- Categorías dinámicas -->
+        {% if categories_nav %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+            Categorías
+          </a>
+          <ul class="dropdown-menu shadow-sm border-0">
+            {% for c in categories_nav %}
+            <li>
+              <a class="dropdown-item"
+                 href="{% url 'core:category_list' c.pk %}">
+                {{ c.name }}
               </a>
             </li>
-          {% endif %}
-        {% endfor %}
+            {% endfor %}
+          </ul>
+        </li>
+        {% endif %}
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#nuevos">Novedades</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#contacto">Contacto</a>
+        </li>
+
       </ul>
 
-      <!-- IDIOMA -->
-      <select id="lang-switcher"
-              class="form-select form-select-sm rounded-pill ms-lg-3"
-              style="width:auto"
-              onchange="window.changeLang && window.changeLang(this.value)">
-        <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>ES</option>
-        <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
-      </select>
 
-      <!-- FALLBACK DJANGO -->
-      <form id="lang-fallback-form" action="{% url 'set_language' %}" method="post" class="d-none">
-        {% csrf_token %}
-        <input type="hidden" name="language" value="{{ request.LANGUAGE_CODE }}">
-        <input type="hidden" name="next" value="{{ request.get_full_path }}">
-      </form>
 
-      <!-- SESIÓN -->
-      <div class="ms-lg-3 mt-3 mt-lg-0 d-flex gap-2">
+      <!-- ======================= -->
+      <!-- DERECHA (LOGIN + IDIOMA + CARRITO) -->
+      <!-- ======================= -->
+      <ul class="navbar-nav ms-auto align-items-center gap-3">
+
+        <!-- Login / Logout -->
         {% if request.user.is_authenticated %}
-          {% if request.user.is_staff %}
-            <a class="btn btn-outline-primary btn-sm rounded-pill px-3" href="/panel/">{% trans 'Panel' %}</a>
-          {% endif %}
-          <a class="btn btn-primary btn-sm rounded-pill px-3" href="/admin/logout/">{% trans 'Cerrar sesión' %}</a>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'core:logout' %}">Cerrar sesión</a>
+        </li>
         {% else %}
-          <a class="btn btn-primary btn-sm rounded-pill px-3" href="/admin/login/">{% trans 'Iniciar sesión' %}</a>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'core:login' %}">Ingresar</a>
+        </li>
+        <li class="nav-item">
+          <a class="btn btn-outline-primary btn-sm" href="{% url 'core:register' %}">
+            Crear cuenta
+          </a>
+        </li>
         {% endif %}
-      </div>
+
+        <!-- Selector idioma -->
+        <li class="nav-item">
+          <select id="lang-switcher"
+                  class="form-select form-select-sm"
+                  style="width:110px;"
+                  onchange="changeLang(this.value)">
+            <option value="es">🇨🇱 Español</option>
+            <option value="en">🇺🇸 English</option>
+          </select>
+        </li>
+
+        <!-- Carrito -->
+        <li class="nav-item">
+          <a class="btn btn-primary rounded-pill px-3 d-flex align-items-center gap-2 position-relative"
+             href="{% url 'core:cart' %}">
+            <span class="bi bi-bag"></span>
+            <span class="fw-semibold">Carrito</span>
+
+            {% if cart_count %}
+              <span class="badge bg-light text-primary position-absolute"
+                    style="top:-6px; right:-6px;">
+                {{ cart_count }}
+              </span>
+            {% endif %}
+          </a>
+        </li>
+
+      </ul>
 
     </div>
+
   </div>
 </nav>

@@ -2,287 +2,184 @@
 {% block title %}{{ product.name }} — Artesanías Pachy{% endblock %}
 
 {% block content %}
-
-<div class="container py-4" itemscope itemtype="https://schema.org/Product">
-
-  <!-- Breadcrumb -->
-  <nav aria-label="breadcrumb" class="mb-4">
-    <ol class="breadcrumb small">
-      <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Inicio</a></li>
-      <li class="breadcrumb-item">
-        <a href="{% url 'core:category_list' product.category.pk %}" class="text-decoration-none">
-          {{ product.category.name }}
-        </a>
-      </li>
-      <li class="breadcrumb-item active text-muted" aria-current="page">{{ product.name }}</li>
-    </ol>
-  </nav>
+<div class="container py-5">
 
   <div class="row g-5">
 
-    <!-- ======================== -->
-    <!-- GALERÍA (estilo Promano) -->
-    <!-- ======================== -->
-    <div class="col-12 col-lg-6">
+    <!-- ========================================================= -->
+    <!-- GALERÍA IZQUIERDA (IMAGEN PRINCIPAL + MINIATURAS) -->
+    <!-- ========================================================= -->
+    <div class="col-lg-6">
 
-      <div class="card p-3 gallery-elev border-0 shadow-sm">
-
-        {% with first=product.images.first %}
-          <div id="pd-main"
-               class="ratio ratio-1x1 rounded-4 overflow-hidden pointer border"
-               {% if first %}data-zoom="{{ first.image.url }}"{% endif %}>
-
-            {% if first %}
-              <img src="{{ first.image.url }}"
-                   alt="{{ first.alt|default:product.name }}"
-                   class="w-100 h-100"
-                   style="object-fit:cover;"
-                   itemprop="image">
-            {% else %}
-              <div class="d-flex align-items-center justify-content-center text-muted">
-                Sin imagen
-              </div>
-            {% endif %}
+      <!-- Imagen principal -->
+      <div id="pd-main"
+           class="gallery-elev rounded-4 overflow-hidden mb-3"
+           data-zoom="{{ product.images.first.image.url }}">
+        {% with img=product.images.first %}
+        {% if img %}
+          <img src="{{ img.image.url }}"
+               alt="{{ img.alt|default:product.name }}"
+               class="w-100"
+               style="max-height:520px;object-fit:cover;cursor:zoom-in;">
+        {% else %}
+          <div class="ratio ratio-1x1 bg-light d-flex justify-content-center align-items-center text-muted">
+            Sin imagen
           </div>
+        {% endif %}
         {% endwith %}
-
-        <!-- Thumbnails -->
-        <div class="d-flex gap-2 mt-3 flex-wrap">
-          {% for im in product.images.all %}
-            <button type="button"
-                    class="thumb-64 btn p-0 border rounded-3 overflow-hidden shadow-sm"
-                    data-target="#pd-main"
-                    data-src="{{ im.image.url }}">
-              <img src="{{ im.image.url }}"
-                   class="w-100 h-100"
-                   style="object-fit:cover;"
-                   alt="{{ im.alt|default:product.name }}">
-            </button>
-          {% empty %}
-            <div class="text-muted small">Sin imágenes adicionales</div>
-          {% endfor %}
-        </div>
-
       </div>
 
-    </div>
-
-    <!-- ======================== -->
-    <!-- INFORMACIÓN DEL PRODUCTO -->
-    <!-- ======================== -->
-    <div class="col-12 col-lg-6">
-
-      <!-- Título + badge -->
-      <div class="d-flex justify-content-between align-items-start">
-        <h1 class="h3 fw-bold mb-2" itemprop="name" style="letter-spacing:-.3px;">
-          {{ product.name }}
-        </h1>
-
-        {% if product.is_new %}
-          <span class="badge bg-primary-subtle text-primary border rounded-pill px-3">
-            Nuevo
-          </span>
-        {% endif %}
-      </div>
-
-      <!-- Datos de confianza (BlueCast vibes) -->
-      <div class="mt-2 small text-muted d-flex flex-column gap-1">
-        <div>🔒 Pago seguro con tarjetas y transferencias.</div>
-        <div>🚚 Envíos a todo Chile (2–5 días hábiles).</div>
-        <div>🔄 Cambios dentro de 10 días.</div>
-      </div>
-
-      <!-- Material -->
-      {% if product.material %}
-        <div class="text-muted small mt-3">
-          <strong>Material:</strong> {{ product.material.name }}
-        </div>
-      {% endif %}
-
-      <!-- Precio -->
-      <div class="mt-3 h3 fw-bold" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <meta itemprop="priceCurrency" content="CLP">
-        <span itemprop="price">${{ product.price }}</span>
-
-        {% if product.stock is not None %}
-          <div class="small mt-1 
-            {% if product.stock > 3 %}text-success
-            {% elif product.stock > 0 %}text-warning
-            {% else %}text-danger{% endif %}">
-            {% if product.stock > 3 %}
-              Disponible
-            {% elif product.stock > 0 %}
-              ¡Pocas unidades!
-            {% else %}
-              Agotado
-            {% endif %}
-          </div>
-        {% endif %}
-      </div>
-
-      <!-- Descripción -->
-      {% if product.description %}
-        <p class="mt-3 text-muted" itemprop="description" style="line-height:1.6;">
-          {{ product.description }}
-        </p>
-      {% endif %}
-
-
-      <!-- ======================== -->
-      <!-- CTA — Agregar al carrito -->
-      <!-- ======================== -->
-
-      {% if product.stock is not None and product.stock|default:0 <= 0 %}
-        <div class="mt-4">
-          <button class="btn btn-secondary btn-lg w-100 rounded-pill" disabled>
-            Agotado
-          </button>
-        </div>
-      {% else %}
-        <form method="post"
-              action="{% url 'core:add_to_cart' product.pk %}"
-              class="mt-4 sticky-cta">
-          {% csrf_token %}
-
-          <div class="d-flex gap-3 align-items-center">
-            <input class="form-control"
-                   type="number"
-                   name="qty"
-                   value="1"
-                   min="1"
-                   style="max-width:110px;">
-
-            <button class="btn btn-primary btn-lg rounded-pill flex-grow-1 px-4">
-              Agregar al carrito
-            </button>
-          </div>
-
-        </form>
-      {% endif %}
-
-
-      <!-- Etiquetas -->
-      {% if product.tags %}
-        <div class="d-flex flex-wrap gap-2 mt-4">
-          {% for t in product.tags.all %}
-            <span class="badge rounded-pill bg-light text-muted border">
-              {{ t.name }}
-            </span>
-          {% endfor %}
-        </div>
-      {% endif %}
-
-    </div>
-  </div>
-
-
-  <!-- ======================== -->
-  <!-- PRODUCTOS RELACIONADOS -->
-  <!-- ======================== -->
-  {% if related %}
-    <section class="mt-5 pt-4">
-
-      <div class="d-flex justify-content-between align-items-end mb-3">
-        <h2 class="h5 fw-bold m-0">También te puede interesar</h2>
-        <a class="small text-decoration-none"
-           href="{% url 'core:category_list' product.category.pk %}">
-          Ver más →
-        </a>
-      </div>
-
-      <div class="row g-4">
-        {% for p in related %}
-        <div class="col-6 col-md-3">
-
-          <a class="card text-decoration-none card-elev h-100 border-0 shadow-sm"
-             href="{% url 'core:product_detail' p.pk %}">
-
-            <div class="thumb-1x1 rounded-top overflow-hidden">
-              {% with img=p.images.first %}
-                {% if img %}
-                  <img src="{{ img.image.url }}" alt="{{ p.name }}">
-                {% else %}
-                  <div class="bg-light d-flex align-items-center justify-content-center text-muted">
-                    Sin imagen
-                  </div>
-                {% endif %}
-              {% endwith %}
-            </div>
-
-            <div class="card-body">
-              <div class="small text-muted">{{ p.category.name }}</div>
-              <div class="fw-semibold text-dark">{{ p.name }}</div>
-              <div class="fw-bold mt-1">${{ p.price }}</div>
-            </div>
-
-          </a>
-
-        </div>
+      <!-- Mini-galería -->
+      <div class="d-flex gap-2 flex-wrap">
+        {% for img in product.images.all %}
+        <button class="thumb-64 border-0 p-0"
+                data-src="{{ img.image.url }}"
+                data-target="#pd-main">
+          <img src="{{ img.image.url }}" class="w-100 h-100" style="object-fit:cover;border-radius:.6rem;">
+        </button>
         {% endfor %}
       </div>
 
-    </section>
+    </div>
+
+
+
+
+    <!-- ========================================================= -->
+    <!-- INFORMACIÓN DEL PRODUCTO -->
+    <!-- ========================================================= -->
+    <div class="col-lg-6">
+
+      <h1 class="h3 fw-bold">{{ product.name }}</h1>
+
+      <div class="text-muted mb-2">
+        {{ product.category.name }}
+      </div>
+
+      <div class="d-flex align-items-center gap-3 mb-4">
+        <div class="price h4 m-0 fw-bold text-dark">
+          ${{ product.price }}
+        </div>
+
+        {% if product.old_price and product.old_price > product.price %}
+          <div class="price small">
+            <span class="old">${{ product.old_price }}</span>
+            <span class="badge bg-danger">Oferta</span>
+          </div>
+        {% endif %}
+      </div>
+
+
+
+      <!-- Descripción -->
+      {% if product.description %}
+      <p class="text-muted mb-4" style="white-space:pre-line;">
+        {{ product.description }}
+      </p>
+      {% endif %}
+
+
+
+      <!-- ========================================================= -->
+      <!-- FORMULARIO: Añadir al carrito -->
+      <!-- ========================================================= -->
+      <form method="post"
+            action="{% url 'core:add_to_cart' product.pk %}"
+            class="mt-3 border-top pt-4">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Cantidad</label>
+          <input type="number" name="qty" value="1" min="1"
+                 class="form-control"
+                 style="max-width:120px;">
+        </div>
+
+        <button class="btn btn-primary btn-lg w-100 rounded-pill">
+          Añadir al carrito
+        </button>
+      </form>
+
+
+
+
+      <!-- ========================================================= -->
+      <!-- DETALLES ESPECIALES (BlueCast style) -->
+      <!-- ========================================================= -->
+      <div class="mt-5">
+        <h4 class="h6 fw-bold mb-3">Detalles</h4>
+        <ul class="list-unstyled text-muted small">
+          <li>✔ Producto artesanal</li>
+          <li>✔ Material certificado</li>
+          <li>✔ Elaborado en Chile</li>
+          <li>✔ Compra segura</li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- ========================================================= -->
+  <!-- PRODUCTOS RELACIONADOS -->
+  <!-- ========================================================= -->
+  {% if related_products %}
+  <section class="mt-5 pt-5">
+
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <h2 class="h5 fw-bold m-0">Productos relacionados</h2>
+    </div>
+
+    <div class="row g-4">
+      {% for p in related_products %}
+      <div class="col-6 col-md-3" data-aos="fade-up">
+
+        <a class="card h-100 product-card card-elev text-decoration-none border-0 shadow-sm"
+           href="{% url 'core:product_detail' p.pk %}">
+          
+          {% with img=p.images.first %}
+          {% if img %}
+            <img src="{{ img.image.url }}" loading="lazy" class="card-img-top rounded-top" alt="{{ p.name }}">
+          {% else %}
+            <div class="ratio ratio-1x1 bg-light d-flex justify-content-center align-items-center text-muted">
+              Sin imagen
+            </div>
+          {% endif %}
+          {% endwith %}
+
+          <div class="card-body">
+            <h3 class="h6 fw-semibold text-dark mb-1">{{ p.name }}</h3>
+            <div class="small text-muted mb-1">{{ p.category.name }}</div>
+            <div class="fw-bold text-dark">${{ p.price }}</div>
+          </div>
+
+        </a>
+
+      </div>
+      {% endfor %}
+    </div>
+
+  </section>
   {% endif %}
 
 
+
 </div>
 
 
-<!-- ======================== -->
-<!-- MODAL ZOOM -->
-<!-- ======================== -->
-<div class="modal fade" id="imgZoomModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
+
+
+<!-- ========================================================= -->
+<!-- MODAL ZOOM DE IMÁGENES -->
+<!-- ========================================================= -->
+<div class="modal fade" id="imgZoomModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content bg-dark border-0">
-      <div class="modal-body p-0">
-        <img id="imgZoomTarget" class="w-100" alt="Zoom">
-      </div>
-      <button type="button"
-              class="btn btn-light position-absolute top-0 end-0 m-2"
-              data-bs-dismiss="modal">
-        Cerrar
-      </button>
+      <img id="imgZoomTarget" class="w-100 rounded-3">
     </div>
   </div>
 </div>
-
-{% endblock %}
-
-
-{% block extra_js %}
-{{ block.super }}
-
-<script>
-  (function(){
-    // Cambiar imagen principal al hacer click en miniaturas
-    document.addEventListener('click', function(e){
-      const btn = e.target.closest('button[data-target][data-src]');
-      if (!btn) return;
-
-      const targetSel = btn.getAttribute('data-target');
-      const src = btn.getAttribute('data-src');
-      const main = document.querySelector(targetSel);
-      if (!main) return;
-
-      const img = main.querySelector('img');
-      if (img) img.src = src;
-      main.setAttribute('data-zoom', src);
-    });
-
-    // Abrir modal de zoom al click en imagen principal
-    const pdMain = document.getElementById('pd-main');
-    if (pdMain) {
-      pdMain.addEventListener('click', function(){
-        const zoomSrc = pdMain.getAttribute('data-zoom');
-        if (!zoomSrc) return;
-
-        const img = document.getElementById('imgZoomTarget');
-        img.src = zoomSrc;
-
-        new bootstrap.Modal(document.getElementById('imgZoomModal')).show();
-      });
-    }
-  })();
-</script>
 
 {% endblock %}

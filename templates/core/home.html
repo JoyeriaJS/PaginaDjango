@@ -4,21 +4,22 @@
 {% block content %}
 
 <!-- ======================= -->
-<!-- USP strip (arriba) -->
+<!-- USP strip -->
 <!-- ======================= -->
 {% include "includes/usp_strip.html" %}
 
 
-<!-- ======================= -->
-<!-- HERO (Versión 2.0) -->
-<!-- ======================= -->
 
+<!-- ======================= -->
+<!-- HERO PRINCIPAL (V2 PRO) -->
+<!-- ======================= -->
 <section class="py-5 hero-xl">
   <div class="container">
     <div class="row align-items-center g-5">
 
-      <!-- Texto -->
+      <!-- TEXTO -->
       <div class="col-lg-6" data-aos="fade-up">
+
         <span class="chip mb-3">Nuevo</span>
 
         <h1 class="display-5 fw-bold mb-3" style="letter-spacing:-1px;">
@@ -36,15 +37,15 @@
         </div>
       </div>
 
-      <!-- Carrusel (solo si existen banners) -->
+
+      <!-- SLIDER HERO -->
       <div class="col-lg-6" data-aos="fade-left">
         {% if banners_hero %}
           <div class="hero-swiper swiper rounded-4 shadow-lg overflow-hidden">
             <div class="swiper-wrapper">
               {% for b in banners_hero %}
                 <div class="swiper-slide">
-                  <img src="{{ b.image.url }}"
-                       alt="{{ b.title|default:'Banner' }}"
+                  <img src="{{ b.image.url }}" alt="{{ b.title|default:'Banner' }}"
                        class="w-100"
                        style="height:440px;object-fit:cover;">
                 </div>
@@ -84,6 +85,7 @@
     </div>
 
     <div class="row g-4">
+
       {% for c in categories %}
       <div class="col-6 col-md-3" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:1 }}0">
 
@@ -108,6 +110,7 @@
       {% empty %}
       <div class="col-12 text-muted">Aún no hay categorías.</div>
       {% endfor %}
+
     </div>
 
   </div>
@@ -163,13 +166,14 @@
 
 
 <!-- ======================= -->
-<!-- SECCIÓN ARTESANAL (BlueCast vibe) -->
+<!-- SECCIÓN ARTESANÍA (BLUECAST VIBE) -->
 <!-- ======================= -->
 <section class="py-5 bg-white">
   <div class="container">
 
     <div class="row g-5 align-items-center">
 
+      <!-- Texto -->
       <div class="col-lg-5" data-aos="fade-right">
         <h2 class="h3 fw-bold mb-3">Hecho a mano, con historia</h2>
 
@@ -187,28 +191,32 @@
         <a href="#nuevos" class="btn btn-outline-primary rounded-pill px-4">Ver novedades</a>
       </div>
 
+
+      <!-- 3 tarjetas -->
       <div class="col-lg-7">
         <div class="row g-3">
-          <div class="col-4" data-aos="fade-up" data-aos-delay="0">
+
+          <div class="col-4" data-aos="fade-up">
             <div class="card card-elev p-3 h-100 text-center shadow-sm border-0">
               <div class="fw-bold mb-1">Calidad</div>
               <div class="small text-muted">Control en cada etapa</div>
             </div>
           </div>
 
-          <div class="col-4" data-aos="fade-up" data-aos-delay="60">
+          <div class="col-4" data-aos="fade-up" data-aos-delay="80">
             <div class="card card-elev p-3 h-100 text-center shadow-sm border-0">
               <div class="fw-bold mb-1">Origen</div>
               <div class="small text-muted">Lapislázuli chileno</div>
             </div>
           </div>
 
-          <div class="col-4" data-aos="fade-up" data-aos-delay="120">
+          <div class="col-4" data-aos="fade-up" data-aos-delay="160">
             <div class="card card-elev p-3 h-100 text-center shadow-sm border-0">
               <div class="fw-bold mb-1">Servicio</div>
               <div class="small text-muted">Atención cercana</div>
             </div>
           </div>
+
         </div>
       </div>
 
@@ -220,7 +228,7 @@
 
 
 <!-- ======================= -->
-<!-- TESTIMONIOS (Swiper) -->
+<!-- TESTIMONIOS -->
 <!-- ======================= -->
 <section class="py-5 bg-white">
   <div class="container">
@@ -254,6 +262,7 @@
         </div>
 
       </div>
+
       <div class="swiper-pagination mt-3"></div>
     </div>
 
@@ -261,13 +270,15 @@
 </section>
 
 
-<!-- Newsletter + FAQs -->
+
+<!-- Newsletter y FAQs -->
 {% include "includes/newsletter.html" %}
 {% include "includes/faqs.html" %}
 
 
+
 <!-- ======================= -->
-<!-- CTA final -->
+<!-- CTA FINAL -->
 <!-- ======================= -->
 <section id="contacto" class="py-5">
   <div class="container">
@@ -289,5 +300,6 @@
 
   </div>
 </section>
+
 
 {% endblock %}
