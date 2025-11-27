@@ -503,40 +503,81 @@ def remove_coupon(request):
 #Mercado Pago views
 def _cart_lines_from_session(request):
     """
-    Convierte el carrito de sesión en items MP.
-    Asume request.session['cart'] = { "product_id": qty, ... }
+    Convierte el carrito de sesión en items compatibles con Mercado Pago.
+    Normaliza qty incluso si viene en formatos incorrectos:
+      - {"qty": 1}
+      - {"qty": {"qty": 1}}
+      - 1
+      - "1"
     """
-    cart = request.session.get("cart", {}) or {}
-    if not isinstance(cart, dict) or not cart:
+
+    raw_cart = request.session.get("cart") or {}
+
+    if not isinstance(raw_cart, dict):
         return []
 
-    # obtengo productos existentes
-    product_ids = [int(pid) for pid in cart.keys() if str(pid).isdigit()]
+    items = []
+    product_ids = []
+
+    # Normalizar IDs
+    for pid, data in raw_cart.items():
+        try:
+            product_ids.append(int(pid))
+        except:
+            continue
+
     products = Product.objects.filter(id__in=product_ids, is_active=True)
 
-    items = []
     for p in products:
-        qty = int(cart.get(str(p.id)) or cart.get(p.id) or 0)
+        raw = raw_cart.get(str(p.id))
+
+        # ============================================================
+        # Normalizar qty correctamente
+        # ============================================================
+        qty = 0
+
+        # Caso 1: viene como dict → {"qty": X} o {"qty": {"qty": X}}
+        if isinstance(raw, dict):
+            q = raw.get("qty", 0)
+            if isinstance(q, dict):
+                q = q.get("qty", 0)
+            try:
+                qty = int(q)
+            except:
+                qty = 0
+
+        # Caso 2: viene como número suelto
+        else:
+            try:
+                qty = int(raw)
+            except:
+                qty = 0
+
+        # Saltar si qty inválida
         if qty < 1:
             continue
-        # tomo primera imagen si hay
-        img = None
-        try:
-            first_img = p.images.first()
-            if first_img:
-                img = first_img.image.url
-        except Exception:
-            img = None
 
+        # Primera imagen del producto
+        img_url = None
+        try:
+            img = p.images.first()
+            if img:
+                img_url = img.image.url
+        except:
+            img_url = None
+
+        # Agregar item compatible con MercadoPago
         items.append({
             "id": str(p.id),
             "title": p.name,
             "quantity": qty,
             "currency_id": "CLP",
             "unit_price": float(p.price),
-            "picture_url": img,
+            "picture_url": img_url,
         })
+
     return items
+
 
 def mp_checkout(request):
     """
