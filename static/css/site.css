@@ -107,3 +107,33 @@ footer .text-muted {
 footer .text-light:hover {
   color: #fff !important;
 }
+
+/* PRODUCT CARD V2 */
+.product-card {
+  background: #fff !important;
+  border-radius: .9rem !important;
+  border: 1px solid #e5e5e5 !important;
+  padding: .75rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.08);
+}
+
+.product-card-img {
+  aspect-ratio: 1/1;
+  border-radius: .8rem;
+  overflow: hidden;
+  margin-bottom: .75rem;
+  background: #f8f9fa;
+}
+
+.product-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
