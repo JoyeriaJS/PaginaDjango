@@ -100,16 +100,18 @@ footer .link-secondary:hover { color:#0d6efd; }
 /* USP strip */
 .usp-strip { font-weight:500; }
 
-.hero-product-card {
-  width: 140px;
-  display: inline-block;
-  text-align: center;
+/* Evitar scroll horizontal del slider */
+.swiper {
+  overflow: hidden !important;
 }
 
-.hero-product-img {
-  width: 140px;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 10px;
-  background: #ddd;
+/* Evita que los slides creen scroll horizontal */
+.swiper-wrapper {
+  overflow: hidden !important;
+}
+
+/* Asegura que NADA se salga */
+body, html {
+  max-width: 100%;
+  overflow-x: hidden !important;
 }
