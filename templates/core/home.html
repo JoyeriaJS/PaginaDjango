@@ -3,91 +3,43 @@
 
 {% block content %}
 
+{% if banners_hero %}
 {% include "includes/usp_strip.html" %}
 
-{# ====================================================== #}
-{# === HERO MIX TIPO SHOPIFY (BANNERS + PRODUCTOS) ===== #}
-{# ====================================================== #}
-
-{% if banners_hero %}
-<section class="hero-xl position-relative mb-5">
-
-  <div class="swiper hero-mix-swiper rounded-4 shadow-lg overflow-hidden">
-    <div class="swiper-wrapper">
-
-      {# --- SLIDES DE BANNERS --- #}
-      {% for b in banners_hero %}
-      <div class="swiper-slide position-relative">
-
-        <img src="{{ b.image.url }}" class="w-100"
-             style="height:520px;object-fit:cover;filter:brightness(0.65);" 
-             alt="{{ b.title|default:'Banner' }}">
-
-        <div class="position-absolute top-50 start-50 translate-middle text-center text-white px-3" 
-             data-aos="fade-up">
-          <span class="badge bg-primary px-3 py-2 mb-2">Nuevo</span>
-          <h2 class="display-5 fw-bold">{{ b.title|default:"Piezas únicas" }}</h2>
-          {% if b.subtitle %}
-          <p class="lead mb-3">{{ b.subtitle }}</p>
-          {% endif %}
-          <a href="#nuevos" class="btn btn-light btn-lg fw-bold shadow-sm">Explorar</a>
+<section class="hero-xl">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-6" data-aos="fade-up">
+        <span class="chip mb-2">Nuevo</span>
+        <h1 class="display-5 fw-bold hero-title mb-3">Joyería en Lapislázuli hecha en Chile</h1>
+        <p class="lead hero-sub">Piezas únicas con historia, materiales nobles y un acabado profesional. Descubre nuestras categorías y novedades.</p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="#categorias" class="btn btn-primary btn-lg">Explorar</a>
+          <a href="#nuevos" class="btn btn-outline-primary btn-lg">Novedades</a>
         </div>
-
       </div>
-      {% endfor %}
-
-      {# --- SLIDE AUTOMÁTICO DE PRODUCTOS DESTACADOS --- #}
-      {% if latest_products %}
-      <div class="swiper-slide position-relative bg-dark">
-
-        <img src="{% static 'img/hero-default.jpg' %}" 
-             class="w-100" style="height:520px;object-fit:cover;opacity:0.25;">
-
-        <div class="position-absolute top-50 start-50 translate-middle text-center text-white px-3" 
-             data-aos="zoom-in">
-          <h2 class="display-6 fw-bold mb-4">Novedades para ti</h2>
-
-          <div class="d-flex justify-content-center gap-3 flex-wrap">
-
-            {% for p in latest_products|slice:":3" %}
-            <a href="{% url 'core:product_detail' p.pk %}"
-               class="bg-white text-dark rounded-3 shadow-sm p-3 text-decoration-none"
-               style="width:150px;">
-
-              {% with img=p.images.first %}
-                {% if img %}
-                <img src="{{ img.image.url }}" class="w-100 mb-2 rounded"
-                     style="height:120px;object-fit:cover;">
-                {% else %}
-                <div class="bg-light w-100 rounded mb-2" style="height:120px;"></div>
-                {% endif %}
-              {% endwith %}
-
-              <div class="small fw-semibold">{{ p.name|truncatechars:18 }}</div>
-              <div class="text-primary fw-bold">${{ p.price }}</div>
-
-            </a>
+      <div class="col-lg-6" data-aos="fade-left">
+        <div class="hero-swiper swiper rounded-4 shadow-lg overflow-hidden">
+          <div class="swiper-wrapper">
+            {% for b in banners_hero %}
+              <div class="swiper-slide">
+                <img src="{{ b.image.url }}" alt="{{ b.title|default:'Banner' }}" class="w-100" style="height:440px;object-fit:cover;">
+              </div>
             {% endfor %}
-
           </div>
+          <div class="swiper-pagination"></div>
         </div>
       </div>
-      {% endif %}
-
     </div>
-
-    <div class="swiper-pagination"></div>
   </div>
 </section>
-
 {% else %}
-{# ======= VERSIÓN SIN BANNERS ======= #}
 <section class="hero-xl">
   <div class="container text-center" data-aos="fade-up">
     <h1 class="display-5 fw-bold hero-title mb-3">Joyería de lapislázuli hecha en Chile</h1>
-    <p class="lead hero-sub mx-auto">Diseño atemporal, materiales nobles y producción local.</p>
+    <p class="lead hero-sub mx-auto">Piezas únicas, diseño atemporal y materiales nobles. Conoce nuestra colección.</p>
     <div class="mt-3">
-      <a href="#nuevos" class="btn btn-primary btn-lg me-2">Novedades</a>
+      <a href="#nuevos" class="btn btn-primary btn-lg me-2">Ver novedades</a>
       <a href="#categorias" class="btn btn-outline-primary btn-lg">Explorar categorías</a>
     </div>
   </div>
@@ -95,12 +47,9 @@
 {% endif %}
 
 
-
-{# ====================================================== #}
-{# === OCASIONES / CATEGORÍAS / NUEVOS PRODUCTOS ======= #}
-{# ====================================================== #}
-
 {% include "includes/occasions.html" %}
+
+
 
 <section id="categorias" class="py-5 section-muted">
   <div class="container">
@@ -119,7 +68,7 @@
             <div class="thumb-1x1 mb-3">
               {% with prod=c.products.first %}
                 {% if prod and prod.images.first %}
-                <img src="{{ prod.images.first.image.url }}" alt="{{ c.name }}">
+                  <img src="{{ prod.images.first.image.url }}" alt="{{ c.name }}">
                 {% endif %}
               {% endwith %}
             </div>
@@ -136,7 +85,6 @@
 </section>
 
 
-
 <section id="nuevos" class="py-5">
   <div class="container">
     <div class="d-flex justify-content-between align-items-end mb-3">
@@ -149,14 +97,15 @@
     <div class="row g-3">
       {% for p in latest_products %}
       <div class="col-6 col-md-3">
-        <a class="card h-100 product-card card-elev text-decoration-none" 
-           href="{% url 'core:product_detail' p.pk %}">
+        <!-- Enlace al detalle del producto -->
+        <a class="card h-100 product-card card-elev text-decoration-none" href="{% url 'core:product_detail' p.pk %}">
           {% with img=p.images.first %}
-            {% if img %}
+          {% if img %}
+            <!-- lazy-load aplicado -->
             <img src="{{ img.image.url }}" loading="lazy" class="card-img-top" alt="{{ img.alt|default:p.name }}">
-            {% else %}
+          {% else %}
             <div class="ratio ratio-1x1 bg-light d-flex align-items-center justify-content-center text-muted">Sin imagen</div>
-            {% endif %}
+          {% endif %}
           {% endwith %}
           <div class="card-body">
             <h3 class="h6 card-title mb-1 text-dark">{{ p.name }}</h3>
@@ -171,8 +120,6 @@
     </div>
   </div>
 </section>
-
-
 
 <section class="py-5">
   <div class="container">
@@ -212,7 +159,6 @@
   </div>
 </section>
 
-
 <section class="py-5 bg-white">
   <div class="container">
     <div class="d-flex justify-content-between align-items-end mb-3">
@@ -221,16 +167,32 @@
 
     <div class="swiper testimonials-swiper">
       <div class="swiper-wrapper">
-        <div class="swiper-slide"><div class="card shadow-sm p-4 h-100"><p class="mb-3">“Compré un set de aros y colgante: la calidad del lapislázuli es excelente y el acabado muy fino.”</p><div class="small text-muted">— Camila A.</div></div></div>
-        <div class="swiper-slide"><div class="card shadow-sm p-4 h-100"><p class="mb-3">“Atención rápida y muy cercana. ¡La pieza llegó preciosa!”</p><div class="small text-muted">— Jorge M.</div></div></div>
-        <div class="swiper-slide"><div class="card shadow-sm p-4 h-100"><p class="mb-3">“Me encantó poder personalizar. Se nota el trabajo artesanal.”</p><div class="small text-muted">— Daniela R.</div></div></div>
+        {% comment %} Sustituye por datos reales cuando quieras {% endcomment %}
+        <div class="swiper-slide">
+          <div class="card shadow-sm p-4 h-100">
+            <p class="mb-3">“Compré un set de aros y colgante: la calidad del lapislázuli es excelente y el acabado muy fino.”</p>
+            <div class="small text-muted">— Camila A.</div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="card shadow-sm p-4 h-100">
+            <p class="mb-3">“Atención rápida y muy cercana. ¡La pieza llegó preciosa!”</p>
+            <div class="small text-muted">— Jorge M.</div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="card shadow-sm p-4 h-100">
+            <p class="mb-3">“Me encantó poder personalizar. Se nota el trabajo artesanal.”</p>
+            <div class="small text-muted">— Daniela R.</div>
+          </div>
+        </div>
       </div>
       <div class="swiper-pagination mt-3"></div>
     </div>
   </div>
 </section>
 
-
+{# === NUEVOS INCLUDES: newsletter + FAQs === #}
 {% include "includes/newsletter.html" %}
 {% include "includes/faqs.html" %}
 
@@ -248,5 +210,5 @@
   </div>
 </section>
 
-
 {% endblock %}
+{% include "includes/newsletter.html" %}
