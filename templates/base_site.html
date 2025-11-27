@@ -91,7 +91,7 @@
     {# --- BOTÓN FLOTANTE DE CARRITO --- #}
     <a href="{% url 'core:cart_detail' %}"
        class="btn btn-primary position-fixed d-flex align-items-center gap-2"
-       style="right: 16px; bottom: 1px; z-index: 1040;">
+       >
       <span class="bi bi-bag"></span>
       <span>Carrito</span>
       {% if cart_count %}
