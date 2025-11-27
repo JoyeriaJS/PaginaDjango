@@ -831,7 +831,7 @@ def mp_success(request):
 
 
 def mp_failure(request):
-    return render(request, "core/payment_failed.html", {
+    return render(request, "core/payment_failure.html", {
         "payment_id": request.GET.get("payment_id"),
         "status": request.GET.get("status")
     })
