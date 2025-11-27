@@ -352,13 +352,8 @@
         disableOnInteraction: false
       },
       speed: 600,
-      slidesPerView: 1.4,
+      slidesPerView: 'auto',   /* ⬅ ARREGLA EL DESBORDAMIENTO */
       spaceBetween: 16,
-      breakpoints: {
-        576: { slidesPerView: 2.2 },
-        768: { slidesPerView: 3 },
-        1200: { slidesPerView: 5 }
-      },
       pagination: {
         el: '.slider-products-swiper .swiper-pagination',
         clickable: true
