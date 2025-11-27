@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+body { font-family: Arial; font-size: 12px; }
+h2 { margin-bottom: 0; }
+.table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+.table th, .table td { border: 1px solid #ccc; padding: 6px; }
+</style>
+</head>
+
+<body>
+
+<h2>Comprobante de compra</h2>
+<p><strong>Orden:</strong> {{ order.payment_id }}</p>
+<p><strong>Estado:</strong> {{ order.status }}</p>
+<p><strong>Fecha:</strong> {{ order.created_at }}</p>
+
+<h3>Cliente</h3>
+<p>
+{{ order.first_name }} {{ order.last_name }}<br>
+{{ order.email }}<br>
+{{ order.phone }}<br>
+{{ order.address_line }}, {{ order.comuna }}, {{ order.ciudad }}, {{ order.region }}
+</p>
+
+<h3>Productos</h3>
+<table class="table">
+<thead>
+<tr>
+  <th>Producto</th>
+  <th>Cantidad</th>
+  <th>Precio</th>
+  <th>Total</th>
+</tr>
+</thead>
+<tbody>
+{% for item in items %}
+<tr>
+  <td>{{ item.product.name }}</td>
+  <td>{{ item.quantity }}</td>
+  <td>${{ item.price }}</td>
+  <td>${{ item.total }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+<h3>Total Pagado: ${{ order.total }}</h3>
+
+</body>
+</html>

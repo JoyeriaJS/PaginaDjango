@@ -1,5 +1,9 @@
 from django.db import models
 from django.utils.text import slugify
+from django.utils import timezone
+#from catalog.models import Product
+#from .models import Order, OrderItem
+from django.contrib import admin
 
 # --- compat para migraciones antiguas (déjala aunque no la uses) ---
 def product_image_path(instance, filename):
@@ -103,3 +107,49 @@ class Discount(models.Model):
 
     def __str__(self):
         return self.name or (self.code or f"Descuento {self.id}")
+    
+class Order(models.Model):
+    payment_id = models.CharField(max_length=100, unique=True)
+    status = models.CharField(max_length=50)
+    merchant_order_id = models.CharField(max_length=100, blank=True, null=True)
+
+    # Totales
+    total = models.PositiveIntegerField(default=0)
+
+    # Datos del comprador
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=100, blank=True, null=True)
+
+    # Dirección
+    address_line = models.CharField(max_length=255, blank=True, null=True)
+    comuna = models.CharField(max_length=100, blank=True, null=True)
+    ciudad = models.CharField(max_length=100, blank=True, null=True)
+    region = models.CharField(max_length=100, blank=True, null=True)
+
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"Orden #{self.payment_id}"
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    quantity = models.PositiveIntegerField(default=1)
+    price = models.PositiveIntegerField(default=0)  # precio unitario
+
+    def total(self):
+        return self.quantity * self.price
+    
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    extra = 0
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ("payment_id", "email", "status", "total", "created_at")
+    list_filter = ("status", "created_at")
+    search_fields = ("payment_id", "email")
+    inlines = [OrderItemInline]

@@ -19,6 +19,17 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseBadRequest
 from catalog.models import Product
 from .forms import CheckoutForm
+from catalog.models import Order, OrderItem
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+
+try:
+    from weasyprint import HTML
+except Exception:
+    HTML = None
+
+
+
 
 
 
@@ -674,22 +685,22 @@ def _clear_cart(request):
         del request.session["cart"]
         request.session.modified = True
 
-def mp_success(request):
-    """
-    Vuelta de éxito. Aún sin guardar en BD.
-    Limpia carrito y muestra mensaje.
-    """
-    _clear_cart(request)
-    messages.success(request, "¡Pago aprobado! Gracias por tu compra.")
-    return redirect("/")
+#def mp_success(request):
+#    """
+#    Vuelta de éxito. Aún sin guardar en BD.
+#    Limpia carrito y muestra mensaje.
+#    """
+#    _clear_cart(request)
+#    messages.success(request, "¡Pago aprobado! Gracias por tu compra.")
+#    return redirect("/")
 
-def mp_failure(request):
-    messages.error(request, "El pago fue rechazado o cancelado. Puedes intentar nuevamente.")
-    return redirect("core:cart_detail")
+#def mp_failure(request):
+ #   messages.error(request, "El pago fue rechazado o cancelado. Puedes intentar nuevamente.")
+  #  return redirect("core:cart_detail")
 
-def mp_pending(request):
-    messages.info(request, "Tu pago quedó en estado pendiente. Te avisaremos al confirmarse.")
-    return redirect("/")
+#def mp_pending(request):
+#    messages.info(request, "Tu pago quedó en estado pendiente. Te avisaremos al confirmarse.")
+ #   return redirect("/")
 
 
 # --- Webhook (opcional por ahora) --------------------------------------------
@@ -752,3 +763,97 @@ def checkout(request):
         "count": count,
     }
     return render(request, "core/checkout.html", ctx)
+
+def mp_success(request):
+    payment_id = request.GET.get("payment_id")
+    status = request.GET.get("status")
+    merchant_order_id = request.GET.get("merchant_order_id")
+
+    checkout_data = request.session.get("checkout_data", {}).copy()
+
+    # Totales antes de borrar carrito
+    cart = request.session.get("cart") or {}
+    items, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
+
+    # 1) CREAR ORDEN
+    order = Order.objects.create(
+        payment_id=payment_id,
+        status=status,
+        merchant_order_id=merchant_order_id,
+        total=grand_total,
+        first_name=checkout_data.get("first_name"),
+        last_name=checkout_data.get("last_name"),
+        email=checkout_data.get("email"),
+        phone=checkout_data.get("phone"),
+        address_line=checkout_data.get("address_line"),
+        comuna=checkout_data.get("comuna"),
+        ciudad=checkout_data.get("ciudad"),
+        region=checkout_data.get("region"),
+    )
+
+    # GUARDAR ITEMS
+    for item in items:
+        OrderItem.objects.create(
+            order=order,
+            product_id=item["id"],
+            quantity=item["qty"],
+            price=item["price"]
+        )
+
+    # 2) Limpiar carrito
+    if "cart" in request.session:
+        del request.session["cart"]
+    request.session.modified = True
+
+    # 3) Preparar PDF
+    html_string = render_to_string("core/pdf_invoice.html", {
+        "order": order,
+        "items": items,
+    })
+
+    pdf_file = HTML(string=html_string).write_pdf()
+
+    # 4) Enviar correo al cliente
+    email = EmailMessage(
+        subject="Comprobante de tu compra — Artesanías Pachy",
+        body="Adjuntamos tu comprobante de compra.",
+        to=[order.email]
+    )
+    email.attach(f"Comprobante-{order.payment_id}.pdf", pdf_file, "application/pdf")
+    email.send(fail_silently=True)
+
+    # 5) Render página
+    return render(request, "core/payment_success.html", {
+        "order": order,
+        "items": items,
+        "grand_total": grand_total,
+    })
+
+
+def mp_failure(request):
+    return render(request, "core/payment_failed.html", {
+        "payment_id": request.GET.get("payment_id"),
+        "status": request.GET.get("status")
+    })
+
+
+def mp_pending(request):
+    return render(request, "core/payment_pending.html", {
+        "payment_id": request.GET.get("payment_id"),
+        "status": request.GET.get("status")
+    })
+
+def order_pdf(request, payment_id):
+    order = get_object_or_404(Order, payment_id=payment_id)
+    items = order.items.all()
+
+    html_string = render_to_string("core/pdf_invoice.html", {
+        "order": order,
+        "items": items,
+    })
+
+    pdf = HTML(string=html_string).write_pdf()
+
+    response = HttpResponse(pdf, content_type="application/pdf")
+    response["Content-Disposition"] = f"inline; filename=Comprobante-{payment_id}.pdf"
+    return response

@@ -1,19 +1,19 @@
 {% extends "base_site.html" %}
-{% block title %}Pago fallido{% endblock %}
+{% block title %}Pago pendiente{% endblock %}
 
 {% block content %}
 <div class="container py-5">
   <div class="card shadow-sm border-0 p-4 text-center">
-    <h2 class="fw-bold text-danger">✖ El pago fue rechazado</h2>
+    <h2 class="fw-bold text-warning">⏳ Pago pendiente</h2>
     <p class="text-muted mt-3">
-      Tu transacción no pudo completarse.
+      Mercado Pago está procesando tu transacción.
     </p>
 
     {% if payment_id %}
       <p class="small text-muted">ID del pago: {{ payment_id }}</p>
     {% endif %}
 
-    <a href="/carrito/" class="btn btn-outline-danger mt-3 rounded-pill px-4">Volver al carrito</a>
+    <a href="/" class="btn btn-primary rounded-pill px-4 mt-3">Volver al inicio</a>
   </div>
 </div>
 {% endblock %}

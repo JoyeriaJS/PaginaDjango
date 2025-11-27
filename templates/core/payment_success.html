@@ -1,9 +1,45 @@
 {% extends "base_site.html" %}
-{% block title %}Pago exitoso{% endblock %}
+{% block title %}Pago exitoso — Comprobante{% endblock %}
+
 {% block content %}
 <div class="container py-5">
-  <h1 class="h4 mb-3">¡Gracias! Tu pago fue procesado correctamente.</h1>
-  <p class="text-muted">Pronto recibirás un correo con los detalles.</p>
-  <a href="/" class="btn btn-primary mt-2">Volver a la tienda</a>
+  
+  <div class="card shadow-sm border-0 p-4">
+    <h2 class="fw-bold mb-3 text-success">
+      ✔ ¡Pago aprobado!
+    </h2>
+
+    <p class="text-muted mb-4">
+      Gracias por tu compra. Aquí tienes tu comprobante.
+    </p>
+
+    <hr>
+
+    <h5 class="fw-semibold mt-3">Detalles del pago</h5>
+
+    <ul class="list-unstyled mt-3 mb-4">
+      <li><strong>ID del pago:</strong> {{ payment_id }}</li>
+      <li><strong>Estado:</strong> {{ status }}</li>
+      <li><strong>ID de la orden:</strong> {{ merchant_order_id }}</li>
+      <li><strong>Total pagado:</strong> ${{ grand_total }}</li>
+    </ul>
+
+    <h5 class="fw-semibold">Datos del comprador</h5>
+    <ul class="list-unstyled mt-3 mb-4">
+      <li><strong>Nombre:</strong> {{ checkout_data.first_name }} {{ checkout_data.last_name }}</li>
+      <li><strong>Correo:</strong> {{ checkout_data.email }}</li>
+      <li><strong>Teléfono:</strong> {{ checkout_data.phone }}</li>
+      <li><strong>Dirección:</strong> {{ checkout_data.address_line }}</li>
+      <li><strong>Comuna:</strong> {{ checkout_data.comuna }}</li>
+      <li><strong>Ciudad:</strong> {{ checkout_data.ciudad }}</li>
+      <li><strong>Región:</strong> {{ checkout_data.region }}</li>
+    </ul>
+    <a href="{% url 'core:order_pdf' order.payment_id %}" 
+      class="btn btn-outline-primary rounded-pill px-4 mt-3">
+      Descargar comprobante PDF
+    </a>
+    <a href="/" class="btn btn-primary rounded-pill px-4">Volver al inicio</a>
+  </div>
+
 </div>
 {% endblock %}

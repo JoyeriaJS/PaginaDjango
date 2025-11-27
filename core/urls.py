@@ -27,6 +27,8 @@ urlpatterns = [
     path("pago/pendiente/", views.mp_pending, name="mp_pending"),
     # opcional webhook (lo podemos activar después):
     path("mp/webhook/", views.mp_webhook, name="mp_webhook"),
+    path("orden/<str:payment_id>/pdf/", views.order_pdf, name="order_pdf"),
+
 
    #CHECKOUT
    path("checkout/", views.checkout, name="checkout"),

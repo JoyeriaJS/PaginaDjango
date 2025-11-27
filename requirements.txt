@@ -11,3 +11,4 @@ python-dotenv
 cloudinary
 django-cloudinary-storage
 mercadopago==2.2.3
+WeasyPrint==53.3
