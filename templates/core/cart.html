@@ -6,11 +6,8 @@
 
   <h1 class="h4 fw-bold mb-4">Tu carrito</h1>
 
-  {% if cart.items %}
+  {% if items %}
   
-  <!-- ============================================= -->
-  <!-- TABLA DE CARRITO -->
-  <!-- ============================================= -->
   <form method="post" action="{% url 'core:update_cart' %}">
     {% csrf_token %}
 
@@ -28,50 +25,44 @@
         
         <tbody>
 
-          {% for line in cart.items %}
+          {% for line in items %}
           <tr>
 
-            <!-- Imagen -->
             <td>
-              {% if line.product.images.first %}
-              <img src="{{ line.product.images.first.image.url }}"
+              {% if line.image_url %}
+              <img src="{{ line.image_url }}"
                    class="rounded"
                    style="width:75px;height:75px;object-fit:cover;">
               {% else %}
-              <div class="ratio ratio-1x1 bg-light rounded"
-                   style="width:75px;"></div>
+              <div class="ratio ratio-1x1 bg-light rounded" style="width:75px;"></div>
               {% endif %}
             </td>
 
-            <!-- Nombre -->
             <td>
-              <a href="{% url 'core:product_detail' line.product.pk %}"
+              <a href="{% url 'core:product_detail' line.id %}"
                  class="text-dark fw-semibold text-decoration-none">
-                {{ line.product.name }}
+                {{ line.name }}
               </a>
               <div class="small text-muted">
-                {{ line.product.category.name }}
+                {{ line.category }}
               </div>
             </td>
 
-            <!-- Cantidad -->
             <td class="text-center">
               <input type="number"
                      name="qty_{{ line.id }}"
                      value="{{ line.qty }}"
                      min="1"
                      class="form-control form-control-sm text-center"
-                     style="width:70px;display:inline-block;">
+                     style="width:70px;">
             </td>
 
-            <!-- Total línea -->
             <td class="text-end">
               <span data-line-total="{{ line.id }}">
-                ${{ line.line_total }}
+                ${{ line.total }}
               </span>
             </td>
 
-            <!-- Eliminar -->
             <td class="text-end">
               <button type="submit"
                       formmethod="post"
@@ -89,12 +80,8 @@
       </table>
     </div>
 
-    <!-- ============================================= -->
-    <!-- BOTONES INFERIORES -->
-    <!-- ============================================= -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mt-4 gap-3">
 
-      <!-- Vaciar carrito -->
       <form method="post" action="{% url 'core:clear_cart' %}">
         {% csrf_token %}
         <button class="btn btn-outline-secondary">
@@ -102,17 +89,16 @@
         </button>
       </form>
 
-      <!-- Totales -->
       <div class="text-end">
 
         <div class="fw-semibold small text-muted">Subtotal</div>
         <div class="h5 fw-bold mb-2" id="cart-subtotal">
-          ${{ cart.subtotal }}
+          ${{ subtotal }}
         </div>
 
         <div class="fw-semibold small text-muted">Total</div>
         <div class="h4 fw-bold mb-3" id="cart-grandtotal">
-          ${{ cart.grand_total }}
+          ${{ grand_total }}
         </div>
 
         <a class="btn btn-primary btn-lg rounded-pill px-5"
@@ -125,12 +111,8 @@
 
   </form>
 
-
   {% else %}
 
-  <!-- ============================================= -->
-  <!-- CARRITO VACÍO -->
-  <!-- ============================================= -->
   <div class="text-center py-5">
     <div class="display-6 mb-3">🛒</div>
     <h2 class="h5 fw-bold mb-3">Tu carrito está vacío</h2>
