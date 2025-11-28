@@ -433,17 +433,36 @@ def cart_detail(request):
     cart = get_normalized_cart(request.session)
     items, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
 
-    ctx = {
+    # -------------------------
+    # 🔥 APLICAR DESCUENTO AQUÍ
+    # -------------------------
+    coupon_code = request.session.get("coupon")
+    discount_amount = Decimal("0")
+
+    if coupon_code:
+        d = _find_discount_by_code(coupon_code)
+        if d:
+            discount_amount = _discount_amount_for_cart(d, items, Decimal(subtotal))
+        else:
+            # Cupón inválido → limpiarlo
+            request.session.pop("coupon", None)
+
+    grand_total = Decimal(subtotal) - discount_amount
+    if grand_total < 0:
+        grand_total = Decimal("0")
+
+    context = {
         "items": items,
         "subtotal": subtotal,
+        "discount_code": coupon_code,
+        "discount_amount": int(discount_amount),
+        "grand_total": int(grand_total),
         "tax": tax,
         "shipping": shipping,
-        "grand_total": grand_total,
-        # Si usas cupones:
-        "discount_code": request.session.get("coupon"),
-        "discount_amount": request.session.get("discount_amount", 0),
     }
-    return render(request, "core/cart.html", ctx)
+
+    return render(request, "core/cart.html", context)
+
     
 #DESCUENTOS
 def _find_discount_by_code(code):
