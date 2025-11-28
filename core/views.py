@@ -23,7 +23,6 @@ from catalog.models import Order, OrderItem
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
-
 try:
     from weasyprint import HTML
 except Exception:
@@ -35,19 +34,13 @@ except Exception:
 
 
 def home(request):
-    banners_hero = Banner.objects.filter(
-        position=Banner.HOME_HERO,
-        is_active=True
-    ).order_by("order")
-
-    banners_strip = Banner.objects.filter(
-        position=Banner.HOME_STRIP,
-        is_active=True
-    ).order_by("order")
-
+    categories = Category.objects.annotate(n=Count('products')).order_by('-n','name')[:8]
+    latest_products = Product.objects.filter(is_active=True).order_by('-created_at')[:8]
     return render(request, "core/home.html", {
-        "banners_hero": banners_hero,
-        "banners_strip": banners_strip,
+        "categories": categories,
+        "latest_products": latest_products,
+        "banners_hero": Banner.objects.filter(is_active=True, position=Banner.HOME_HERO).order_by('order','-updated_at')[:6],
+        "banners_strip": Banner.objects.filter(is_active=True, position=Banner.HOME_STRIP).order_by('order','-updated_at')[:6],
     })
 
 
