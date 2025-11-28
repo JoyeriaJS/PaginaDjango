@@ -214,3 +214,303 @@ body, html {
   border-color: var(--border) !important;
 }
 
+/* ============================================================
+   💎 PACK PREMIUM — COMPLEMENTO FINAL (NO reemplaza nada tuyo)
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   TIPOGRAFÍA GLOBAL PREMIUM
+   ------------------------------------------------------------ */
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.65;
+    letter-spacing: .15px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: .4px;
+    font-weight: 600;
+}
+
+/* ------------------------------------------------------------
+   PALETA DE COLORES (usa tu brand)
+   ------------------------------------------------------------ */
+:root {
+    --primary: var(--brand);
+    --primary-dark: rgba(13,110,253,.85);
+    --radius: 14px;
+}
+
+/* ------------------------------------------------------------
+   NAVBAR PREMIUM
+   ------------------------------------------------------------ */
+.navbar {
+    backdrop-filter: blur(14px);
+    background: rgba(255,255,255,0.75) !important;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+    transition: background .3s ease;
+}
+
+.navbar .nav-link {
+    font-weight: 500;
+    padding: .55rem .9rem;
+    transition: color .2s;
+}
+
+.navbar .nav-link:hover {
+    color: var(--primary) !important;
+    opacity: .85;
+}
+
+/* Dark navbar */
+:root[data-theme="dark"] .navbar {
+    background: rgba(18,18,18,0.7) !important;
+    border-bottom: 1px solid var(--border) !important;
+}
+
+/* ------------------------------------------------------------
+   BOTONES — Modernos premium
+   ------------------------------------------------------------ */
+.btn-primary {
+    background: var(--primary);
+    border-color: var(--primary);
+    font-weight: 600;
+    padding: .65rem 1.4rem;
+    border-radius: var(--radius);
+    transition: transform .2s, background .3s;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-outline-primary {
+    border-radius: var(--radius);
+    font-weight: 600;
+}
+
+/* ------------------------------------------------------------
+   TARJETAS PREMIUM
+   ------------------------------------------------------------ */
+.card,
+.card-elev {
+    border-radius: var(--radius);
+    border: 1px solid rgba(0,0,0,.06);
+    background: #fff;
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.card:hover,
+.card-elev:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+/* Dark cards */
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .card-elev {
+    background: var(--card);
+    border-color: var(--border);
+}
+
+/* ------------------------------------------------------------
+   FORMULARIOS PREMIUM
+   ------------------------------------------------------------ */
+.form-control,
+.form-select {
+    border-radius: var(--radius);
+    padding: .7rem .9rem;
+    border-color: rgba(0,0,0,.12);
+    background: #fff;
+    transition: border .25s, box-shadow .25s;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(13,110,253,.18);
+}
+
+/* DARK MODE */
+:root[data-theme="dark"] .form-control,
+:root[data-theme="dark"] .form-select {
+    background: var(--bg-light);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+/* ------------------------------------------------------------
+   HERO PREMIUM
+   ------------------------------------------------------------ */
+.hero-xl {
+    border-radius: 0 0 28px 28px;
+    overflow: hidden;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.hero-title {
+    font-weight: 700;
+    letter-spacing: .4px;
+}
+
+.hero-sub {
+    color: #6c757d;
+    font-size: 1.12rem;
+}
+
+/* Dark hero */
+:root[data-theme="dark"] .hero-sub {
+    color: var(--text-muted);
+}
+
+/* ------------------------------------------------------------
+   SLIDER DE PRODUCTOS
+   ------------------------------------------------------------ */
+.slider-product-card {
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(0,0,0,.06);
+    transition: transform .2s;
+}
+
+.slider-product-card:hover {
+    transform: scale(1.03);
+}
+
+/* Dark */
+:root[data-theme="dark"] .slider-product-card {
+    background: var(--card);
+    border-color: var(--border);
+    box-shadow: none;
+}
+
+/* ------------------------------------------------------------
+   SWIPER PAGINATION PREMIUM
+   ------------------------------------------------------------ */
+.swiper-pagination-bullet {
+    background: var(--primary) !important;
+    opacity: .45;
+}
+.swiper-pagination-bullet-active {
+    opacity: 1 !important;
+}
+
+/* ------------------------------------------------------------
+   CATEGORÍAS
+   ------------------------------------------------------------ */
+.card-category {
+    border-radius: var(--radius);
+}
+
+.category-circle {
+    width: 72px;
+    height: 72px;
+    font-size: 1.25rem;
+}
+
+/* Dark */
+:root[data-theme="dark"] .category-circle {
+    background: rgba(77,163,255,.12);
+}
+
+/* ------------------------------------------------------------
+   PRODUCT DETAIL — Galería Premium
+   ------------------------------------------------------------ */
+#pd-main img {
+    border-radius: var(--radius);
+    box-shadow: 0 6px 18px rgba(0,0,0,.06);
+}
+
+.thumb-64 {
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform .2s, box-shadow .2s;
+}
+.thumb-64:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 12px rgba(0,0,0,.10);
+}
+
+/* ------------------------------------------------------------
+   FOOTER PREMIUM
+   ------------------------------------------------------------ */
+footer {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    border-top: 1px solid rgba(0,0,0,.08);
+    background: #ffffff;
+}
+
+footer h5, footer h6 {
+    font-weight: 700;
+}
+
+footer a {
+    color: var(--primary);
+    transition: opacity .2s;
+}
+footer a:hover {
+    opacity: .7;
+}
+
+/* Dark footer */
+:root[data-theme="dark"] footer {
+    background: #111317 !important;
+}
+
+/* ------------------------------------------------------------
+   MOBILE UX (mejorado)
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+    .hero-xl {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+    .card,
+    .card-elev {
+        border-radius: 12px;
+    }
+    .btn {
+        padding: .55rem 1rem;
+        font-size: .95rem;
+    }
+    footer {
+        text-align: center;
+    }
+}
+
+/* ------------------------------------------------------------
+   SOMBRAS PREMIUM
+   ------------------------------------------------------------ */
+.shadow-soft {
+    box-shadow: 0 8px 28px rgba(0,0,0,.07);
+}
+
+.shadow-hover:hover {
+    box-shadow: 0 12px 28px rgba(0,0,0,.12);
+}
+
+/* ------------------------------------------------------------
+   IMÁGENES FLUIDAS
+   ------------------------------------------------------------ */
+img {
+    border-radius: var(--radius);
+}
+
+/* Evitar bordes en thumbs */
+.thumb-1x1 img,
+.slider-product-img,
+.hero-product-img {
+    border-radius: 12px !important;
+}
+
+/* ------------------------------------------------------------
+   TRANSICIONES GLOBAL
+   ------------------------------------------------------------ */
+*, *::before, *::after {
+    transition: background .2s, color .2s, border-color .2s;
+}
