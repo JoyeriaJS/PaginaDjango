@@ -327,5 +327,47 @@
   <!-- SWIPER JS -->
   <script src="https://unpkg.com/swiper@9/swiper-bundle.min.js"></script>
 
- 
+  <script>
+    /* HERO PRINCIPAL */
+    new Swiper('.hero-mix-swiper', {
+      loop: true,
+      autoplay: {
+        delay: 6000,
+        disableOnInteraction: false
+      },
+      speed: 800,
+      effect: 'fade',
+      fadeEffect: { crossFade: true },
+      pagination: {
+        el: '.hero-mix-swiper .swiper-pagination',
+        clickable: true
+      }
+    });
+
+    /* SLIDER HORIZONTAL TIPO BLUECAST */
+    new Swiper('.slider-products-swiper', {
+      loop: true,
+      autoplay: {
+        delay: 4500,
+        disableOnInteraction: false
+      },
+      speed: 600,
+      slidesPerView: 'auto',   /* ⬅ ARREGLA EL DESBORDAMIENTO */
+      spaceBetween: 16,
+      pagination: {
+        el: '.slider-products-swiper .swiper-pagination',
+        clickable: true
+      }
+    });
+
+    /* Testimonios */
+    new Swiper('.testimonials-swiper', {
+      loop: true,
+      autoplay: { delay: 5000 },
+      pagination: { el: '.testimonials-swiper .swiper-pagination', clickable: true },
+      slidesPerView: 1,
+      spaceBetween: 16,
+      breakpoints: { 768:{slidesPerView:2}, 1200:{slidesPerView:3} }
+    });
+  </script>
 {% endblock %}
