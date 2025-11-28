@@ -184,6 +184,47 @@
   </div>
 </section>
 
+{% if featured_products %}
+<section class="py-5 bg-light">
+  <div class="container">
+
+    <div class="text-center mb-4">
+      <h2 class="fw-bold">Productos Destacados</h2>
+      <p class="text-muted">Seleccionados especialmente para ti</p>
+    </div>
+
+    <div class="swiper slider-featured-swiper">
+      <div class="swiper-wrapper">
+
+        {% for fp in featured_products %}
+          {% with p=fp.product %}
+          <div class="swiper-slide" style="width:240px;">
+            <a class="bc-card text-decoration-none" href="{% url 'core:product_detail' p.pk %}">
+              
+              {% with img=p.images.first %}
+                {% if img %}
+                <img src="{{ img.image.url }}" alt="{{ p.name }}">
+                {% endif %}
+              {% endwith %}
+
+              <div class="p-3">
+                <div class="fw-semibold">{{ p.name|truncatechars:30 }}</div>
+                <div class="text-primary fw-bold mt-1">${{ p.price }}</div>
+              </div>
+            </a>
+          </div>
+          {% endwith %}
+        {% endfor %}
+
+      </div>
+
+      <div class="swiper-pagination mt-3"></div>
+    </div>
+
+  </div>
+</section>
+{% endif %}
+
 <!-- ========================================================= -->
 <!-- LISTADO DE NOVEDADES (CUADRÍCULA) -->
 <!-- ========================================================= -->

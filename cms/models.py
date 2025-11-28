@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
-
+from django.contrib import admin
+from .models import FeaturedProduct
 def banner_upload_path(instance, filename):
     return f"banners/{instance.position}/{filename}"
 
@@ -55,7 +56,23 @@ class MenuItem(models.Model):
 
     def __str__(self):
         return self.title
+    
+class FeaturedProduct(models.Model):
+    product = models.ForeignKey("core.Product", on_delete=models.CASCADE, related_name="featured")
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ["order", "-created_at"]
+
+    def __str__(self):
+        return f"{self.product.name} (destacado)"
+
+@admin.register(FeaturedProduct)
+class FeaturedProductAdmin(admin.ModelAdmin):
+    list_display = ("product", "order", "is_active")
+    list_editable = ("order", "is_active")
 #RESEÑA
 
 
