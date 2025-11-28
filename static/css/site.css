@@ -115,3 +115,168 @@ body, html {
   max-width: 100%;
   overflow-x: hidden !important;
 }
+
+/* ============================================================ */
+/* DARK MODE — Artesanías Pachy Premium                        */
+/* ============================================================ */
+
+:root[data-theme="dark"] {
+  --brand: #4da3ff;
+  --bg: #0d0f12;
+  --bg-light: #1a1c20;
+  --text: #e4e6eb;
+  --text-muted: #9da1a7;
+  --card: #16181c;
+  --border: #2a2d33;
+}
+
+:root[data-theme="dark"] body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Textos */
+:root[data-theme="dark"] .text-muted { color: var(--text-muted) !important; }
+
+/* Navbar */
+:root[data-theme="dark"] .navbar {
+  background: var(--bg-light) !important;
+  border-color: var(--border) !important;
+}
+:root[data-theme="dark"] .navbar-brand,
+:root[data-theme="dark"] .nav-link {
+  color: var(--text) !important;
+}
+:root[data-theme="dark"] .nav-link:hover {
+  color: var(--brand) !important;
+}
+
+/* Cards */
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .card-elev {
+  background: var(--card) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+  box-shadow: 0 0 25px rgba(0,0,0,.45) !important;
+}
+
+/* Footer */
+:root[data-theme="dark"] footer {
+  background: #111317 !important;
+  color: var(--text-muted) !important;
+}
+
+/* Inputs */
+:root[data-theme="dark"] .form-control {
+  background: var(--bg-light);
+  border-color: var(--border);
+  color: var(--text);
+}
+:root[data-theme="dark"] .form-control:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px rgba(77,163,255,.25);
+}
+
+/* Botones */
+:root[data-theme="dark"] .btn-outline-secondary {
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+:root[data-theme="dark"] .btn-outline-secondary:hover {
+  background: var(--border);
+}
+
+/* Secciones claras */
+:root[data-theme="dark"] .bg-light,
+:root[data-theme="dark"] .section-muted {
+  background: var(--bg-light) !important;
+}
+
+/* Acordeón (FAQs) */
+:root[data-theme="dark"] .accordion-button {
+  background: var(--bg-light) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+:root[data-theme="dark"] .accordion-body {
+  background: var(--card) !important;
+}
+
+/* Usp Strip */
+:root[data-theme="dark"] .usp-strip {
+  background: var(--bg-light) !important;
+}
+
+/* Borders */
+:root[data-theme="dark"] .border,
+:root[data-theme="dark"] .border-top,
+:root[data-theme="dark"] .border-bottom {
+  border-color: var(--border) !important;
+}
+
+@media (max-width: 576px) {
+  .hero-xl {
+    min-height: 60vh;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+  .hero-title {
+    font-size: 1.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  #pd-main {
+    border-radius: .75rem;
+  }
+  .thumb-64 {
+    width: 52px;
+    height: 52px;
+  }
+}
+
+@media (max-width: 576px) {
+  .product-card .card-title {
+    font-size: .95rem;
+  }
+  .product-card img {
+    border-radius: .75rem;
+  }
+}
+
+@media (max-width: 576px) {
+  table.table thead {
+    display: none;
+  }
+  table.table tbody tr {
+    display: block;
+    margin-bottom: 1.2rem;
+    border: 1px solid #eee;
+    border-radius: .75rem;
+    padding: .8rem;
+  }
+  table.table td {
+    display: flex;
+    justify-content: space-between;
+  }
+  table.table td img {
+    width: 70px;
+    height: 70px;
+    border-radius: .5rem;
+  }
+}
+@media (max-width: 576px) {
+  .sticky-cta {
+    position: static !important;
+  }
+}
+@media (max-width: 576px) {
+  .navbar-brand {
+    font-size: 1rem;
+  }
+  .navbar {
+    padding-top: .4rem;
+    padding-bottom: .4rem;
+  }
+}
+

@@ -59,6 +59,13 @@
         <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
       </select>
 
+      <!-- Dark mode toggle -->
+      <button id="themeToggle"
+              class="btn btn-sm btn-outline-secondary ms-3 rounded-pill px-3"
+              type="button">
+        🌙
+      </button>
+
       {# --- Formulario fall-back Django set_language --- #}
       <form id="lang-fallback-form" action="{% url 'set_language' %}"
             method="post" class="d-none">
