@@ -22,7 +22,6 @@ from .forms import CheckoutForm
 from catalog.models import Order, OrderItem
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
-from .models import FeaturedProduct
 
 try:
     from weasyprint import HTML
@@ -31,44 +30,15 @@ except Exception:
 
 
 
-
-
-
 def home(request):
-    # Categorías
-    categories = Category.objects.annotate(
-        n=Count('products')
-    ).order_by('-n', 'name')[:8]
-
-    # Últimos productos (siguen funcionando igual)
-    latest_products = Product.objects.filter(
-        is_active=True
-    ).order_by('-created_at')[:8]
-
-    # Banners (como ya los tenías)
-    banners_hero = Banner.objects.filter(
-        is_active=True,
-        position=Banner.HOME_HERO
-    ).order_by('order', '-updated_at')[:6]
-
-    banners_strip = Banner.objects.filter(
-        is_active=True,
-        position=Banner.HOME_STRIP
-    ).order_by('order', '-updated_at')[:6]
-
-    # 👉 NUEVO: Productos destacados administrables
-    featured_products = FeaturedProduct.objects.filter(
-        is_active=True
-    ).select_related("product").order_by("order")[:12]
-
+    categories = Category.objects.annotate(n=Count('products')).order_by('-n','name')[:8]
+    latest_products = Product.objects.filter(is_active=True).order_by('-created_at')[:8]
     return render(request, "core/home.html", {
         "categories": categories,
         "latest_products": latest_products,
-        "banners_hero": banners_hero,
-        "banners_strip": banners_strip,
-        "featured_products": featured_products,  # <- AGREGADO
+        "banners_hero": Banner.objects.filter(is_active=True, position=Banner.HOME_HERO).order_by('order','-updated_at')[:6],
+        "banners_strip": Banner.objects.filter(is_active=True, position=Banner.HOME_STRIP).order_by('order','-updated_at')[:6],
     })
-
 
 
 # ---------- PRODUCTO (página pública de detalle) ----------

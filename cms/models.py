@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
-from django.contrib import admin
-from .models import FeaturedProduct
+
 def banner_upload_path(instance, filename):
     return f"banners/{instance.position}/{filename}"
 
@@ -69,10 +68,6 @@ class FeaturedProduct(models.Model):
     def __str__(self):
         return f"{self.product.name} (destacado)"
 
-@admin.register(FeaturedProduct)
-class FeaturedProductAdmin(admin.ModelAdmin):
-    list_display = ("product", "order", "is_active")
-    list_editable = ("order", "is_active")
 #RESEÑA
 
 
