@@ -213,3 +213,199 @@ body, html {
 :root[data-theme="dark"] .border-bottom {
   border-color: var(--border) !important;
 }
+
+/* ==========================================================
+   ESTILO PREMIUM — SIN ROMPER LÓGICA / SIN CAMBIAR HTML
+   ========================================================== */
+
+/* TIPOGRAFÍA GLOBAL */
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    letter-spacing: .2px;
+}
+
+/* TITULOS */
+h1, h2, h3, h4, h5 {
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: .5px;
+    font-weight: 600;
+}
+
+/* ----------------------------------------------------------
+   NAVBAR
+   ---------------------------------------------------------- */
+.navbar {
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    transition: background .3s;
+}
+
+.navbar .nav-link {
+    font-weight: 500;
+    transition: color .2s;
+}
+.navbar .nav-link:hover {
+    color: var(--primary);
+}
+
+/* Botón del theme toggle */
+#themeToggle {
+    border-radius: 50%;
+    padding: 6px 10px;
+    transition: background .2s;
+}
+#themeToggle:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+/* ----------------------------------------------------------
+   BOTONES
+   ---------------------------------------------------------- */
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: #000;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: background .25s, transform .15s;
+}
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+/* ----------------------------------------------------------
+   TARJETAS (PRODUCTOS, SECCIONES, CONTENEDORES)
+   ---------------------------------------------------------- */
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    transition: transform .2s, box-shadow .3s;
+}
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+/* ----------------------------------------------------------
+   FORMULARIOS + INPUTS
+   ---------------------------------------------------------- */
+.form-control {
+    background: var(--bg-card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 .2rem rgba(198,166,103,.25);
+}
+
+/* Labels */
+label {
+    font-weight: 500;
+}
+
+/* Select 100% bonitos */
+select.form-select {
+    background: var(--bg-card);
+    color: var(--text);
+    border-radius: 10px;
+}
+
+/* ----------------------------------------------------------
+   FOOTER
+   ---------------------------------------------------------- */
+footer {
+    background: var(--bg-card);
+    color: var(--text-soft);
+    border-top: 1px solid var(--border);
+}
+footer a {
+    color: var(--primary);
+    text-decoration: none;
+}
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* ----------------------------------------------------------
+   PRODUCTOS (mini mejoras)
+   ---------------------------------------------------------- */
+.product-card img {
+    transition: transform .3s;
+}
+.product-card:hover img {
+    transform: scale(1.08);
+}
+
+/* Precio */
+.price-tag {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* ----------------------------------------------------------
+   CONTENEDORES GENERALES
+   ---------------------------------------------------------- */
+section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.container, .container-fluid {
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+/* ----------------------------------------------------------
+   MOBILE UX MEJORADO
+   ---------------------------------------------------------- */
+@media (max-width: 768px) {
+    .navbar-brand img {
+        height: 42px !important;
+    }
+
+    body {
+        padding-bottom: 70px; /* espacio para WhatsApp */
+    }
+
+    .btn {
+        padding: .6rem 1.1rem;
+        border-radius: 10px;
+    }
+
+    .card {
+        border-radius: 12px;
+    }
+}
+
+/* ----------------------------------------------------------
+   SWIPER: FLECHAS + PAGINACIÓN ELEGANTE
+   ---------------------------------------------------------- */
+.swiper-pagination-bullet {
+    background: var(--primary) !important;
+    opacity: 0.6;
+}
+.swiper-pagination-bullet-active {
+    opacity: 1 !important;
+}
+
+/* ----------------------------------------------------------
+   MODO DARK ajustado (usa tus variables existentes)
+   ---------------------------------------------------------- */
+:root[data-theme="dark"] body {
+    background: #0c0c0c !important;
+}
+
+:root[data-theme="dark"] .card {
+    box-shadow: none;
+}
+
+:root[data-theme="dark"] .navbar {
+    background: rgba(15, 15, 15, 0.70) !important;
+}
+
