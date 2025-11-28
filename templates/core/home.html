@@ -3,142 +3,117 @@
 {% block title %}Casteable{% endblock %}
 
 {% block extra_head %}
-  {{ block.super }}
+{{ block.super }}
+<link href="https://unpkg.com/swiper@9/swiper-bundle.min.css" rel="stylesheet">
+<style>
+  /* Hero text */
+  .hero-main-title {
+    font-family: "Poppins", sans-serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .hero-main-sub {
+    max-width: 55ch;
+    font-size: 1.15rem;
+  }
 
-  <!-- SWIPER CSS -->
-  <link href="https://unpkg.com/swiper@9/swiper-bundle.min.css" rel="stylesheet">
+  /* Slider BlueCast */
+  .bc-card {
+    width: 200px;
+    background: var(--card, #fff);
+    border-radius: 18px;
+    box-shadow: var(--shadow, 0 8px 22px rgba(0,0,0,.08));
+    overflow: hidden;
+    transition: .25s;
+  }
+  .bc-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 26px rgba(0,0,0,.15);
+  }
+  .bc-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+  }
 
-  <style>
-    /* HERO PRODUCT SLIDE */
-    .hero-mix-title {
-      text-shadow: 0 2px 12px rgba(0,0,0,.55);
-    }
-    .hero-product-card {
-      width: 140px;
-      display: inline-block;
-      text-align: center;
-    }
-    .hero-product-img {
-      width: 140px;
-      height: 140px;
-      object-fit: cover;
-      border-radius: 10px;
-      background: #ddd;
-    }
-
-    /* SLIDER DE PRODUCTOS TIPO BLUECAST */
-    .slider-product-card {
-      width: 200px;
-      border-radius: 10px;
-      overflow: hidden;
-      background: white;
-      box-shadow: 0 4px 12px rgba(0,0,0,.08);
-      transition: transform .2s;
-    }
-    .slider-product-card:hover {
-      transform: scale(1.03);
-    }
-    .slider-product-img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-  </style>
+  /* Hero swiper */
+  .hero-swiper img {
+    height: 430px;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+</style>
 {% endblock %}
-
-
 
 {% block content %}
 
 {% include "includes/usp_strip.html" %}
 
-<!-- ============================================================= -->
-<!-- =============== HERO MIX TIPO SHOPIFY ======================== -->
-<!-- ============================================================= -->
+<!-- ========================================================= -->
+<!-- HERO PRINCIPAL BLUECAST PRO -->
+<!-- ========================================================= -->
+{% if banners_hero %}
+<section class="py-4">
+  <div class="container">
+    <div class="row g-4 align-items-center">
 
-<section class="hero-xl position-relative mb-5">
+      <!-- Texto izquierdo -->
+      <div class="col-lg-6" data-aos="fade-up">
+        <h1 class="hero-main-title mb-3">
+          Joyería en Lapislázuli hecha en Chile
+        </h1>
+        <p class="hero-main-sub text-muted mb-4">
+          Piezas únicas elaboradas por artesanos locales con técnicas tradicionales.
+        </p>
 
-  <div class="swiper hero-mix-swiper rounded-4 shadow-lg overflow-hidden">
-    <div class="swiper-wrapper">
-
-      {% for b in banners_hero %}
-      <div class="swiper-slide position-relative">
-        <img src="{{ b.image.url }}" class="w-100"
-             style="height:520px;object-fit:cover;filter:brightness(0.55);">
-
-        <div class="position-absolute top-50 start-50 translate-middle text-center text-white px-3"
-             data-aos="fade-up">
-          <span class="badge bg-primary px-3 py-2 mb-2">Nuevo</span>
-
-          <h2 class="display-5 fw-bold hero-mix-title">{{ b.title|default:"Joyería Artesanal" }}</h2>
-
-          {% if b.subtitle %}
-            <p class="lead">{{ b.subtitle }}</p>
-          {% endif %}
-
-          <a href="#nuevos" class="btn btn-light btn-lg fw-bold shadow-sm mt-3">Explorar</a>
+        <div class="d-flex gap-3">
+          <a href="#categorias" class="btn btn-primary btn-lg rounded-pill px-4">Explorar</a>
+          <a href="#nuevos" class="btn btn-outline-primary btn-lg rounded-pill px-4">Novedades</a>
         </div>
       </div>
-      {% endfor %}
 
-
-      {# --- SLIDE DE PRODUCTOS DESTACADOS --- #}
-      {% if latest_products %}
-      <div class="swiper-slide position-relative bg-dark">
-
-        <img src="{% static 'img/hero-default.jpg' %}" class="w-100"
-             style="height:520px;object-fit:cover;opacity:0.25;">
-
-        <div class="position-absolute top-50 start-50 translate-middle text-center text-white px-3"
-             data-aos="zoom-in">
-
-          <h2 class="display-6 fw-bold mb-4 hero-mix-title">Novedades para ti</h2>
-
-          <div class="d-flex justify-content-center gap-4 flex-wrap" style="max-width:700px;margin:auto;">
-
-            {% for p in latest_products|slice:":6" %}
-            <a href="{% url 'core:product_detail' p.pk %}"
-               class="hero-product-card text-decoration-none">
-
-              {% with img=p.images.first %}
-                {% if img %}
-                  <img src="{{ img.image.url }}" class="hero-product-img">
-                {% else %}
-                  <div class="hero-product-img bg-light"></div>
+      <!-- Hero Slider -->
+      <div class="col-lg-6" data-aos="fade-left">
+        <div class="swiper hero-swiper shadow-lg">
+          <div class="swiper-wrapper">
+            {% for b in banners_hero %}
+            <div class="swiper-slide position-relative">
+              <img src="{{ b.image.url }}" alt="{{ b.title }}">
+              {% if b.title %}
+              <div class="position-absolute bottom-0 start-0 w-100 p-4 text-white"
+                style="background:linear-gradient(to top, rgba(0,0,0,.6), transparent);">
+                <h5 class="fw-bold">{{ b.title }}</h5>
+                {% if b.subtitle %}<p class="small mb-2">{{ b.subtitle }}</p>{% endif %}
+                {% if b.link_url %}
+                <a href="{{ b.link_url }}" class="btn btn-primary btn-sm rounded-pill">
+                  {{ b.link_label|default:"Ver más" }}
+                </a>
                 {% endif %}
-              {% endwith %}
-
-              <div class="text-white small mt-2 fw-semibold">{{ p.name|truncatechars:20 }}</div>
-              <div class="text-primary fw-bold">${{ p.price }}</div>
-            </a>
+              </div>
+              {% endif %}
+            </div>
             {% endfor %}
-
           </div>
-
+          <div class="swiper-pagination"></div>
         </div>
-
       </div>
-      {% endif %}
 
     </div>
-
-    <div class="swiper-pagination"></div>
   </div>
 </section>
+{% endif %}
 
-
-
-
-<!-- ============================================================= -->
-<!-- ====== NUEVO SLIDER HORIZONTAL TIPO BLUECAST (PRODUCTOS) ==== -->
-<!-- ============================================================= -->
-
+<!-- ========================================================= -->
+<!-- SLIDER PRODUCTOS DESTACADOS (NOVEDADES) -->
+<!-- ========================================================= -->
+{% if latest_products %}
 <section class="py-5 bg-light">
   <div class="container">
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="h4 m-0">Recomendados para ti</h2>
-      <a href="/catalogo/" class="small">Ver todo →</a>
+    <div class="text-center mb-4">
+      <h2 class="fw-bold">Novedades para ti</h2>
+      <p class="text-muted">Productos recién agregados</p>
     </div>
 
     <div class="swiper slider-products-swiper">
@@ -146,64 +121,60 @@
 
         {% for p in latest_products %}
         <div class="swiper-slide">
-          <a class="slider-product-card text-decoration-none" href="{% url 'core:product_detail' p.pk %}">
-            
+          <a class="bc-card text-decoration-none" href="{% url 'core:product_detail' p.pk %}">
             {% with img=p.images.first %}
-              {% if img %}
-                <img src="{{ img.image.url }}" class="slider-product-img">
-              {% else %}
-                <div class="slider-product-img bg-light"></div>
-              {% endif %}
+            {% if img %}
+              <img src="{{ img.image.url }}">
+            {% else %}
+              <div class="bg-light" style="height:180px;"></div>
+            {% endif %}
             {% endwith %}
 
-            <div class="p-2">
-              <div class="small fw-semibold text-dark">{{ p.name|truncatechars:28 }}</div>
-              <div class="fw-bold text-primary">${{ p.price }}</div>
+            <div class="p-3">
+              <div class="fw-semibold">{{ p.name|truncatechars:28 }}</div>
+              <div class="text-primary fw-bold mt-1">${{ p.price }}</div>
             </div>
           </a>
         </div>
         {% endfor %}
 
       </div>
-      <div class="swiper-pagination"></div>
+      <div class="swiper-pagination mt-2"></div>
     </div>
 
   </div>
 </section>
+{% endif %}
 
-
-
-
-<!-- ============================================================= -->
-<!-- TODO EL CONTENIDO ORIGINAL DEL HOME (CATEGORÍAS ETC.)        -->
-<!-- ============================================================= -->
-
+<!-- ========================================================= -->
+<!-- CATEGORÍAS DESTACADAS -->
+<!-- ========================================================= -->
 {% include "includes/occasions.html" %}
 
-<section id="categorias" class="py-5 section-muted">
+<section id="categorias" class="py-5">
   <div class="container">
 
-    <div class="d-flex justify-content-between align-items-end mb-3">
-      <h2 class="h3 m-0">Categorías destacadas</h2>
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <h2 class="fw-bold">Categorías destacadas</h2>
       {% if request.user.is_staff %}
-        <a href="/panel/categorias/" class="small text-decoration-none">Gestionar categorías →</a>
+        <a href="/panel/categorias/" class="small">Gestionar categorías →</a>
       {% endif %}
     </div>
 
-    <div class="row g-3">
+    <div class="row g-4">
       {% for c in categories %}
-      <div class="col-6 col-md-3" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:1 }}0">
-        <a class="text-decoration-none" href="{% url 'core:category_list' c.pk %}">
-          <div class="card card-elev h-100 text-center p-3">
-            <div class="thumb-1x1 mb-3">
+      <div class="col-6 col-md-3" data-aos="zoom-in">
+        <a href="{% url 'core:category_list' c.pk %}" class="text-decoration-none">
+          <div class="card card-elev text-center p-3 h-100">
+            <div class="thumb-1x1 mb-2">
               {% with prod=c.products.first %}
                 {% if prod and prod.images.first %}
-                  <img src="{{ prod.images.first.image.url }}" alt="{{ c.name }}">
+                <img src="{{ prod.images.first.image.url }}" alt="{{ c.name }}">
                 {% endif %}
               {% endwith %}
             </div>
             <h3 class="h6 text-dark mb-1">{{ c.name }}</h3>
-            <p class="small text-muted mb-0">{{ c.n }} productos</p>
+            <p class="small text-muted">{{ c.n }} productos</p>
           </div>
         </a>
       </div>
@@ -213,35 +184,36 @@
   </div>
 </section>
 
-
+<!-- ========================================================= -->
+<!-- LISTADO DE NOVEDADES (CUADRÍCULA) -->
+<!-- ========================================================= -->
 <section id="nuevos" class="py-5">
   <div class="container">
-
+    
     <div class="d-flex justify-content-between align-items-end mb-3">
-      <h2 class="h3 m-0">Novedades</h2>
+      <h2 class="fw-bold">Novedades</h2>
       {% if request.user.is_staff %}
-        <a href="/panel/productos/" class="small text-decoration-none">Gestionar productos →</a>
+        <a href="/panel/productos/" class="small">Gestionar productos →</a>
       {% endif %}
     </div>
 
-    <div class="row g-3">
+    <div class="row g-4">
       {% for p in latest_products %}
       <div class="col-6 col-md-3">
-        <a class="card h-100 product-card card-elev text-decoration-none"
-           href="{% url 'core:product_detail' p.pk %}">
+        <a href="{% url 'core:product_detail' p.pk %}" class="product-card text-decoration-none h-100">
           {% with img=p.images.first %}
-            {% if img %}
-              <img src="{{ img.image.url }}" loading="lazy" class="card-img-top">
-            {% else %}
-              <div class="ratio ratio-1x1 bg-light d-flex align-items-center justify-content-center text-muted">
-                Sin imagen
-              </div>
-            {% endif %}
+          {% if img %}
+            <img src="{{ img.image.url }}" class="card-img-top">
+          {% else %}
+            <div class="ratio ratio-1x1 bg-light d-flex align-items-center justify-content-center text-muted">
+              Sin imagen
+            </div>
+          {% endif %}
           {% endwith %}
           <div class="card-body">
-            <h3 class="h6 card-title mb-1 text-dark">{{ p.name }}</h3>
-            <div class="small text-muted mb-2">{{ p.category.name }}</div>
-            <div class="fw-semibold">${{ p.price }}</div>
+            <h3 class="h6 text-dark mb-1">{{ p.name }}</h3>
+            <div class="small text-muted">{{ p.category.name }}</div>
+            <div class="fw-bold text-primary mt-1">${{ p.price }}</div>
           </div>
         </a>
       </div>
@@ -251,28 +223,30 @@
   </div>
 </section>
 
-
+<!-- ========================================================= -->
+<!-- SECCIÓN INFORMACIONAL -->
+<!-- ========================================================= -->
 <section class="py-5">
   <div class="container">
     <div class="row g-4 align-items-center">
-
-      <div class="col-lg-5" data-aos="fade-right">
-        <h2 class="h3 mb-2">Hecho a mano, con historia</h2>
-        <p class="text-muted mb-3">
-          Cada pieza es elaborada por artesanos locales con técnicas tradicionales.
+      
+      <div class="col-lg-5">
+        <h2 class="fw-bold mb-3">Hecho a mano, con historia</h2>
+        <p class="text-muted">
+          Cada pieza es elaborada cuidadosamente por artesanos locales utilizando materiales nobles.
         </p>
         <ul class="text-muted">
-          <li>Selección curada</li>
           <li>Producción responsable</li>
+          <li>Selección curada</li>
           <li>Diseño atemporal</li>
         </ul>
       </div>
 
       <div class="col-lg-7">
         <div class="row g-3">
-          <div class="col-md-4"><div class="card h-100 card-elev p-3 text-center"><div class="fw-bold mb-1">Calidad</div><div class="small text-muted">Control en cada etapa</div></div></div>
-          <div class="col-md-4"><div class="card h-100 card-elev p-3 text-center"><div class="fw-bold mb-1">Origen</div><div class="small text-muted">Lapislázuli chileno</div></div></div>
-          <div class="col-md-4"><div class="card h-100 card-elev p-3 text-center"><div class="fw-bold mb-1">Servicio</div><div class="small text-muted">Atención cercana</div></div></div>
+          <div class="col-md-4"><div class="card card-elev p-3 text-center"><strong>Calidad</strong><p class="small text-muted">Control en cada etapa</p></div></div>
+          <div class="col-md-4"><div class="card card-elev p-3 text-center"><strong>Origen</strong><p class="small text-muted">Lapislázuli chileno</p></div></div>
+          <div class="col-md-4"><div class="card card-elev p-3 text-center"><strong>Servicio</strong><p class="small text-muted">Atención cercana</p></div></div>
         </div>
       </div>
 
@@ -280,19 +254,18 @@
   </div>
 </section>
 
-
+<!-- ========================================================= -->
+<!-- TESTIMONIOS -->
+<!-- ========================================================= -->
 <section class="py-5 bg-white">
   <div class="container">
-
-    <div class="d-flex justify-content-between align-items-end mb-3">
-      <h2 class="h4 m-0">Lo que dicen nuestros clientes</h2>
-    </div>
+    <h2 class="fw-bold mb-4">Lo que dicen nuestros clientes</h2>
 
     <div class="swiper testimonials-swiper">
       <div class="swiper-wrapper">
-        <div class="swiper-slide"><div class="card shadow-sm p-4 h-100"><p>“Excelente calidad.”</p><div class="small text-muted">— Camila A.</div></div></div>
-        <div class="swiper-slide"><div class="card shadow-sm p-4 h-100"><p>“Llegó preciosa.”</p><div class="small text-muted">— Jorge M.</div></div></div>
-        <div class="swiper-slide"><div class="card shadow-sm p-4 h-100"><p>“Trabajo artesanal.”</p><div class="small text-muted">— Daniela R.</div></div></div>
+        <div class="swiper-slide"><div class="card shadow-sm p-4 h-100">“Excelente calidad.”<br><small class="text-muted">— Camila A.</small></div></div>
+        <div class="swiper-slide"><div class="card shadow-sm p-4 h-100">“Llegó preciosa.”<br><small class="text-muted">— Jorge M.</small></div></div>
+        <div class="swiper-slide"><div class="card shadow-sm p-4 h-100">“Trabajo artesanal.”<br><small class="text-muted">— Daniela R.</small></div></div>
       </div>
       <div class="swiper-pagination mt-3"></div>
     </div>
@@ -307,11 +280,11 @@
   <div class="container">
     <div class="row g-3 align-items-center">
       <div class="col-md-8">
-        <h3 class="h4 mb-1">¿Tienes un pedido especial?</h3>
-        <p class="text-muted mb-0">Escríbenos y te ayudamos.</p>
+        <h3 class="fw-bold">¿Tienes un pedido especial?</h3>
+        <p class="text-muted">Escríbenos y te ayudamos.</p>
       </div>
       <div class="col-md-4 text-md-end">
-        <a class="btn btn-primary btn-lg" href="mailto:contacto@artesaniaspachy.cl">Contactar</a>
+        <a class="btn btn-primary btn-lg rounded-pill" href="mailto:contacto@artesaniaspachy.cl">Contactar</a>
       </div>
     </div>
   </div>
@@ -319,55 +292,34 @@
 
 {% endblock %}
 
-
-
 {% block extra_js %}
-  {{ block.super }}
+{{ block.super }}
+<script src="https://unpkg.com/swiper@9/swiper-bundle.min.js"></script>
 
-  <!-- SWIPER JS -->
-  <script src="https://unpkg.com/swiper@9/swiper-bundle.min.js"></script>
+<script>
+  new Swiper('.hero-swiper', {
+    loop: true,
+    autoplay: { delay: 5500 },
+    effect: 'fade',
+    pagination: { el: '.hero-swiper .swiper-pagination', clickable: true },
+  });
 
-  <script>
-    /* HERO PRINCIPAL */
-    new Swiper('.hero-mix-swiper', {
-      loop: true,
-      autoplay: {
-        delay: 6000,
-        disableOnInteraction: false
-      },
-      speed: 800,
-      effect: 'fade',
-      fadeEffect: { crossFade: true },
-      pagination: {
-        el: '.hero-mix-swiper .swiper-pagination',
-        clickable: true
-      }
-    });
+  new Swiper('.slider-products-swiper', {
+    loop: true,
+    autoplay: { delay: 4000 },
+    speed: 600,
+    slidesPerView: 'auto',
+    spaceBetween: 24,
+    pagination: { el: '.slider-products-swiper .swiper-pagination', clickable: true },
+  });
 
-    /* SLIDER HORIZONTAL TIPO BLUECAST */
-    new Swiper('.slider-products-swiper', {
-      loop: true,
-      autoplay: {
-        delay: 4500,
-        disableOnInteraction: false
-      },
-      speed: 600,
-      slidesPerView: 'auto',   /* ⬅ ARREGLA EL DESBORDAMIENTO */
-      spaceBetween: 16,
-      pagination: {
-        el: '.slider-products-swiper .swiper-pagination',
-        clickable: true
-      }
-    });
-
-    /* Testimonios */
-    new Swiper('.testimonials-swiper', {
-      loop: true,
-      autoplay: { delay: 5000 },
-      pagination: { el: '.testimonials-swiper .swiper-pagination', clickable: true },
-      slidesPerView: 1,
-      spaceBetween: 16,
-      breakpoints: { 768:{slidesPerView:2}, 1200:{slidesPerView:3} }
-    });
-  </script>
+  new Swiper('.testimonials-swiper', {
+    loop: true,
+    autoplay: { delay: 5000 },
+    slidesPerView: 1,
+    spaceBetween: 24,
+    pagination: { el: '.testimonials-swiper .swiper-pagination', clickable: true },
+    breakpoints: { 768: { slidesPerView: 2 }, 1200: { slidesPerView: 3 } }
+  });
+</script>
 {% endblock %}
