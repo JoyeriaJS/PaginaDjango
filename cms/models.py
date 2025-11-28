@@ -56,17 +56,7 @@ class MenuItem(models.Model):
     def __str__(self):
         return self.title
     
-class FeaturedProduct(models.Model):
-    product = models.ForeignKey("core.Product", on_delete=models.CASCADE, related_name="featured")
-    order = models.PositiveIntegerField(default=0)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        ordering = ["order", "-created_at"]
-
-    def __str__(self):
-        return f"{self.product.name} (destacado)"
 
 #RESEÑA
 
