@@ -610,89 +610,74 @@ def _cart_lines_from_session(request):
 
 
 def mp_checkout(request):
-    """
-    Crea la preferencia en Mercado Pago usando:
-    - ítems del carrito (desde sesión)
-    - datos del checkout (request.session['checkout_data'])
-    Acepta GET o POST (por si vienes desde /checkout/ con un link/botón).
-    """
-    # ✔️ Permite GET o POST
     if request.method not in ("GET", "POST"):
         return redirect("core:cart_detail")
 
-    # ✔️ Token configurado
     if not settings.MP_ACCESS_TOKEN:
-        messages.error(request, "Falta configurar MP_ACCESS_TOKEN en el servidor.")
+        messages.error(request, "Falta configurar MP_ACCESS_TOKEN.")
         return redirect("core:cart_detail")
 
-    # ✔️ Carrito con ítems
-    items = _cart_lines_from_session(request)  # <- tu helper actual
+    # ------------ CARRITO SIN DESCUENTO -------------
+    items = _cart_lines_from_session(request)
     if not items:
         messages.error(request, "Tu carrito está vacío.")
         return redirect("core:cart_detail")
 
-    # ✔️ Datos de checkout (obligatorios para pagar)
+    # ------------ CALCULAR TOTAL DEL CARRITO --------
+    cart = request.session.get("cart") or {}
+    items_summary, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
+
+    # ------------ APLICAR DESCUENTO -----------------
+    coupon_code = request.session.get("coupon")
+    discount_amount = Decimal("0")
+
+    if coupon_code:
+        d = _find_discount_by_code(coupon_code)
+        if d:
+            discount_amount = _discount_amount_for_cart(d, items_summary, Decimal(subtotal))
+
+    grand_total = Decimal(subtotal) - discount_amount
+    if grand_total < 0:
+        grand_total = Decimal("0")
+
+    # ------------ REDUCIR EL TOTAL PARA MP ----------
+    # Ajustamos el último item del carrito para que refleje el descuento
+    if discount_amount > 0 and items:
+        # Aplicar descuento al ÚLTIMO item
+        last = items[-1]
+        last_price = Decimal(last["unit_price"])
+        last_total = last_price * last["quantity"]
+
+        if discount_amount >= last_total:
+            # Si el descuento cubre todo ese ítem, lo dejamos en 0
+            last["unit_price"] = 0
+        else:
+            # Reducimos proporcionalmente
+            new_unit = (last_total - discount_amount) / last["quantity"]
+            last["unit_price"] = float(new_unit.quantize(Decimal("1"), rounding=ROUND_HALF_UP))
+
+    # -------------- SEGUIR NORMAL --------------------
     checkout_data = request.session.get("checkout_data")
     if not checkout_data:
-        messages.warning(request, "Completa tus datos de envío y contacto.")
+        messages.warning(request, "Completa tus datos antes de pagar.")
         return redirect("core:checkout")
-
-    # Payer (tomamos del checkout; si el user está logueado puedes sobreescribir email)
-    payer = {
-        "name": checkout_data.get("first_name", ""),
-        "surname": checkout_data.get("last_name", ""),
-        "email": checkout_data.get("email", ""),
-        "phone": {"number": checkout_data.get("phone", "")},
-        "identification": {"type": "RUT", "number": checkout_data.get("rut", "")},
-        "address": {
-            "zip_code": checkout_data.get("postal_code", "") or "",
-            "street_name": checkout_data.get("address_line", "") or "",
-        },
-    }
-
-    # Metadata útil para tu backoffice / webhook
-    metadata = {
-        "shipping_method": checkout_data.get("shipping_method"),
-        "address_line": checkout_data.get("address_line"),
-        "comuna": checkout_data.get("comuna"),
-        "ciudad": checkout_data.get("ciudad"),
-        "region": checkout_data.get("region"),
-        "notes": checkout_data.get("notes"),
-        # Podrías agregar un ID temporal de pedido si lo generas aquí:
-        # "tmp_order_id": request.session.session_key,
-    }
 
     sdk = mercadopago.SDK(settings.MP_ACCESS_TOKEN)
 
-    success_url = request.build_absolute_uri(reverse("core:mp_success"))
-    failure_url = request.build_absolute_uri(reverse("core:mp_failure"))
-    pending_url = request.build_absolute_uri(reverse("core:mp_pending"))
-    notif_url   = request.build_absolute_uri(reverse("core:mp_webhook"))  # opcional; comenta si no lo usarás todavía
-
     preference = {
-        "items": items,                        # <- ya en CLP y enteros (como dejamos el carrito)
-        "payer": payer,
-        "metadata": metadata,
-        "back_urls": {
-            "success": success_url,
-            "failure": failure_url,
-            "pending": pending_url,
+        "items": items,
+        "payer": {
+            "name": checkout_data.get("first_name", ""),
+            "surname": checkout_data.get("last_name", ""),
+            "email": checkout_data.get("email", ""),
         },
         "auto_return": "approved",
-        "binary_mode": True,                   # opcional: solo aprueba/rechaza (sin 'pending' intermedio)
-        "statement_descriptor": "ARTES PACHY", # cómo se verá en el extracto (máx 22 chars)
-        "notification_url": notif_url,         # comenta esta línea si aún no configuras webhook público
-        # "external_reference": f"CHK-{request.session.session_key}",  # opcional
+        "binary_mode": True,
     }
 
     try:
         pref_res = sdk.preference().create(preference)
-        data = pref_res.get("response", {})
-        # En modo producción usa init_point; en sandbox usa sandbox_init_point
-        init_point = data.get("init_point") or data.get("sandbox_init_point")
-        if not init_point:
-            messages.error(request, "No se pudo crear la preferencia de pago.")
-            return redirect("core:cart_detail")
+        init_point = pref_res["response"].get("init_point")
         return redirect(init_point)
     except Exception as e:
         messages.error(request, f"Error iniciando pago: {e}")
@@ -742,19 +727,28 @@ def mp_webhook(request):
 
 #checkout form
 def checkout(request):
-    """
-    Muestra y procesa el formulario de checkout.
-    Guarda los datos en request.session['checkout_data'].
-    Luego redirige a Mercado Pago (mp_checkout) o vuelve al carrito.
-    """
-    # Protección: si el carrito está vacío, volver al carrito
+    # Protección: si el carrito está vacío
     cart = request.session.get("cart") or {}
     items, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
     if count <= 0:
         messages.info(request, "Tu carrito está vacío.")
         return redirect("core:cart_detail")
 
-    # Precarga con lo que hubiera en sesión
+    # -----------------------------
+    # 🔥 APLICAR DESCUENTO AQUÍ
+    # -----------------------------
+    coupon_code = request.session.get("coupon")
+    discount_amount = Decimal("0")
+
+    if coupon_code:
+        d = _find_discount_by_code(coupon_code)
+        if d:
+            discount_amount = _discount_amount_for_cart(d, items, Decimal(subtotal))
+
+    grand_total = Decimal(subtotal) - discount_amount
+    if grand_total < 0:
+        grand_total = Decimal("0")
+
     initial = request.session.get("checkout_data") or {}
 
     if request.method == "POST":
@@ -763,7 +757,7 @@ def checkout(request):
             request.session["checkout_data"] = form.cleaned_data
             request.session.modified = True
 
-            # ¿viene con intención de pagar?
+            # si hace clic en Pagar
             if "pay" in request.POST:
                 return redirect("core:mp_checkout")
             else:
@@ -776,9 +770,11 @@ def checkout(request):
         "form": form,
         "items": items,
         "subtotal": subtotal,
+        "discount_code": coupon_code,
+        "discount_amount": int(discount_amount),
+        "grand_total": int(grand_total),
         "tax": tax,
         "shipping": shipping,
-        "grand_total": grand_total,
         "count": count,
     }
     return render(request, "core/checkout.html", ctx)
