@@ -337,6 +337,17 @@
               }
             };
 
+            new Swiper('.hero-swiper', {
+              loop: true,
+              autoplay: { delay: 3500 },
+              pagination: {
+                el: '.hero-swiper .swiper-pagination',
+                clickable: true,
+              },
+              effect: 'fade',
+            });
+
+
             // Estado inicial: si cookie dice EN, cargamos Google y aplicamos
             var initial = getLangFromCookie();
             if (initial === 'en'){
@@ -371,7 +382,7 @@
             });
           })();
           </script>
-
+        
 
 
   </body>

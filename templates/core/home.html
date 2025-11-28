@@ -56,30 +56,75 @@
 <!-- =============== HERO MIX TIPO SHOPIFY ======================== -->
 <!-- ============================================================= -->
 
-<section class="hero-xl position-relative mb-5">
+{% if banners_hero %}
+<section class="hero-xl">
+  <div class="container">
 
-  <div class="swiper hero-mix-swiper rounded-4 shadow-lg overflow-hidden">
-    <div class="swiper-wrapper">
+    <div class="row align-items-center g-4">
 
-      {% for b in banners_hero %}
-      <div class="swiper-slide position-relative">
-        <img src="{{ b.image.url }}" class="w-100"
-             style="height:520px;object-fit:cover;filter:brightness(0.55);">
-
-        <div class="position-absolute top-50 start-50 translate-middle text-center text-white px-3"
-             data-aos="fade-up">
-          <span class="badge bg-primary px-3 py-2 mb-2">Nuevo</span>
-
-          <h2 class="display-5 fw-bold hero-mix-title">{{ b.title|default:"Joyería Artesanal" }}</h2>
-
-          {% if b.subtitle %}
-            <p class="lead">{{ b.subtitle }}</p>
-          {% endif %}
-
-          <a href="#nuevos" class="btn btn-light btn-lg fw-bold shadow-sm mt-3">Explorar</a>
+      <div class="col-lg-6" data-aos="fade-up">
+        <h1 class="display-5 fw-bold hero-title mb-3">
+          Joyería en Lapislázuli hecha en Chile
+        </h1>
+        <p class="lead hero-sub">
+          Piezas únicas con historia y materiales nobles.
+        </p>
+        <div class="d-flex gap-2 mt-3">
+          <a href="#categorias" class="btn btn-primary btn-lg rounded-pill">Explorar</a>
+          <a href="#nuevos" class="btn btn-outline-primary btn-lg rounded-pill">Novedades</a>
         </div>
       </div>
-      {% endfor %}
+
+      <div class="col-lg-6" data-aos="fade-left">
+
+        <div class="swiper hero-swiper rounded-4 shadow-lg overflow-hidden">
+
+          <div class="swiper-wrapper">
+
+            {% for b in banners_hero %}
+            <div class="swiper-slide position-relative">
+
+              <img src="{{ b.image.url }}"
+                   alt="{{ b.title }}"
+                   class="w-100"
+                   style="height:420px; object-fit:cover;">
+
+              {% if b.title %}
+              <div class="position-absolute bottom-0 start-0 p-4 text-white"
+                   style="background:linear-gradient(to top, rgba(0,0,0,.6), transparent);">
+
+                <h5 class="fw-bold mb-1">{{ b.title }}</h5>
+
+                {% if b.subtitle %}
+                <p class="small mb-2">{{ b.subtitle }}</p>
+                {% endif %}
+
+                {% if b.link_url %}
+                <a href="{{ b.link_url }}" class="btn btn-primary btn-sm rounded-pill">
+                  {{ b.link_label|default:"Ver más" }}
+                </a>
+                {% endif %}
+
+              </div>
+              {% endif %}
+
+            </div>
+            {% endfor %}
+
+          </div>
+
+          <div class="swiper-pagination"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+{% endif %}
+
 
 
       {# --- SLIDE DE PRODUCTOS DESTACADOS --- #}
