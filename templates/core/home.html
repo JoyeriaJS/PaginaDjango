@@ -86,9 +86,27 @@
       {% if latest_products %}
       <div class="swiper-slide position-relative bg-dark">
 
-        <img src="{% static 'img/hero-default.jpg' %}" class="w-100"
-             style="height:520px;object-fit:cover;opacity:0.25;">
+        <script>
+(function(){
+  const root = document.documentElement;
+  const stored = localStorage.getItem("theme");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
+  // Estado inicial
+  if (stored) {
+    root.dataset.theme = stored;
+  } else {
+    root.dataset.theme = prefersDark ? "dark" : "light";
+  }
+
+  // Toggle
+  document.getElementById("themeToggle")?.addEventListener("click", () => {
+    const isDark = root.dataset.theme === "dark";
+    root.dataset.theme = isDark ? "light" : "dark";
+    localStorage.setItem("theme", root.dataset.theme);
+  });
+})();
+</script>
         <div class="position-absolute top-50 start-50 translate-middle text-center text-white px-3"
              data-aos="zoom-in">
 
