@@ -22,6 +22,7 @@ from .forms import CheckoutForm
 from catalog.models import Order, OrderItem
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.contrib.auth.decorators import login_required
 
 try:
     from weasyprint import HTML
@@ -758,6 +759,7 @@ def mp_webhook(request):
 
 
 #checkout form
+@login_required(login_url="core:login")
 def checkout(request):
     # Protección: si el carrito está vacío
     cart = request.session.get("cart") or {}

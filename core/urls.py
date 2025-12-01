@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import home
 from . import views
+from . import views_auth
 
 app_name = "core"
 urlpatterns = [
@@ -32,6 +33,11 @@ urlpatterns = [
 
    #CHECKOUT
    path("checkout/", views.checkout, name="checkout"),
+
+   #LOGIN
+    path("login/", views_auth.login_view, name="login"),
+    path("register/", views_auth.register_view, name="register"),
+    path("logout/", views_auth.logout_view, name="logout"),
    
     
     
