@@ -40,12 +40,25 @@
     border-radius: 20px;
   }
 
-  /* Featured Products */
-  .featured-swiper .swiper-slide {
-    transition: transform .25s ease;
+  .featured-swiper .swiper-slide { transition: transform .25s ease; }
+  .featured-swiper .swiper-slide:hover { transform: translateY(-6px); }
+
+  /* ===== Cards de catálogo ===== */
+  .catalog-card {
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 6px 18px rgba(0,0,0,.08);
+      transition: .25s;
   }
-  .featured-swiper .swiper-slide:hover {
-    transform: translateY(-6px);
+  .catalog-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 26px rgba(0,0,0,.15);
+  }
+  .catalog-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
   }
 </style>
 {% endblock %}
@@ -107,7 +120,7 @@
 {% endif %}
 
 <!-- ========================================================= -->
-<!-- PRODUCTOS DESTACADOS (ADMIN) — SWIPER ROTATIVO -->
+<!-- PRODUCTOS DESTACADOS (ADMIN) -->
 <!-- ========================================================= -->
 {% if featured_products %}
 <section class="py-5">
@@ -150,6 +163,9 @@
 </section>
 {% endif %}
 
+<!-- ========================================================= -->
+<!-- CATÁLOGOS ADMIN DINÁMICOS (CORREGIDO & PROFESIONAL) -->
+<!-- ========================================================= -->
 {% for sec in catalog_sections %}
 <section class="py-5 bg-light">
   <div class="container">
@@ -165,18 +181,16 @@
       <div class="swiper-wrapper">
 
         {% for p in sec.products.all %}
-        <div class="swiper-slide">
+        <div class="swiper-slide" style="width: auto;">
           <a href="{% url 'core:product_detail' p.pk %}" class="text-decoration-none">
-            <div class="card card-elev p-2 text-center h-100">
-              <div class="thumb-1x1 mb-2">
-                {% with img=p.images.first %}
-                  {% if img %}
-                  <img src="{{ img.image.url }}">
-                  {% endif %}
-                {% endwith %}
-              </div>
-              <h6 class="fw-semibold">{{ p.name }}</h6>
-              <p class="fw-bold text-primary">${{ p.price }}</p>
+            <div class="catalog-card p-2 text-center">
+              {% with img=p.images.first %}
+              {% if img %}
+                <img src="{{ img.image.url }}">
+              {% endif %}
+              {% endwith %}
+              <h6 class="fw-semibold mt-2">{{ p.name }}</h6>
+              <p class="fw-bold text-primary mb-2">${{ p.price }}</p>
             </div>
           </a>
         </div>
@@ -188,28 +202,7 @@
 
   </div>
 </section>
-
-<script>
-new Swiper('.catalog-swiper-{{ sec.id }}', {
-  loop: true,
-  autoplay: { delay: 4500, disableOnInteraction:false },
-  speed: 900,
-  slidesPerView: 2,
-  spaceBetween: 20,
-  breakpoints: {
-    576: { slidesPerView: 2 },
-    768: { slidesPerView: 3 },
-    1200: { slidesPerView: 4 }
-  },
-  pagination: {
-    el: '.catalog-swiper-{{ sec.id }} .swiper-pagination',
-    clickable: true
-  }
-});
-</script>
-
 {% endfor %}
-
 
 <!-- ========================================================= -->
 <!-- SLIDER DE NOVEDADES -->
@@ -448,19 +441,14 @@ document.addEventListener("DOMContentLoaded", function () {
       },
   });
 
-  const observer = new IntersectionObserver((entries)=>{
-      entries.forEach(entry=>{
-          if(entry.isIntersecting){
-              fpSwiper.autoplay.start();
-          } else {
-              fpSwiper.autoplay.stop();
-          }
-      });
-  }, { threshold: 0.25 });
-
-  const target = document.querySelector('.featured-swiper');
-  if (target) observer.observe(target);
-
 });
 </script>
+
+<!-- ============================= -->
+<!-- CATÁLOGOS (dinámicos) — SWIPER PRO -->
+<!-- ============================= -->
+<script>
+
+</script>
+
 {% endblock %}
