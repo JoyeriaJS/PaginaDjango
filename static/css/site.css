@@ -1,410 +1,640 @@
-/* ============================================================
-   CASTEABLE — DARK REAL MODE (FULL)
-   Estilo técnico, industrial, profesional
-   ============================================================ */
+:root{--brand:#0d6efd}
+.hero{background: radial-gradient(1200px 500px at right, rgba(13,110,253,.08), transparent);} 
+.hero .hero-card img{display:block}
+.card-category:hover{transform:translateY(-2px);box-shadow:0 .5rem 1rem rgba(0,0,0,.08);transition:.2s}
+.category-circle{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(13,110,253,.1);color:#0d6efd;font-weight:700}
+.product-card:hover{transform:translateY(-3px);transition:.2s;box-shadow:0 .75rem 1.5rem rgba(0,0,0,.08)}
 
-:root {
-    --blue: #247CFF;
-    --blue-bright: #4CA8FF;
-    --blue-neon: #00C2FF;
-    --bg-dark: #0B0D11;
-    --bg-dark-2: #12151B;
-    --bg-dark-3: #181C23;
-    --card-dark: #1F242C;
-    --text-light: #E9ECF2;
-    --text-muted: #9AA0A8;
-    --border-dark: #2C323D;
-    --radius: 14px;
-    --shadow-dark: 0 8px 22px rgba(0,0,0,.55);
+/* Hero grande */
+.hero-xl {
+  min-height: 68vh;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(1200px 600px at 10% 0%, rgba(33,37,41,.08), transparent),
+              linear-gradient(180deg, rgba(0,0,0,.02), transparent 30%);
+}
+.hero-title {
+  letter-spacing: .2px;
+}
+.hero-sub {
+  color: #6c757d;
+  max-width: 58ch;
 }
 
-/* ====================== */
-/* FONDO GLOBAL DARK REAL */
-/* ====================== */
+/* Tarjetas limpias con hover suave */
+.card-elev {
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card-elev:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+/* Secciones “bandas” */
+.section-muted {
+  background: linear-gradient(180deg, #f8f9fa, #fff);
+}
+
+/* Badges y chips */
+.chip {
+  display:inline-block; padding:.35rem .6rem; border-radius:999px;
+  background:#eef2ff; color:#3b5bdb; font-weight:600; font-size:.85rem;
+}
+
+/* Imágenes responsivas cuadradas */
+.thumb-1x1 {
+  position:relative; width:100%; padding-top:100%; overflow:hidden; border-radius:.75rem; background:#f1f3f5;
+}
+.thumb-1x1 img {
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+}
+
+footer h6, footer h5 { font-weight:700; }
+footer .link-secondary:hover { color:#0d6efd; }
+
+/* Cards de testimonios: */
+.testimonials-swiper .card { border:0; }
+
+/* Paginación más visible */
+.pagination .page-link { border-radius: .5rem; }
+
+/* Elevaciones suaves */
+.card-elev { transition: transform .15s ease, box-shadow .15s ease; }
+.card-elev:hover { transform: translateY(-2px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.08); }
+
+/* Galería detalle */
+.gallery-elev { border: 0; box-shadow: 0 .5rem 1rem rgba(0,0,0,.05); }
+.thumb-64 { width:64px; height:64px; }
+.pointer { cursor: zoom-in; }
+
+/* Mini utilidades */
+.thumb-1x1 { position:relative; padding-top:100%; background:#f8f9fa; overflow:hidden; border-radius:.75rem; }
+.thumb-1x1 > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+
+.section-muted { background: #f8f9fb; }
+
+.sticky-cta { position:sticky; top:16px; }
+
+/* Swiper paginations dentro de cards oscuras, opcional */
+.testimonials-swiper .swiper-pagination-bullet-active { background:#0d6efd; }
+
+/* Elevación y hover */
+.card-elev { border: 1px solid #eee; transition: transform .2s ease, box-shadow .2s ease; }
+.card-elev:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(0,0,0,.06); }
+
+/* Badges en imagen */
+.thumb-1x1 { position: relative; aspect-ratio: 1/1; overflow: hidden; border-radius: .75rem; background:#f8f9fa; }
+.product-badge { position:absolute; top:8px; left:8px; padding:.25rem .5rem; font-size:.75rem; border-radius:999px; background:#0d6efd; color:#fff; }
+
+/* Precio */
+.price { font-weight:700; letter-spacing: .2px; }
+.price .old { color:#999; text-decoration:line-through; font-weight:500; margin-right:.25rem; }
+
+/* Skeleton */
+.skel { background: linear-gradient(90deg,#f0f0f0 25%,#f6f6f6 37%,#f0f0f0 63%); background-size:400% 100%; animation: shimmer 1.4s ease infinite; }
+@keyframes shimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
+
+/* Mini chips */
+.chip { display:inline-block; padding:.25rem .5rem; font-size:.75rem; border-radius:999px; background:#eef5ff; color:#0d6efd; }
+
+/* USP strip */
+.usp-strip { font-weight:500; }
+
+/* Evitar scroll horizontal del slider */
+.swiper {
+  overflow: hidden !important;
+}
+
+/* Evita que los slides creen scroll horizontal */
+.swiper-wrapper {
+  overflow: hidden !important;
+}
+
+/* Asegura que NADA se salga */
+body, html {
+  max-width: 100%;
+  overflow-x: hidden !important;
+}
+
+/* ============================================================ */
+/* DARK MODE — Artesanías Pachy Premium                        */
+/* ============================================================ */
+
+:root[data-theme="dark"] {
+  --brand: #4da3ff;
+  --bg: #0d0f12;
+  --bg-light: #1a1c20;
+  --text: #e4e6eb;
+  --text-muted: #9da1a7;
+  --card: #16181c;
+  --border: #2a2d33;
+}
+
+:root[data-theme="dark"] body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Textos */
+:root[data-theme="dark"] .text-muted { color: var(--text-muted) !important; }
+
+/* Navbar */
+:root[data-theme="dark"] .navbar {
+  background: var(--bg-light) !important;
+  border-color: var(--border) !important;
+}
+:root[data-theme="dark"] .navbar-brand,
+:root[data-theme="dark"] .nav-link {
+  color: var(--text) !important;
+}
+:root[data-theme="dark"] .nav-link:hover {
+  color: var(--brand) !important;
+}
+
+/* Cards */
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .card-elev {
+  background: var(--card) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+  box-shadow: 0 0 25px rgba(0,0,0,.45) !important;
+}
+
+/* Footer */
+:root[data-theme="dark"] footer {
+  background: #111317 !important;
+  color: var(--text-muted) !important;
+}
+
+/* Inputs */
+:root[data-theme="dark"] .form-control {
+  background: var(--bg-light);
+  border-color: var(--border);
+  color: var(--text);
+}
+:root[data-theme="dark"] .form-control:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px rgba(77,163,255,.25);
+}
+
+/* Botones */
+:root[data-theme="dark"] .btn-outline-secondary {
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+:root[data-theme="dark"] .btn-outline-secondary:hover {
+  background: var(--border);
+}
+
+/* Secciones claras */
+:root[data-theme="dark"] .bg-light,
+:root[data-theme="dark"] .section-muted {
+  background: var(--bg-light) !important;
+}
+
+/* Acordeón (FAQs) */
+:root[data-theme="dark"] .accordion-button {
+  background: var(--bg-light) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+:root[data-theme="dark"] .accordion-body {
+  background: var(--card) !important;
+}
+
+/* Usp Strip */
+:root[data-theme="dark"] .usp-strip {
+  background: var(--bg-light) !important;
+}
+
+/* Borders */
+:root[data-theme="dark"] .border,
+:root[data-theme="dark"] .border-top,
+:root[data-theme="dark"] .border-bottom {
+  border-color: var(--border) !important;
+}
+
+/* ============================================================
+   💙 BLUECAST STYLE — Complemento premium
+   Elegante, minimal, limpio, moderno
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   PALETA TIPO BLUECAST
+   ------------------------------------------------------------ */
+:root {
+    --bc-primary: #0059ff;       /* Azul intenso premium */
+    --bc-primary-dark: #0041d2;
+    --bc-bg: #f5f7fb;
+    --bc-radius: 16px;
+    --bc-shadow: 0 8px 22px rgba(0,0,0,.08);
+}
+
+/* Dark mode override */
+:root[data-theme="dark"] {
+    --bc-bg: var(--bg);
+}
+
+/* ------------------------------------------------------------
+   TIPOGRAFÍA BLUECAST
+   ------------------------------------------------------------ */
 body {
-    background: var(--bg-dark);
-    color: var(--text-light);
     font-family: "Inter", system-ui, sans-serif;
+    background: var(--bc-bg);
     line-height: 1.65;
 }
 
-/* Evitar scroll horizontal */
-html, body {
-    overflow-x: hidden;
+/* Titulares estilo BlueCast */
+h1, h2, h3 {
+    font-weight: 700;
+    letter-spacing: .2px;
+    font-family: "Poppins", sans-serif;
 }
 
-/* ====================== */
-/* NAVBAR DARK REAL */
-/* ====================== */
+/* ------------------------------------------------------------
+   NAVBAR – Blanco minimal + sombras
+   ------------------------------------------------------------ */
 .navbar {
-    background: var(--bg-dark-2) !important;
-    border-bottom: 1px solid var(--border-dark);
+    background: #ffffff !important;
+    border-bottom: 1px solid rgba(0,0,0,.06) !important;
+    box-shadow: 0 3px 10px rgba(0,0,0,.03);
     backdrop-filter: blur(10px);
 }
+
+:root[data-theme="dark"] .navbar {
+    background: rgba(18,18,18,0.85) !important;
+}
+
+/* Enlaces */
 .navbar .nav-link {
-    color: var(--text-light) !important;
     font-weight: 500;
+    color: #222 !important;
 }
+
 .navbar .nav-link:hover {
-    color: var(--blue-bright) !important;
-}
-.navbar-brand img {
-    filter: brightness(1.4);
+    color: var(--bc-primary) !important;
 }
 
-/* ====================== */
-/* HERO DARK */
-/* ====================== */
-.hero-xl,
-.hero,
-.hero-main-container {
-    background: linear-gradient(180deg, rgba(36,124,255,.12), transparent 55%),
-                var(--bg-dark-2);
-    padding: 3rem 0;
-    border-radius: 0 0 24px 24px;
+:root[data-theme="dark"] .nav-link {
+    color: var(--text) !important;
 }
 
-.hero-main-title {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--text-light);
-}
-.hero-main-sub {
-    font-size: 1.15rem;
-    max-width: 60ch;
-    color: var(--text-muted);
-}
-
-/* HERO SWIPER */
-.hero-swiper img {
-    border-radius: 20px;
-    box-shadow: var(--shadow-dark);
+/* ------------------------------------------------------------
+   HERO – Estilo BlueCast limpio
+   ------------------------------------------------------------ */
+.hero-xl {
+    background: linear-gradient(180deg, rgba(0,89,255,.08), transparent 55%);
+    border-radius: 0 0 28px 28px;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
-/* ====================== */
-/* BOTONES DARK NEON */
-/* ====================== */
-.btn-primary {
-    background: linear-gradient(135deg, var(--blue), var(--blue-neon));
-    border: none;
-    padding: 12px 30px;
-    font-weight: 600;
-    border-radius: 40px;
-    color: #fff !important;
-    box-shadow: 0 0 20px rgba(0,194,255,.25);
-    transition: .25s;
-}
-.btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0 28px rgba(0,194,255,.35);
-}
-
-.btn-outline-primary {
-    border: 2px solid var(--blue-bright);
-    color: var(--blue-bright) !important;
-    border-radius: 40px;
-    padding: 12px 30px;
-    font-weight: 600;
-}
-.btn-outline-primary:hover {
-    background: var(--blue-bright);
-    color: #fff !important;
-}
-
-/* ====================== */
-/* PRODUCT CARDS DARK */
-/* ====================== */
-.card-elev,
-.product-card,
-.slider-product-card {
-    background: var(--card-dark);
-    border: 1px solid var(--border-dark);
-    border-radius: var(--radius);
-    box-shadow: none;
-    transition: .25s;
-}
-.card-elev:hover,
-.product-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 30px rgba(0,0,0,.45);
-    border-color: var(--blue);
-}
-.card-elev img,
-.product-card img {
-    border-radius: var(--radius) var(--radius) 0 0;
-}
-
-/* PRECIO */
-.text-primary,
-.price {
-    color: var(--blue-bright) !important;
+.hero-title {
+    font-size: 2.55rem;
+    line-height: 1.2;
     font-weight: 700;
 }
 
-/* ====================== */
-/* CATEGORÍAS DARK */
-/* ====================== */
-#categorias .card {
-    background: var(--bg-dark-2);
-    border-radius: var(--radius);
-    border: 1px solid var(--border-dark);
-    transition: .25s;
-}
-#categorias .card:hover {
-    background: var(--blue);
-    border-color: var(--blue);
-    color: white !important;
-    transform: translateY(-5px);
+.hero-sub {
+    font-size: 1.2rem;
+    max-width: 50ch;
+    color: #666;
 }
 
-/* ====================== */
-/* THUMBNAILS */
-/* ====================== */
-.thumb-1x1 {
-    position: relative;
-    padding-top: 100%;
-    background: var(--bg-dark-3);
-    border-radius: var(--radius);
-    overflow: hidden;
-}
-.thumb-1x1 img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* ====================== */
-/* CATALOG CARDS */
-/* ====================== */
-.catalog-card {
-    background: var(--card-dark);
-    border: 1px solid var(--border-dark);
-    border-radius: var(--radius);
-    box-shadow: none;
-    transition: .25s;
-}
-.catalog-card:hover {
-    border-color: var(--blue);
-    transform: translateY(-6px);
-    box-shadow: 0 10px 30px rgba(0,0,0,.45);
-}
-.catalog-card img {
-    height: 160px;
-    object-fit: cover;
-}
-
-/* ====================== */
-/* SWIPER DARK */
-/* ====================== */
-.swiper {
-    padding-bottom: 35px;
-}
-.swiper-slide {
-    border-radius: var(--radius);
-}
-.swiper-pagination-bullet {
-    background: var(--blue-bright) !important;
-    opacity: .35;
-}
-.swiper-pagination-bullet-active {
-    opacity: 1;
-}
-
-/* ====================== */
-/* TESTIMONIAL CARDS */
-/* ====================== */
-.testimonials-swiper .card {
-    background: var(--card-dark);
-    border: 1px solid var(--border-dark);
-    border-radius: var(--radius);
-    box-shadow: none;
-}
-.testimonials-swiper .card:hover {
-    border-color: var(--blue);
-}
-
-/* ====================== */
-/* FORMS */
-/* ====================== */
-.form-control,
-.form-select {
-    background: var(--bg-dark-2);
-    border: 1px solid var(--border-dark);
-    color: var(--text-light);
-    border-radius: var(--radius);
-}
-.form-control:focus,
-.form-select:focus {
-    border-color: var(--blue);
-    box-shadow: 0 0 0 2px rgba(36,124,255,.45);
-}
-
-/* ====================== */
-/* FOOTER */
-/* ====================== */
-footer {
-    background: var(--bg-dark-2);
-    border-top: 1px solid var(--border-dark);
-    padding: 50px 0;
+:root[data-theme="dark"] .hero-sub {
     color: var(--text-muted);
 }
-footer a {
-    color: var(--blue-bright);
-}
-footer a:hover {
-    opacity: .7;
-}
 
-/* ========================================================== */
-/*         DARK MODE — BLUECAST PREMIUM (OPCIÓN A)             */
-/* ========================================================== */
-
-:root[data-theme="dark"] {
-    --bc-bg: #0b0e13;               /* Fondo principal */
-    --bc-bg-light: #14171d;         /* Secciones / contenedores */
-    --bc-card: #1a1e25;             /* Cards */
-    --bc-text: #e8ecf3;             /* Texto principal */
-    --bc-text-muted: #9298a3;       /* Texto secundario */
-    --bc-border: #2d323c;           /* Bordes suaves */
-    --bc-primary: #0a84ff;          /* Azul Eléctrico */
-    --bc-primary-hover: #0066dd;    /* Azul profundo */
-    --bc-shadow: 0 0 18px rgba(10,132,255,.15);
-    --radius: 16px;
+/* ------------------------------------------------------------
+   BOTONES – BlueCast
+   ------------------------------------------------------------ */
+.btn-primary {
+    background: var(--bc-primary);
+    border-color: var(--bc-primary);
+    padding: .7rem 1.4rem;
+    border-radius: var(--bc-radius);
+    font-weight: 600;
+    transition: .2s;
 }
 
-/* ======================== FONDO GENERAL ======================== */
-:root[data-theme="dark"] body {
-    background: var(--bc-bg) !important;
-    color: var(--bc-text);
+.btn-primary:hover {
+    background: var(--bc-primary-dark);
+    transform: translateY(-2px);
 }
 
-/* ======================== TEXTOS ======================== */
-:root[data-theme="dark"] .text-muted {
-    color: var(--bc-text-muted) !important;
+.btn-outline-primary {
+    border-color: var(--bc-primary);
+    color: var(--bc-primary);
+    border-radius: var(--bc-radius);
 }
 
-:root[data-theme="dark"] h1,
-:root[data-theme="dark"] h2,
-:root[data-theme="dark"] h3,
-:root[data-theme="dark"] h4 {
-    color: var(--bc-text);
-}
-
-/* ======================== NAVBAR ======================== */
-:root[data-theme="dark"] .navbar {
-    background: rgba(10,12,16,0.85) !important;
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--bc-border) !important;
-}
-
-:root[data-theme="dark"] .navbar-brand,
-:root[data-theme="dark"] .nav-link {
-    color: var(--bc-text) !important;
-}
-
-:root[data-theme="dark"] .nav-link:hover {
-    color: var(--bc-primary) !important;
-}
-
-/* ======================== HERO ======================== */
-:root[data-theme="dark"] .hero-xl,
-:root[data-theme="dark"] .hero {
-    background: linear-gradient(180deg, rgba(10,132,255,.10), transparent 55%);
-}
-
-:root[data-theme="dark"] .hero-main-title {
+.btn-outline-primary:hover {
+    background: var(--bc-primary);
     color: #fff;
 }
 
-:root[data-theme="dark"] .hero-main-sub {
-    color: var(--bc-text-muted);
+/* ------------------------------------------------------------
+   PRODUCT CARDS — estilo BlueCast
+   ------------------------------------------------------------ */
+.product-card,
+.slider-product-card,
+.card-elev {
+    background: #fff;
+    border-radius: var(--bc-radius);
+    border: none;
+    box-shadow: var(--bc-shadow);
+    transition: transform .25s ease, box-shadow .25s ease;
 }
 
-/* ======================== BOTONES ======================== */
-:root[data-theme="dark"] .btn-primary {
-    background: var(--bc-primary) !important;
-    border: none !important;
-    color: #fff !important;
-    box-shadow: 0 0 20px rgba(10,132,255,.25);
+.product-card:hover,
+.slider-product-card:hover,
+.card-elev:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,.12);
 }
 
-:root[data-theme="dark"] .btn-primary:hover {
-    background: var(--bc-primary-hover) !important;
-}
-
-:root[data-theme="dark"] .btn-outline-primary {
-    border-color: var(--bc-primary);
-    color: var(--bc-primary) !important;
-}
-
-:root[data-theme="dark"] .btn-outline-primary:hover {
-    background: var(--bc-primary);
-    color: #fff !important;
-}
-
-/* ======================== CARDS / PRODUCTOS ======================== */
-:root[data-theme="dark"] .card,
-:root[data-theme="dark"] .card-elev,
+/* Dark mode */
 :root[data-theme="dark"] .product-card,
-:root[data-theme="dark"] .catalog-card {
-    background: var(--bc-card) !important;
-    color: var(--bc-text) !important;
-    border: 1px solid var(--bc-border) !important;
-    box-shadow: var(--bc-shadow) !important;
+:root[data-theme="dark"] .card-elev,
+:root[data-theme="dark"] .slider-product-card {
+    background: var(--card);
+    box-shadow: none;
 }
 
-:root[data-theme="dark"] .catalog-card img,
-:root[data-theme="dark"] .card-elev img,
-:root[data-theme="dark"] .product-card img {
-    filter: brightness(1.05) contrast(1.05);
+/* Imagen de producto */
+.slider-product-img,
+.hero-product-img {
+    border-radius: var(--bc-radius);
+    object-fit: cover;
 }
 
-/* ======================== SWIPER ======================== */
-:root[data-theme="dark"] .swiper-slide {
-    background: var(--bc-card) !important;
-    border-radius: var(--radius);
+/* ------------------------------------------------------------
+   CATEGORÍAS – estilo ProMano/BlueCast
+   ------------------------------------------------------------ */
+.card-category {
+    background: #ffffff;
+    border: none;
+    box-shadow: var(--bc-shadow);
+    border-radius: var(--bc-radius);
+    transition: .25s;
 }
 
-:root[data-theme="dark"] .swiper-pagination-bullet {
+.card-category:hover {
+    transform: scale(1.02);
+}
+
+/* Dark mode */
+:root[data-theme="dark"] .card-category {
+    background: var(--card);
+}
+
+/* ------------------------------------------------------------
+   SWIPER — Estilo BlueCast
+   ------------------------------------------------------------ */
+.swiper {
+    padding-bottom: 35px;
+}
+
+.swiper-slide {
+    border-radius: var(--bc-radius);
+}
+
+.swiper-pagination-bullet {
     background: var(--bc-primary) !important;
-    opacity: .35;
+    opacity: .3;
 }
 
-:root[data-theme="dark"] .swiper-pagination-bullet-active {
+.swiper-pagination-bullet-active {
     opacity: 1 !important;
 }
 
-/* ======================== CATEGORÍAS ======================== */
-:root[data-theme="dark"] #categorias .card {
-    background: var(--bc-bg-light) !important;
-    border: 1px solid var(--bc-border) !important;
+/* ------------------------------------------------------------
+   CAROUSEL HERO (home)
+   ------------------------------------------------------------ */
+.hero-swiper img {
+    border-radius: var(--bc-radius);
+    box-shadow: var(--bc-shadow);
 }
 
-:root[data-theme="dark"] #categorias .card:hover {
-    background: var(--bc-primary) !important;
-    color: #fff !important;
+/* ------------------------------------------------------------
+   FORMULARIOS — minimal tipo Shopify/BlueCast
+   ------------------------------------------------------------ */
+.form-control,
+.form-select {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.08);
+    border-radius: var(--bc-radius);
+    padding: .75rem 1rem;
+    font-size: 1rem;
 }
 
-/* ======================== FOOTER ======================== */
-:root[data-theme="dark"] footer {
-    background: #090b0e !important;
-    color: var(--bc-text-muted) !important;
-    border-top: 1px solid var(--bc-border);
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--bc-primary);
+    box-shadow: 0 0 0 2px rgba(0,89,255,.25);
 }
 
-/* ======================== FORMULARIOS ======================== */
+/* Dark mode */
 :root[data-theme="dark"] .form-control,
 :root[data-theme="dark"] .form-select {
-    background: var(--bc-bg-light);
-    border: 1px solid var(--bc-border);
-    color: var(--bc-text);
+    background: var(--bg-light);
+    border-color: var(--border);
 }
 
-:root[data-theme="dark"] .form-control:focus,
-:root[data-theme="dark"] .form-select:focus {
-    border-color: var(--bc-primary);
-    box-shadow: 0 0 0 2px rgba(10,132,255,.25);
+/* ------------------------------------------------------------
+   FOOTER — estilo BlueCast PRO
+   ------------------------------------------------------------ */
+footer {
+    background: #ffffff;
+    border-top: 1px solid rgba(0,0,0,.06);
+    box-shadow: 0 -3px 12px rgba(0,0,0,.03);
+    padding-top: 40px;
+    padding-bottom: 40px;
 }
 
+footer a {
+    color: var(--bc-primary);
+    text-decoration: none;
+}
+footer a:hover {
+    opacity: .75;
+}
+
+/* Dark */
+:root[data-theme="dark"] footer {
+    background: #111317 !important;
+}
+
+/* ------------------------------------------------------------
+   CARDS DE TESTIMONIOS — estilo BlueCast
+   ------------------------------------------------------------ */
+.testimonials-swiper .card {
+    border: none;
+    border-radius: var(--bc-radius);
+    box-shadow: var(--bc-shadow);
+}
+
+/* Dark */
+:root[data-theme="dark"] .testimonials-swiper .card {
+    background: var(--card);
+    box-shadow: none;
+}
+
+/* ------------------------------------------------------------
+   PRODUCT DETAIL — estilo BlueCast
+   ------------------------------------------------------------ */
+#pd-main img {
+    border-radius: var(--bc-radius);
+    box-shadow: var(--bc-shadow);
+}
+
+.thumb-64 {
+    border-radius: var(--bc-radius);
+    overflow: hidden;
+    transition: transform .2s, box-shadow .2s ease;
+}
+
+.thumb-64:hover {
+    transform: scale(1.08);
+    box-shadow: 0 8px 16px rgba(0,0,0,.15);
+}
+
+/* ------------------------------------------------------------
+   MOBILE OPTIMIZADO (BlueCast)
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    .btn-primary,
+    .btn-outline-primary {
+        padding: .55rem 1.1rem;
+        font-size: .95rem;
+    }
+    .card,
+    .card-elev {
+        border-radius: 12px;
+    }
+}
+
+
+
+  .catalog-card {
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 6px 18px rgba(0,0,0,.08);
+      transition: .25s;
+  }
+
+  .catalog-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 26px rgba(0,0,0,.15);
+  }
+
+  .catalog-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+  }
+
+  :root {
+    --blue: #005BFF;
+    --blue-dark: #0E1A2F;
+    --cyan: #00C2FF;
+    --gray-light: #F3F4F6;
+    --gray-dark: #1F1F1F;
+    --radius: 14px;
+    --shadow: 0 8px 22px rgba(0,0,0,.08);
+}
+
+/* HERO */
+.hero-main-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--blue-dark);
+}
+.hero-main-sub {
+    font-size: 1.1rem;
+    color: #555;
+    max-width: 50ch;
+}
+
+/* BOTONES */
+.btn-primary {
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+    border: none;
+    padding: 12px 28px;
+    font-weight: 600;
+    color: white !important;
+    border-radius: 50px;
+    box-shadow: 0 6px 16px rgba(0,91,255,0.25);
+}
+.btn-outline-primary {
+    border-color: var(--blue);
+    color: var(--blue) !important;
+    border-radius: 50px;
+    padding: 12px 28px;
+    font-weight: 600;
+}
+
+/* CARDS GENERALES */
+.card-elev,
+.catalog-card {
+    border-radius: var(--radius);
+    background: white;
+    box-shadow: var(--shadow);
+    border: 1px solid #E6E6E6;
+    transition: .25s;
+}
+.card-elev:hover,
+.catalog-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 26px rgba(0,0,0,.15);
+    border-color: var(--blue);
+}
+
+.catalog-card img,
+.card-elev img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* TITULOS DE SECCIÓN */
+section h2.fw-bold {
+    color: var(--blue-dark);
+    font-weight: 800;
+}
+
+/* PRECIO */
+.text-primary {
+    color: var(--blue) !important;
+    font-weight: 700;
+}
+
+/* CATEGORÍAS */
+#categorias .card {
+    background: var(--gray-light);
+    border-radius: var(--radius);
+    border: none;
+    transition: .25s;
+}
+#categorias .card:hover {
+    transform: translateY(-5px);
+    background: var(--blue);
+    color: white;
+}
+
+/* SWIPER */
+.swiper-slide {
+    transition: .25s;
+}
+
+/* FOOTER */
+footer {
+    background: var(--blue-dark);
+    color: #EEE;
+    padding: 50px 0;
+}
