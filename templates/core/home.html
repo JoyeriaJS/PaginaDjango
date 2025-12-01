@@ -150,6 +150,67 @@
 </section>
 {% endif %}
 
+{% for sec in catalog_sections %}
+<section class="py-5 bg-light">
+  <div class="container">
+
+    <div class="text-center mb-4">
+      <h2 class="fw-bold">{{ sec.title }}</h2>
+      {% if sec.subtitle %}
+      <p class="text-muted">{{ sec.subtitle }}</p>
+      {% endif %}
+    </div>
+
+    <div class="swiper catalog-swiper-{{ sec.id }}">
+      <div class="swiper-wrapper">
+
+        {% for p in sec.products.all %}
+        <div class="swiper-slide">
+          <a href="{% url 'core:product_detail' p.pk %}" class="text-decoration-none">
+            <div class="card card-elev p-2 text-center h-100">
+              <div class="thumb-1x1 mb-2">
+                {% with img=p.images.first %}
+                  {% if img %}
+                  <img src="{{ img.image.url }}">
+                  {% endif %}
+                {% endwith %}
+              </div>
+              <h6 class="fw-semibold">{{ p.name }}</h6>
+              <p class="fw-bold text-primary">${{ p.price }}</p>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+
+      </div>
+      <div class="swiper-pagination mt-3"></div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+new Swiper('.catalog-swiper-{{ sec.id }}', {
+  loop: true,
+  autoplay: { delay: 4500, disableOnInteraction:false },
+  speed: 900,
+  slidesPerView: 2,
+  spaceBetween: 20,
+  breakpoints: {
+    576: { slidesPerView: 2 },
+    768: { slidesPerView: 3 },
+    1200: { slidesPerView: 4 }
+  },
+  pagination: {
+    el: '.catalog-swiper-{{ sec.id }} .swiper-pagination',
+    clickable: true
+  }
+});
+</script>
+
+{% endfor %}
+
+
 <!-- ========================================================= -->
 <!-- SLIDER DE NOVEDADES -->
 <!-- ========================================================= -->

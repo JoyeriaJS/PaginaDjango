@@ -204,3 +204,27 @@ class FeaturedProductAdmin(admin.ModelAdmin):
     search_fields = ["product__name"]
     list_filter = ["is_active"]
     ordering = ["order"]
+
+
+class CatalogSection(models.Model):
+    title = models.CharField(max_length=120)
+    subtitle = models.CharField(max_length=250, blank=True)
+    products = models.ManyToManyField(Product, blank=True)
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["order"]
+
+    def __str__(self):
+        return self.title
+
+
+@admin.register(CatalogSection)
+class CatalogSectionAdmin(admin.ModelAdmin):
+    list_display = ["title", "order", "is_active", "updated_at"]
+    list_editable = ["order", "is_active"]
+    list_display_links = ["title"]
+    search_fields = ["title"]
+    filter_horizontal = ["products"]

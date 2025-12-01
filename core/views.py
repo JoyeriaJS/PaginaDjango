@@ -17,7 +17,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseBadRequest
-from catalog.models import Product, FeaturedProduct
+from catalog.models import Product, FeaturedProduct, CatalogSection
 from .forms import CheckoutForm
 from catalog.models import Order, OrderItem
 from django.core.mail import EmailMessage
@@ -41,21 +41,23 @@ def home(request):
 
     featured_products = FeaturedProduct.objects.filter(
         is_active=True
-    ).select_related("product") \
-    .order_by("order")[:12]
+    ).order_by('order')
+
+    catalog_sections = CatalogSection.objects.filter(
+        is_active=True
+    ).order_by('order')
 
     return render(request, "core/home.html", {
         "categories": categories,
         "latest_products": latest_products,
         "featured_products": featured_products,
+        "catalog_sections": catalog_sections,
         "banners_hero": Banner.objects.filter(
-            is_active=True,
-            position=Banner.HOME_HERO
-        ).order_by('order', '-updated_at')[:6],
+            is_active=True, position=Banner.HOME_HERO
+        ).order_by('order','-updated_at')[:6],
         "banners_strip": Banner.objects.filter(
-            is_active=True,
-            position=Banner.HOME_STRIP
-        ).order_by('order', '-updated_at')[:6],
+            is_active=True, position=Banner.HOME_STRIP
+        ).order_by('order','-updated_at')[:6],
     })
 
 
