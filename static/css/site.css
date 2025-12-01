@@ -1,244 +1,258 @@
 /* ============================================================
-   CASTEABLE DARK MODE — RESIN & MAKER STORE
-   Paleta industrial técnica estilo BlueCast + Amazon Tech
+   CASTEABLE — DARK REAL MODE (FULL)
+   Estilo técnico, industrial, profesional
    ============================================================ */
 
 :root {
-  --blue: #005BFF;
-  --blue-dark: #0E1A2F;
-  --cyan: #00C2FF;
-  --gray-light: #F3F4F6;
-  --gray-dark: #1F1F1F;
-  --radius: 14px;
-  --shadow: 0 8px 22px rgba(0,0,0,.18);
+    --blue: #247CFF;
+    --blue-bright: #4CA8FF;
+    --blue-neon: #00C2FF;
+    --bg-dark: #0B0D11;
+    --bg-dark-2: #12151B;
+    --bg-dark-3: #181C23;
+    --card-dark: #1F242C;
+    --text-light: #E9ECF2;
+    --text-muted: #9AA0A8;
+    --border-dark: #2C323D;
+    --radius: 14px;
+    --shadow-dark: 0 8px 22px rgba(0,0,0,.55);
 }
 
-/* ---------------- DARK THEME TOKENS ---------------- */
-:root[data-theme="dark"] {
-  --bg: #0b0d11;
-  --bg-light: #14171d;
-  --card: #1a1e24;
-  --text: #e8eaed;
-  --text-muted: #98a0ab;
-  --border: #2c3139;
-  --brand: #0c63ff;
+/* ====================== */
+/* FONDO GLOBAL DARK REAL */
+/* ====================== */
+body {
+    background: var(--bg-dark);
+    color: var(--text-light);
+    font-family: "Inter", system-ui, sans-serif;
+    line-height: 1.65;
 }
 
-/* Base */
-:root[data-theme="dark"] body {
-  background: var(--bg);
-  color: var(--text);
-}
-
+/* Evitar scroll horizontal */
 html, body {
-  overflow-x: hidden;
+    overflow-x: hidden;
 }
 
-/* ------------------------------------------------------------
-   NAVIGATION
-   ------------------------------------------------------------ */
+/* ====================== */
+/* NAVBAR DARK REAL */
+/* ====================== */
 .navbar {
-  background: var(--bg-light) !important;
-  border-bottom: 1px solid var(--border) !important;
-  backdrop-filter: blur(8px);
+    background: var(--bg-dark-2) !important;
+    border-bottom: 1px solid var(--border-dark);
+    backdrop-filter: blur(10px);
 }
 .navbar .nav-link {
-  color: var(--text) !important;
-  font-weight: 500;
+    color: var(--text-light) !important;
+    font-weight: 500;
 }
 .navbar .nav-link:hover {
-  color: var(--blue);
+    color: var(--blue-bright) !important;
+}
+.navbar-brand img {
+    filter: brightness(1.4);
 }
 
-/* ------------------------------------------------------------
-   HERO
-   ------------------------------------------------------------ */
+/* ====================== */
+/* HERO DARK */
+/* ====================== */
+.hero-xl,
+.hero,
+.hero-main-container {
+    background: linear-gradient(180deg, rgba(36,124,255,.12), transparent 55%),
+                var(--bg-dark-2);
+    padding: 3rem 0;
+    border-radius: 0 0 24px 24px;
+}
+
 .hero-main-title {
-  font-size: 3rem;
-  font-weight: 800;
-  color: var(--text);
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--text-light);
 }
 .hero-main-sub {
-  font-size: 1.15rem;
-  max-width: 55ch;
-  color: var(--text-muted);
+    font-size: 1.15rem;
+    max-width: 60ch;
+    color: var(--text-muted);
 }
 
+/* HERO SWIPER */
 .hero-swiper img {
-  border-radius: 22px;
-  box-shadow: var(--shadow);
+    border-radius: 20px;
+    box-shadow: var(--shadow-dark);
 }
 
-/* ------------------------------------------------------------
-   BUTTONS — Castable Blue Gradient
-   ------------------------------------------------------------ */
+/* ====================== */
+/* BOTONES DARK NEON */
+/* ====================== */
 .btn-primary {
-  background: linear-gradient(90deg, var(--blue), var(--cyan));
-  border: none;
-  color: #fff !important;
-  border-radius: 50px;
-  padding: 12px 30px;
-  font-weight: 600;
-  transition: .25s;
+    background: linear-gradient(135deg, var(--blue), var(--blue-neon));
+    border: none;
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 40px;
+    color: #fff !important;
+    box-shadow: 0 0 20px rgba(0,194,255,.25);
+    transition: .25s;
 }
 .btn-primary:hover {
-  transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 0 28px rgba(0,194,255,.35);
 }
 
 .btn-outline-primary {
-  border: 2px solid var(--blue);
-  color: var(--blue) !important;
-  border-radius: 50px;
-  padding: 12px 30px;
-  font-weight: 600;
+    border: 2px solid var(--blue-bright);
+    color: var(--blue-bright) !important;
+    border-radius: 40px;
+    padding: 12px 30px;
+    font-weight: 600;
 }
 .btn-outline-primary:hover {
-  background: var(--blue);
-  color: #fff !important;
+    background: var(--blue-bright);
+    color: #fff !important;
 }
 
-/* ------------------------------------------------------------
-   CARDS — Productos / Catálogos
-   ------------------------------------------------------------ */
+/* ====================== */
+/* PRODUCT CARDS DARK */
+/* ====================== */
 .card-elev,
-.catalog-card {
-  background: var(--card);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  box-shadow: 0 0 25px rgba(0,0,0,.25);
-  transition: .25s;
+.product-card,
+.slider-product-card {
+    background: var(--card-dark);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius);
+    box-shadow: none;
+    transition: .25s;
 }
 .card-elev:hover,
-.catalog-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--blue);
-  box-shadow: 0 0 35px rgba(0,0,0,.35);
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.45);
+    border-color: var(--blue);
+}
+.card-elev img,
+.product-card img {
+    border-radius: var(--radius) var(--radius) 0 0;
 }
 
-.catalog-card img,
-.card-elev img {
-  width: 100%;
-  height: 170px;
-  object-fit: cover;
-  border-radius: var(--radius) var(--radius) 0 0;
+/* PRECIO */
+.text-primary,
+.price {
+    color: var(--blue-bright) !important;
+    font-weight: 700;
 }
 
-.price, 
-.text-primary {
-  color: var(--blue) !important;
-  font-weight: 700;
-}
-
-/* ------------------------------------------------------------
-   CATEGORY CARDS
-   ------------------------------------------------------------ */
+/* ====================== */
+/* CATEGORÍAS DARK */
+/* ====================== */
 #categorias .card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  transition: .25s;
+    background: var(--bg-dark-2);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-dark);
+    transition: .25s;
 }
 #categorias .card:hover {
-  background: var(--blue);
-  border-color: var(--blue);
-  color: #fff !important;
-  transform: translateY(-4px);
+    background: var(--blue);
+    border-color: var(--blue);
+    color: white !important;
+    transform: translateY(-5px);
 }
 
-/* ------------------------------------------------------------
-   THUMBNAILS
-   ------------------------------------------------------------ */
+/* ====================== */
+/* THUMBNAILS */
+/* ====================== */
 .thumb-1x1 {
-  position: relative;
-  padding-top: 100%;
-  background: var(--bg-light);
-  overflow: hidden;
-  border-radius: var(--radius);
+    position: relative;
+    padding-top: 100%;
+    background: var(--bg-dark-3);
+    border-radius: var(--radius);
+    overflow: hidden;
 }
 .thumb-1x1 img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* ------------------------------------------------------------
-   SWIPER GLOBAL
-   ------------------------------------------------------------ */
+/* ====================== */
+/* CATALOG CARDS */
+/* ====================== */
+.catalog-card {
+    background: var(--card-dark);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius);
+    box-shadow: none;
+    transition: .25s;
+}
+.catalog-card:hover {
+    border-color: var(--blue);
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.45);
+}
+.catalog-card img {
+    height: 160px;
+    object-fit: cover;
+}
+
+/* ====================== */
+/* SWIPER DARK */
+/* ====================== */
 .swiper {
-  overflow: hidden !important;
-  padding-bottom: 30px;
+    padding-bottom: 35px;
 }
 .swiper-slide {
-  transition: .25s;
+    border-radius: var(--radius);
 }
-
-/* pagination color */
 .swiper-pagination-bullet {
-  background: var(--blue) !important;
-  opacity: .35;
+    background: var(--blue-bright) !important;
+    opacity: .35;
 }
 .swiper-pagination-bullet-active {
-  opacity: 1;
+    opacity: 1;
 }
 
-/* ------------------------------------------------------------
-   TESTIMONIOS
-   ------------------------------------------------------------ */
+/* ====================== */
+/* TESTIMONIAL CARDS */
+/* ====================== */
 .testimonials-swiper .card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
+    background: var(--card-dark);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius);
+    box-shadow: none;
+}
+.testimonials-swiper .card:hover {
+    border-color: var(--blue);
 }
 
-/* ------------------------------------------------------------
-   FORMS
-   ------------------------------------------------------------ */
-.form-control, .form-select {
-  background: var(--bg-light);
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: var(--radius);
+/* ====================== */
+/* FORMS */
+/* ====================== */
+.form-control,
+.form-select {
+    background: var(--bg-dark-2);
+    border: 1px solid var(--border-dark);
+    color: var(--text-light);
+    border-radius: var(--radius);
 }
-.form-control:focus, 
+.form-control:focus,
 .form-select:focus {
-  border-color: var(--blue);
-  box-shadow: 0 0 0 2px rgba(0,91,255,.3);
+    border-color: var(--blue);
+    box-shadow: 0 0 0 2px rgba(36,124,255,.45);
 }
 
-/* ------------------------------------------------------------
-   FOOTER
-   ------------------------------------------------------------ */
+/* ====================== */
+/* FOOTER */
+/* ====================== */
 footer {
-  background: var(--bg-light);
-  color: var(--text-muted);
-  padding: 50px 0;
-  border-top: 1px solid var(--border);
+    background: var(--bg-dark-2);
+    border-top: 1px solid var(--border-dark);
+    padding: 50px 0;
+    color: var(--text-muted);
 }
 footer a {
-  color: var(--blue);
+    color: var(--blue-bright);
 }
 footer a:hover {
-  opacity: .7;
-}
-
-/* ------------------------------------------------------------
-   MISC UTILITIES
-   ------------------------------------------------------------ */
-.section-muted {
-  background: var(--bg-light) !important;
-}
-
-.pointer { cursor: pointer; }
-
-.chip {
-  display: inline-block;
-  padding: .35rem .6rem;
-  background: rgba(0,91,255,.15);
-  color: var(--blue);
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: .8rem;
+    opacity: .7;
 }
