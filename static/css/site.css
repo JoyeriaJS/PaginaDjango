@@ -256,3 +256,155 @@ footer a {
 footer a:hover {
     opacity: .7;
 }
+
+/* ========================================================== */
+/*         DARK MODE — BLUECAST PREMIUM (OPCIÓN A)             */
+/* ========================================================== */
+
+:root[data-theme="dark"] {
+    --bc-bg: #0b0e13;               /* Fondo principal */
+    --bc-bg-light: #14171d;         /* Secciones / contenedores */
+    --bc-card: #1a1e25;             /* Cards */
+    --bc-text: #e8ecf3;             /* Texto principal */
+    --bc-text-muted: #9298a3;       /* Texto secundario */
+    --bc-border: #2d323c;           /* Bordes suaves */
+    --bc-primary: #0a84ff;          /* Azul Eléctrico */
+    --bc-primary-hover: #0066dd;    /* Azul profundo */
+    --bc-shadow: 0 0 18px rgba(10,132,255,.15);
+    --radius: 16px;
+}
+
+/* ======================== FONDO GENERAL ======================== */
+:root[data-theme="dark"] body {
+    background: var(--bc-bg) !important;
+    color: var(--bc-text);
+}
+
+/* ======================== TEXTOS ======================== */
+:root[data-theme="dark"] .text-muted {
+    color: var(--bc-text-muted) !important;
+}
+
+:root[data-theme="dark"] h1,
+:root[data-theme="dark"] h2,
+:root[data-theme="dark"] h3,
+:root[data-theme="dark"] h4 {
+    color: var(--bc-text);
+}
+
+/* ======================== NAVBAR ======================== */
+:root[data-theme="dark"] .navbar {
+    background: rgba(10,12,16,0.85) !important;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--bc-border) !important;
+}
+
+:root[data-theme="dark"] .navbar-brand,
+:root[data-theme="dark"] .nav-link {
+    color: var(--bc-text) !important;
+}
+
+:root[data-theme="dark"] .nav-link:hover {
+    color: var(--bc-primary) !important;
+}
+
+/* ======================== HERO ======================== */
+:root[data-theme="dark"] .hero-xl,
+:root[data-theme="dark"] .hero {
+    background: linear-gradient(180deg, rgba(10,132,255,.10), transparent 55%);
+}
+
+:root[data-theme="dark"] .hero-main-title {
+    color: #fff;
+}
+
+:root[data-theme="dark"] .hero-main-sub {
+    color: var(--bc-text-muted);
+}
+
+/* ======================== BOTONES ======================== */
+:root[data-theme="dark"] .btn-primary {
+    background: var(--bc-primary) !important;
+    border: none !important;
+    color: #fff !important;
+    box-shadow: 0 0 20px rgba(10,132,255,.25);
+}
+
+:root[data-theme="dark"] .btn-primary:hover {
+    background: var(--bc-primary-hover) !important;
+}
+
+:root[data-theme="dark"] .btn-outline-primary {
+    border-color: var(--bc-primary);
+    color: var(--bc-primary) !important;
+}
+
+:root[data-theme="dark"] .btn-outline-primary:hover {
+    background: var(--bc-primary);
+    color: #fff !important;
+}
+
+/* ======================== CARDS / PRODUCTOS ======================== */
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .card-elev,
+:root[data-theme="dark"] .product-card,
+:root[data-theme="dark"] .catalog-card {
+    background: var(--bc-card) !important;
+    color: var(--bc-text) !important;
+    border: 1px solid var(--bc-border) !important;
+    box-shadow: var(--bc-shadow) !important;
+}
+
+:root[data-theme="dark"] .catalog-card img,
+:root[data-theme="dark"] .card-elev img,
+:root[data-theme="dark"] .product-card img {
+    filter: brightness(1.05) contrast(1.05);
+}
+
+/* ======================== SWIPER ======================== */
+:root[data-theme="dark"] .swiper-slide {
+    background: var(--bc-card) !important;
+    border-radius: var(--radius);
+}
+
+:root[data-theme="dark"] .swiper-pagination-bullet {
+    background: var(--bc-primary) !important;
+    opacity: .35;
+}
+
+:root[data-theme="dark"] .swiper-pagination-bullet-active {
+    opacity: 1 !important;
+}
+
+/* ======================== CATEGORÍAS ======================== */
+:root[data-theme="dark"] #categorias .card {
+    background: var(--bc-bg-light) !important;
+    border: 1px solid var(--bc-border) !important;
+}
+
+:root[data-theme="dark"] #categorias .card:hover {
+    background: var(--bc-primary) !important;
+    color: #fff !important;
+}
+
+/* ======================== FOOTER ======================== */
+:root[data-theme="dark"] footer {
+    background: #090b0e !important;
+    color: var(--bc-text-muted) !important;
+    border-top: 1px solid var(--bc-border);
+}
+
+/* ======================== FORMULARIOS ======================== */
+:root[data-theme="dark"] .form-control,
+:root[data-theme="dark"] .form-select {
+    background: var(--bc-bg-light);
+    border: 1px solid var(--bc-border);
+    color: var(--bc-text);
+}
+
+:root[data-theme="dark"] .form-control:focus,
+:root[data-theme="dark"] .form-select:focus {
+    border-color: var(--bc-primary);
+    box-shadow: 0 0 0 2px rgba(10,132,255,.25);
+}
+
