@@ -17,7 +17,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseBadRequest
-from catalog.models import Product
+from catalog.models import Product, FeaturedProduct
 from .forms import CheckoutForm
 from catalog.models import Order, OrderItem
 from django.core.mail import EmailMessage
@@ -31,14 +31,34 @@ except Exception:
 
 
 def home(request):
-    categories = Category.objects.annotate(n=Count('products')).order_by('-n','name')[:8]
-    latest_products = Product.objects.filter(is_active=True).order_by('-created_at')[:8]
+    categories = Category.objects.annotate(
+        n=Count('products')
+    ).order_by('-n', 'name')[:8]
+
+    latest_products = Product.objects.filter(
+        is_active=True
+    ).order_by('-created_at')[:8]
+
+    featured_products = FeaturedProduct.objects.filter(
+        is_active=True
+    ).select_related("product") \
+    .order_by("order")[:12]
+
     return render(request, "core/home.html", {
         "categories": categories,
         "latest_products": latest_products,
-        "banners_hero": Banner.objects.filter(is_active=True, position=Banner.HOME_HERO).order_by('order','-updated_at')[:6],
-        "banners_strip": Banner.objects.filter(is_active=True, position=Banner.HOME_STRIP).order_by('order','-updated_at')[:6],
+        "featured_products": featured_products,
+        "banners_hero": Banner.objects.filter(
+            is_active=True,
+            position=Banner.HOME_HERO
+        ).order_by('order', '-updated_at')[:6],
+        "banners_strip": Banner.objects.filter(
+            is_active=True,
+            position=Banner.HOME_STRIP
+        ).order_by('order', '-updated_at')[:6],
     })
+
+
 
 
 # ---------- PRODUCTO (página pública de detalle) ----------
@@ -898,3 +918,5 @@ def order_pdf(request, payment_id):
     response = HttpResponse(pdf, content_type="application/pdf")
     response["Content-Disposition"] = f"inline; filename=Comprobante-{payment_id}.pdf"
     return response
+
+

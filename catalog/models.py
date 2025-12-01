@@ -153,3 +153,54 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ("status", "created_at")
     search_fields = ("payment_id", "email")
     inlines = [OrderItemInline]
+
+
+# ============================
+#  Featured Products
+# ============================
+class FeaturedProduct(models.Model):
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="featured_entries",
+        verbose_name="Producto"
+    )
+
+    order = models.PositiveIntegerField(
+        default=0,
+        verbose_name="Orden"
+    )
+
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="Activo"
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    class Meta:
+        ordering = ["order", "-updated_at"]
+        verbose_name = "Producto destacado"
+        verbose_name_plural = "Productos destacados"
+
+    def __str__(self):
+        return f"{self.order} — {self.product.name}"
+
+
+from django.contrib import admin
+from .models import FeaturedProduct, Product
+
+@admin.register(FeaturedProduct)
+class FeaturedProductAdmin(admin.ModelAdmin):
+    list_display = ["product", "order", "is_active", "updated_at"]
+    list_display_links = ["product"]   # ← IMPORTANTE
+    list_editable = ["order", "is_active"]
+    search_fields = ["product__name"]
+    list_filter = ["is_active"]
+    ordering = ["order"]
