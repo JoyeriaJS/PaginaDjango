@@ -460,19 +460,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
         new Swiper(`.catalog-swiper-${sec.id}`, {
 
-            loop: total > 4,
+            // SIEMPRE loop
+            loop: true,
 
-            autoplay: {
-                delay: 4200,
-                disableOnInteraction: false,
+            // ===== MOVIMIENTO CONTINUO PREMIUM =====
+            freeMode: {
+                enabled: true,
+                momentum: false
             },
 
-            speed: 900,
+            autoplay: {
+                delay: 0,                  // SIN pausas
+                disableOnInteraction: false
+            },
+
+            speed: 9000,                  // VELOCIDAD continua (ajustable)
             grabCursor: true,
 
             slidesPerView: 'auto',
             spaceBetween: 20,
 
+            // Mantengo tus breakpoints originales
             breakpoints: {
                 0:   { slidesPerView: total >= 1 ? 1.2 : 1 },
                 576: { slidesPerView: total >= 2 ? 2 : total },
@@ -484,12 +492,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 el: `.catalog-swiper-${sec.id} .swiper-pagination`,
                 clickable: true
             }
+
         });
 
     });
 
 });
 </script>
+
 
 
 
