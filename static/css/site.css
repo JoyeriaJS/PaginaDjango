@@ -537,3 +537,104 @@ footer a:hover {
       height: 180px;
       object-fit: cover;
   }
+
+  :root {
+    --blue: #005BFF;
+    --blue-dark: #0E1A2F;
+    --cyan: #00C2FF;
+    --gray-light: #F3F4F6;
+    --gray-dark: #1F1F1F;
+    --radius: 14px;
+    --shadow: 0 8px 22px rgba(0,0,0,.08);
+}
+
+/* HERO */
+.hero-main-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--blue-dark);
+}
+.hero-main-sub {
+    font-size: 1.1rem;
+    color: #555;
+    max-width: 50ch;
+}
+
+/* BOTONES */
+.btn-primary {
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+    border: none;
+    padding: 12px 28px;
+    font-weight: 600;
+    color: white !important;
+    border-radius: 50px;
+    box-shadow: 0 6px 16px rgba(0,91,255,0.25);
+}
+.btn-outline-primary {
+    border-color: var(--blue);
+    color: var(--blue) !important;
+    border-radius: 50px;
+    padding: 12px 28px;
+    font-weight: 600;
+}
+
+/* CARDS GENERALES */
+.card-elev,
+.catalog-card {
+    border-radius: var(--radius);
+    background: white;
+    box-shadow: var(--shadow);
+    border: 1px solid #E6E6E6;
+    transition: .25s;
+}
+.card-elev:hover,
+.catalog-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 26px rgba(0,0,0,.15);
+    border-color: var(--blue);
+}
+
+.catalog-card img,
+.card-elev img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* TITULOS DE SECCIÓN */
+section h2.fw-bold {
+    color: var(--blue-dark);
+    font-weight: 800;
+}
+
+/* PRECIO */
+.text-primary {
+    color: var(--blue) !important;
+    font-weight: 700;
+}
+
+/* CATEGORÍAS */
+#categorias .card {
+    background: var(--gray-light);
+    border-radius: var(--radius);
+    border: none;
+    transition: .25s;
+}
+#categorias .card:hover {
+    transform: translateY(-5px);
+    background: var(--blue);
+    color: white;
+}
+
+/* SWIPER */
+.swiper-slide {
+    transition: .25s;
+}
+
+/* FOOTER */
+footer {
+    background: var(--blue-dark);
+    color: #EEE;
+    padding: 50px 0;
+}
