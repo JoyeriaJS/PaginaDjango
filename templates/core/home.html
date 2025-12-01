@@ -386,6 +386,8 @@
 
 {% block extra_js %}
 {{ block.super }}
+
+
 <script src="https://unpkg.com/swiper@9/swiper-bundle.min.js"></script>
 
 <script>
@@ -448,7 +450,47 @@ document.addEventListener("DOMContentLoaded", function () {
 <!-- CATÁLOGOS (dinámicos) — SWIPER PRO -->
 <!-- ============================= -->
 <script>
+document.addEventListener("DOMContentLoaded", () => {
 
+    const catalogSections = JSON.parse(`{{ sections_config|safe }}`);
+
+    catalogSections.forEach(sec => {
+
+        const total = sec.total;
+
+        new Swiper(`.catalog-swiper-${sec.id}`, {
+
+            loop: total > 4,
+
+            autoplay: {
+                delay: 4200,
+                disableOnInteraction: false,
+            },
+
+            speed: 900,
+            grabCursor: true,
+
+            slidesPerView: 'auto',
+            spaceBetween: 20,
+
+            breakpoints: {
+                0:   { slidesPerView: total >= 1 ? 1.2 : 1 },
+                576: { slidesPerView: total >= 2 ? 2 : total },
+                768: { slidesPerView: total >= 3 ? 3 : total },
+                1200:{ slidesPerView: total >= 4 ? 4 : total }
+            },
+
+            pagination: {
+                el: `.catalog-swiper-${sec.id} .swiper-pagination`,
+                clickable: true
+            }
+        });
+
+    });
+
+});
 </script>
+
+
 
 {% endblock %}
