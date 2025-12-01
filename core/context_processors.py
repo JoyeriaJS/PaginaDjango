@@ -45,13 +45,32 @@ def cart_badge(request):
 
 def main_menu(request):
     """
-    Deja este como lo tengas. Ejemplo mínimo:
+    Carga el menú dinámico completo desde el admin.
+    Solo muestra los items activos y ordenados.
     """
-    return {
-        "main_menu": [
-            # {"title": "Inicio", "url": "/"},
-            # ...
-        ]
-    }
+    # Ítems padre (sin parent)
+    parents = MenuItem.objects.filter(
+        is_active=True,
+        parent__isnull=True
+    ).order_by("order")
+
+    menu = []
+
+    for p in parents:
+        children = list(
+            MenuItem.objects.filter(
+                is_active=True,
+                parent=p
+            ).order_by("order")
+        )
+
+        menu.append({
+            "title": p.title,
+            "url": p.url or "#",
+            "open_in_new_tab": p.open_in_new_tab,
+            "children": children,   # Aquí van los hijos si tiene
+        })
+
+    return {"main_menu": menu}
 
     
