@@ -91,10 +91,10 @@
 
 
       {% if request.user.is_authenticated %}
-        <a class="btn btn-primary" href="{% url 'core:logout' %}">Cerrar sesión</a>
+        <a class="btn btn-outline-primary d-flex align-items-center gap-2 position-relative me-2" href="{% url 'core:logout' %}">Cerrar sesión</a>
       {% else %}
       <li class="nav-item">
-        <a class="btn btn-primary" href="{% url 'core:login' %}">Ingresar</a>
+        <a class="btn btn-outline-primary d-flex align-items-center gap-2 position-relative me-2" href="{% url 'core:login' %}">Ingresar</a>
       </li>
       <li class="nav-item">
         <a class="btn btn-outline-light btn-sm" href="{% url 'core:register' %}">
