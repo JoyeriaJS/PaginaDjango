@@ -50,22 +50,6 @@
         {% endfor %}
       </ul>
 
-      {% if request.user.is_authenticated %}
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'core:logout' %}">Cerrar sesión</a>
-      </li>
-      {% else %}
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'core:login' %}">Ingresar</a>
-      </li>
-      <li class="nav-item">
-        <a class="btn btn-outline-light btn-sm" href="{% url 'core:register' %}">
-          Crear cuenta
-        </a>
-      </li>
-      {% endif %}
-
-
       {# --- Selector de idioma --- #}
       <select id="lang-switcher"
               class="form-select form-select-sm me-2"
@@ -113,6 +97,22 @@
       {% else %}
         <a class="btn btn-primary" href="/admin/login/">{% trans 'Iniciar sesión' %}</a>
       {% endif %}
+
+      {% if request.user.is_authenticated %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'core:logout' %}">Cerrar sesión</a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'core:login' %}">Ingresar</a>
+      </li>
+      <li class="nav-item">
+        <a class="btn btn-outline-light btn-sm" href="{% url 'core:register' %}">
+          Crear cuenta
+        </a>
+      </li>
+      {% endif %}
+
 
     </div>
   </div>
