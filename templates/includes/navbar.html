@@ -101,11 +101,14 @@
       {% if request.user.is_authenticated %}
         <a class="btn btn-primary" href="{% url 'core:logout' %}">Cerrar sesión</a>
       {% else %}
+      <li class="nav-item">
         <a class="btn btn-primary" href="{% url 'core:login' %}">Ingresar</a>
-      {% endif %}
+      </li>
+      <li class="nav-item">
         <a class="btn btn-outline-light btn-sm" href="{% url 'core:register' %}">
           Crear cuenta
         </a>
+      </li>
       {% endif %}
 
 
