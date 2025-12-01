@@ -99,14 +99,10 @@
       {% endif %}
 
       {% if request.user.is_authenticated %}
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'core:logout' %}">Cerrar sesión</a>
-      </li>
+        <a class="btn btn-primary" href="{% url 'core:logout' %}">Cerrar sesión</a>
       {% else %}
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'core:login' %}">Ingresar</a>
-      </li>
-      <li class="nav-item">
+        <a class="btn btn-primary" href="{% url 'core:login' %}">Ingresar</a>
+      {% endif %}
         <a class="btn btn-outline-light btn-sm" href="{% url 'core:register' %}">
           Crear cuenta
         </a>
