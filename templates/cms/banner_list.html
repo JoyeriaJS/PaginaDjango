@@ -1,51 +1,103 @@
 {% extends "catalog/base_admin.html" %}
 {% block title %}Banners{% endblock %}
+
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h1 class="h3">Banners</h1>
-  <a href="{% url 'cms:banner_create' %}" class="btn btn-primary">Nuevo banner</a>
+
+<!-- Encabezado -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="fw-bold m-0" style="font-size:1.7rem;">Banners</h1>
+  <a href="{% url 'cms:banner_create' %}" class="btn btn-primary px-4 py-2" style="border-radius:12px;">+ Nuevo banner</a>
 </div>
-<form class="row g-2 mb-3">
-  <div class="col-md-4">
-    <select name="position" class="form-select" onchange="this.form.submit()">
-      <option value="">Todas las ubicaciones</option>
-      <option value="home_hero" {% if position == 'home_hero' %}selected{% endif %}>Home — Hero</option>
-      <option value="home_strip" {% if position == 'home_strip' %}selected{% endif %}>Home — Tira</option>
-    </select>
+
+<!-- Filtros -->
+<div class="card shadow-sm border-0 mb-4" style="border-radius:16px;">
+  <div class="card-body">
+    <form class="row g-3">
+
+      <div class="col-md-4">
+        <label class="form-label fw-semibold">Filtrar por ubicación</label>
+        <select name="position" class="form-select" onchange="this.form.submit()">
+          <option value="">Todas las ubicaciones</option>
+          <option value="home_hero" {% if position == 'home_hero' %}selected{% endif %}>Home — Hero</option>
+          <option value="home_strip" {% if position == 'home_strip' %}selected{% endif %}>Home — Tira</option>
+        </select>
+      </div>
+
+    </form>
   </div>
-</form>
-<div class="table-responsive">
-<table class="table table-striped align-middle">
-  <thead>
-    <tr>
-      <th>Preview</th>
-      <th>Título</th>
-      <th>Ubicación</th>
-      <th>Orden</th>
-      <th>Activo</th>
-      <th class="text-end">Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for b in banners %}
-    <tr>
-      <td style="width:160px">{% if b.image %}<img src="{{ b.image.url }}" class="img-fluid rounded" style="max-height:80px">{% endif %}</td>
-      <td><div class="fw-semibold">{{ b.title|default:"(sin título)" }}</div><div class="small text-muted">{{ b.subtitle }}</div></td>
-      <td>{{ b.get_position_display }}</td>
-      <td>{{ b.order }}</td>
-      <td>{% if b.is_active %}<span class="badge bg-success">Sí</span>{% else %}<span class="badge bg-secondary">No</span>{% endif %}</td>
-      <td class="text-end">
-        <a class="btn btn-sm btn-outline-primary" href="{% url 'cms:banner_edit' b.pk %}">Editar</a>
-        <form action="{% url 'cms:banner_delete' b.pk %}" method="post" class="d-inline">
-          {% csrf_token %}
-          <button class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar banner?')">Eliminar</button>
-        </form>
-      </td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="6" class="text-center text-muted">No hay banners.</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
 </div>
+
+<!-- Tabla principal -->
+<div class="table-responsive">
+  <table class="table align-middle table-hover">
+
+    <thead class="table-light" style="border-bottom:2px solid #eee;">
+      <tr>
+        <th style="width:180px;">Preview</th>
+        <th>Título</th>
+        <th>Ubicación</th>
+        <th>Orden</th>
+        <th>Activo</th>
+        <th class="text-end">Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for b in banners %}
+      <tr>
+
+        <td>
+          {% if b.image %}
+          <img src="{{ b.image.url }}" class="rounded" 
+               style="max-height:80px;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,.1);">
+          {% else %}
+          <div class="bg-light text-muted d-flex align-items-center justify-content-center"
+               style="width:140px;height:80px;border-radius:10px;border:1px solid #ddd;">
+            Sin imagen
+          </div>
+          {% endif %}
+        </td>
+
+        <td>
+          <div class="fw-semibold">{{ b.title|default:"(Sin título)" }}</div>
+          <div class="small text-muted">{{ b.subtitle }}</div>
+        </td>
+
+        <td>{{ b.get_position_display }}</td>
+        <td>{{ b.order }}</td>
+
+        <td>
+          {% if b.is_active %}
+            <span class="badge bg-success px-3 py-2" style="border-radius:10px;">Sí</span>
+          {% else %}
+            <span class="badge bg-secondary px-3 py-2" style="border-radius:10px;">No</span>
+          {% endif %}
+        </td>
+
+        <td class="text-end">
+
+          <a class="btn btn-sm btn-outline-primary me-1" href="{% url 'cms:banner_edit' b.pk %}" style="border-radius:10px;">
+            Editar
+          </a>
+
+          <form method="post" action="{% url 'cms:banner_delete' b.pk %}" class="d-inline">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar banner?')" style="border-radius:10px;">
+              Eliminar
+            </button>
+          </form>
+
+        </td>
+
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6" class="text-center text-muted py-5">No hay banners para mostrar.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+
+  </table>
+</div>
+
 {% endblock %}
