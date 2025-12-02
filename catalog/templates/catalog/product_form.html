@@ -1,30 +1,96 @@
-{% extends 'catalog/base_admin.html' %}{% block content %}<h1 class='h4'>{{ title }}</h1><form method='post'>{% csrf_token %}{{ form.as_p }}<button class='btn btn-primary'>Guardar</button></form>{% endblock %}
-{% if product %}
-<hr class="my-4">
-<h2 class="h5">Imágenes</h2>
-<p class="text-muted">Agrega, elimina o marca una imagen como principal.</p>
-<a class="btn btn-sm btn-outline-info mb-3" href="{% url 'catalog:product_images' product.pk %}">Agregar imagen</a>
+{% extends 'catalog/base_admin.html' %}
 
-<div class="row g-3">
-  {% for img in images %}
-  <div class="col-6 col-md-3">
-    <div class="card">
-      <img src="{{ img.image.url }}" class="card-img-top" alt="{{ img.alt }}">
-      <div class="card-body small d-flex justify-content-between align-items-center">
-        {% if img.is_primary %}
-          <span class="badge bg-success">Principal</span>
-        {% else %}
-          <a class="btn btn-sm btn-outline-primary" href="{% url 'catalog:image_set_primary' img.pk %}">Hacer principal</a>
+{% block content %}
+
+<div class="container py-4">
+
+  <!-- Título -->
+  <h1 class="h4 fw-bold mb-4">{{ title }}</h1>
+
+  <!-- CARD FORMULARIO -->
+  <div class="card shadow-sm border-0 mb-4" style="border-radius:16px;">
+    <div class="card-body p-4">
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger">{{ form.non_field_errors }}</div>
         {% endif %}
-        <form method="post" action="{% url 'catalog:image_delete' img.pk %}">
-          {% csrf_token %}
-          <button class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar imagen?')">Eliminar</button>
-        </form>
-      </div>
+
+        <!-- FORMULARIO EN 2 COLUMNAS -->
+        <div class="row g-4">
+
+          {% for field in form %}
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">{{ field.label }}</label>
+            {{ field }}
+            <div class="text-danger small">{{ field.errors }}</div>
+          </div>
+          {% endfor %}
+
+        </div>
+
+        <div class="mt-4 d-flex justify-content-end">
+          <button class="btn btn-primary px-4 py-2" style="border-radius:10px;">Guardar producto</button>
+        </div>
+
+      </form>
+
     </div>
   </div>
-  {% empty %}
-  <div class="text-muted">Sin imágenes aún.</div>
-  {% endfor %}
+
+  {% if product %}
+  <hr class="my-4">
+
+  <!-- SECCIÓN DE IMÁGENES -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h5 fw-bold">Imágenes del producto</h2>
+    <a class="btn btn-sm btn-outline-primary" href="{% url 'catalog:product_images' product.pk %}">
+      + Agregar imagen
+    </a>
+  </div>
+
+  <p class="text-muted mb-4">Gestiona las imágenes del producto. Puedes marcar una como principal o eliminarla.</p>
+
+  <div class="row g-4">
+    {% for img in images %}
+    <div class="col-6 col-md-3">
+      <div class="card shadow-sm border-0 h-100" style="border-radius:14px;">
+
+        <div class="position-relative">
+          <img src="{{ img.image.url }}" class="card-img-top" style="height:160px; object-fit:cover; border-radius:14px 14px 0 0;">
+        </div>
+
+        <div class="card-body small d-flex flex-column gap-2">
+
+          {% if img.is_primary %}
+            <span class="badge bg-success w-100 py-2">Imagen principal</span>
+          {% else %}
+            <a class="btn btn-sm btn-outline-primary w-100"
+               href="{% url 'catalog:image_set_primary' img.pk %}">Hacer principal</a>
+          {% endif %}
+
+          <form method="post" action="{% url 'catalog:image_delete' img.pk %}">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-outline-danger w-100"
+                    onclick="return confirm('¿Eliminar imagen?')">
+              Eliminar
+            </button>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+
+    {% empty %}
+    <div class="text-muted">No hay imágenes agregadas aún.</div>
+    {% endfor %}
+  </div>
+
+  {% endif %}
+
 </div>
-{% endif %}
+
+{% endblock %}
