@@ -1,71 +1,121 @@
 {% extends "catalog/base_admin.html" %}
 {% block title %}Materiales{% endblock %}
+
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h1 class="h4 m-0">Materiales</h1>
-  <a href="{% url 'catalog:material_create' %}" class="btn btn-primary">Nuevo</a>
+<!-- Encabezado -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold m-0" style="font-size:1.7rem;">Materiales</h1>
+    <a href="{% url 'catalog:material_create' %}" 
+       class="btn btn-primary px-4 py-2"
+       style="border-radius:12px;">
+        + Nuevo material
+    </a>
 </div>
 
-<form class="row g-2 mb-3" method="get">
-  <div class="col-md-6">
-    <input name="q" value="{{ q|default:'' }}" class="form-control" placeholder="Buscar material por nombre">
-  </div>
-  <div class="col-md-2">
-    <button class="btn btn-outline-primary w-100">Filtrar</button>
-  </div>
-  <div class="col-md-2">
-    <a href="{% url 'catalog:material_list' %}" class="btn btn-outline-secondary w-100">Limpiar</a>
-  </div>
+<!-- Filtros -->
+<form class="row g-3 mb-4" method="get">
+
+    <div class="col-md-6">
+        <input name="q" value="{{ q|default:'' }}" 
+               class="form-control" 
+               placeholder="Buscar material por nombre">
+    </div>
+
+    <div class="col-md-2">
+        <button class="btn btn-outline-primary w-100" style="border-radius:12px;">
+            Filtrar
+        </button>
+    </div>
+
+    <div class="col-md-2">
+        <a href="{% url 'catalog:material_list' %}" 
+           class="btn btn-outline-secondary w-100" 
+           style="border-radius:12px;">
+            Limpiar
+        </a>
+    </div>
+
 </form>
 
+<!-- Tabla -->
 <div class="table-responsive">
-  <table class="table table-striped align-middle">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th style="width:180px" class="text-end">Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for m in items %}
-      <tr>
-        <td class="fw-semibold">{{ m.name }}</td>
-        <td class="text-end">
-          <a class="btn btn-sm btn-outline-primary" href="{% url 'catalog:material_edit' m.pk %}">Editar</a>
-          <form action="{% url 'catalog:material_delete' m.pk %}" method="post" class="d-inline">
-            {% csrf_token %}
-            <button class="btn btn-sm btn-outline-danger"
-                    onclick="return confirm('¿Eliminar material {{ m.name|escapejs }}?')">
-                Eliminar
-            </button>
-            </form>
-        </td>
-      </tr>
-      {% empty %}
-      <tr>
-        <td colspan="2" class="text-center text-muted py-4">Sin materiales</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    <table class="table align-middle table-hover">
+
+        <thead class="table-light" style="border-bottom:2px solid #eee;">
+            <tr>
+                <th class="fw-semibold">Nombre</th>
+                <th class="text-end" style="width:180px;">Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for m in items %}
+            <tr>
+
+                <td class="fw-semibold">{{ m.name }}</td>
+
+                <td class="text-end">
+
+                    <a class="btn btn-sm btn-outline-primary me-1"
+                       style="border-radius:10px;"
+                       href="{% url 'catalog:material_edit' m.pk %}">
+                       Editar
+                    </a>
+
+                    <form action="{% url 'catalog:material_delete' m.pk %}"
+                          method="post"
+                          class="d-inline">
+                      {% csrf_token %}
+                      <button class="btn btn-sm btn-outline-danger"
+                              style="border-radius:10px;"
+                              onclick="return confirm('¿Eliminar material {{ m.name|escapejs }}?')">
+                          Eliminar
+                      </button>
+                    </form>
+
+                </td>
+
+            </tr>
+
+        {% empty %}
+            <tr>
+                <td colspan="2" class="text-center text-muted py-5">
+                    No hay materiales disponibles.
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
 </div>
 
+<!-- Paginación -->
 {% if items.has_other_pages %}
 <nav aria-label="Paginación">
-  <ul class="pagination justify-content-center">
-    {% if items.has_previous %}
-      <li class="page-item"><a class="page-link" href="?page={{ items.previous_page_number }}&q={{ q|urlencode }}">«</a></li>
-    {% else %}
-      <li class="page-item disabled"><span class="page-link">«</span></li>
-    {% endif %}
-    <li class="page-item disabled"><span class="page-link">Página {{ items.number }} de {{ items.paginator.num_pages }}</span></li>
-    {% if items.has_next %}
-      <li class="page-item"><a class="page-link" href="?page={{ items.next_page_number }}&q={{ q|urlencode }}">»</a></li>
-    {% else %}
-      <li class="page-item disabled"><span class="page-link">»</span></li>
-    {% endif %}
-  </ul>
+    <ul class="pagination justify-content-center">
+
+        {% if items.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ items.previous_page_number }}&q={{ q|urlencode }}">«</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">«</span></li>
+        {% endif %}
+
+        <li class="page-item disabled">
+            <span class="page-link">Página {{ items.number }} de {{ items.paginator.num_pages }}</span>
+        </li>
+
+        {% if items.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ items.next_page_number }}&q={{ q|urlencode }}">»</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">»</span></li>
+        {% endif %}
+
+    </ul>
 </nav>
 {% endif %}
 
