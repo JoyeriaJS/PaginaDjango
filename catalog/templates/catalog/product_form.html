@@ -4,35 +4,48 @@
 
 <div class="container py-4">
 
-  <!-- Título -->
-  <h1 class="h4 fw-bold mb-4">{{ title }}</h1>
+  <!-- TÍTULO -->
+  <h1 class="fw-bold mb-4" style="font-size:1.8rem;">{{ title }}</h1>
 
-  <!-- CARD FORMULARIO -->
-  <div class="card shadow-sm border-0 mb-4" style="border-radius:16px;">
+  <!-- CARD DEL FORMULARIO -->
+  <div class="card shadow-sm border-0 mb-4" style="border-radius:18px;">
     <div class="card-body p-4">
+
+      <h4 class="fw-semibold mb-3">Información del producto</h4>
 
       <form method="post" novalidate>
         {% csrf_token %}
 
         {% if form.non_field_errors %}
-          <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
         {% endif %}
 
-        <!-- FORMULARIO EN 2 COLUMNAS -->
         <div class="row g-4">
 
           {% for field in form %}
           <div class="col-md-6">
+
             <label class="form-label fw-semibold">{{ field.label }}</label>
-            {{ field }}
+
+            <div class="input-wrapper mb-1">
+              {{ field }}
+            </div>
+
+            {% if field.help_text %}
+              <div class="form-text">{{ field.help_text }}</div>
+            {% endif %}
+
             <div class="text-danger small">{{ field.errors }}</div>
           </div>
           {% endfor %}
 
         </div>
 
-        <div class="mt-4 d-flex justify-content-end">
-          <button class="btn btn-primary px-4 py-2" style="border-radius:10px;">Guardar producto</button>
+        <!-- BOTÓN GUARDAR -->
+        <div class="d-flex justify-content-end mt-4">
+          <button class="btn btn-primary px-4 py-2" style="border-radius:12px; font-weight:600;">
+            Guardar producto
+          </button>
         </div>
 
       </form>
@@ -41,39 +54,45 @@
   </div>
 
   {% if product %}
-  <hr class="my-4">
-
   <!-- SECCIÓN DE IMÁGENES -->
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="h5 fw-bold">Imágenes del producto</h2>
-    <a class="btn btn-sm btn-outline-primary" href="{% url 'catalog:product_images' product.pk %}">
+    <h4 class="fw-semibold">Imágenes del producto</h4>
+    <a href="{% url 'catalog:product_images' product.pk %}"
+       class="btn btn-outline-primary btn-sm" 
+       style="border-radius:10px;">
       + Agregar imagen
     </a>
   </div>
 
-  <p class="text-muted mb-4">Gestiona las imágenes del producto. Puedes marcar una como principal o eliminarla.</p>
+  <p class="text-muted mb-4">Puedes agregar o seleccionar la imagen principal.</p>
 
   <div class="row g-4">
+
     {% for img in images %}
     <div class="col-6 col-md-3">
-      <div class="card shadow-sm border-0 h-100" style="border-radius:14px;">
 
-        <div class="position-relative">
-          <img src="{{ img.image.url }}" class="card-img-top" style="height:160px; object-fit:cover; border-radius:14px 14px 0 0;">
+      <div class="card shadow-sm border-0 h-100" style="border-radius:16px;">
+
+        <div class="ratio ratio-1x1">
+          <img src="{{ img.image.url }}" 
+               style="object-fit:cover; border-radius:16px 16px 0 0;">
         </div>
 
-        <div class="card-body small d-flex flex-column gap-2">
+        <div class="card-body p-3 d-flex flex-column gap-2">
 
           {% if img.is_primary %}
             <span class="badge bg-success w-100 py-2">Imagen principal</span>
           {% else %}
-            <a class="btn btn-sm btn-outline-primary w-100"
-               href="{% url 'catalog:image_set_primary' img.pk %}">Hacer principal</a>
+            <a href="{% url 'catalog:image_set_primary' img.pk %}"
+               class="btn btn-sm btn-outline-primary w-100" 
+               style="border-radius:10px;">
+              Hacer principal
+            </a>
           {% endif %}
 
           <form method="post" action="{% url 'catalog:image_delete' img.pk %}">
             {% csrf_token %}
-            <button class="btn btn-sm btn-outline-danger w-100"
+            <button class="btn btn-sm btn-outline-danger w-100" style="border-radius:10px;"
                     onclick="return confirm('¿Eliminar imagen?')">
               Eliminar
             </button>
@@ -82,13 +101,13 @@
         </div>
 
       </div>
+
     </div>
-
     {% empty %}
-    <div class="text-muted">No hay imágenes agregadas aún.</div>
+      <p class="text-muted">No hay imágenes aún.</p>
     {% endfor %}
-  </div>
 
+  </div>
   {% endif %}
 
 </div>
