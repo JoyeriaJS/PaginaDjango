@@ -298,3 +298,57 @@ form .form-select:focus {
 .list-group-item:last-child {
     border-bottom: none;
 }
+
+/*ultimo css
+/* === FIX PROFESIONAL PARA CAMPOS DESCUDRADOS === */
+
+.input-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-holder {
+  width: 100%;
+}
+
+.input-holder input,
+.input-holder select,
+.input-holder textarea {
+  width: 100% !important;
+  min-height: 48px;
+  border-radius: 12px !important;
+  border: 1px solid #d9d9d9;
+  padding: 10px 14px !important;
+  font-size: 1rem;
+  background: #fff;
+}
+
+.input-holder textarea {
+  min-height: 90px !important;
+  resize: vertical;
+}
+
+/* Focus */
+.input-holder input:focus,
+.input-holder select:focus,
+.input-holder textarea:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, .15);
+  outline: none;
+}
+
+/* Corrige selects largos */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-position: right 14px center;
+  background-repeat: no-repeat;
+}
+
+/* Mobile fix */
+@media (max-width: 768px) {
+  .input-holder input,
+  .input-holder select {
+    min-height: 50px;
+  }
+}
