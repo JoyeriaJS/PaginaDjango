@@ -352,3 +352,40 @@ select {
     min-height: 50px;
   }
 }
+
+
+/* ROTATOR STRIP */
+.usp-strip-rotator {
+    overflow: hidden;
+    position: relative;
+}
+
+.usp-rotator {
+    display: flex;
+    flex-direction: column;
+    animation: uspRotate 12s infinite;
+}
+
+.usp-item {
+    font-size: 0.9rem;
+    padding: 6px 0;
+    text-align: center;
+    color: #fff;
+}
+
+/* Animación (4 ítems => 4 etapas) */
+@keyframes uspRotate {
+    0% { transform: translateY(0); }
+    20% { transform: translateY(0); }
+
+    25% { transform: translateY(-25%); }
+    45% { transform: translateY(-25%); }
+
+    50% { transform: translateY(-50%); }
+    70% { transform: translateY(-50%); }
+
+    75% { transform: translateY(-75%); }
+    95% { transform: translateY(-75%); }
+
+    100% { transform: translateY(0); }
+}
