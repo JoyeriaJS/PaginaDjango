@@ -386,3 +386,62 @@ select {
     100% { transform: translateX(-50%); }
 }
 
+/* ===================================== */
+/*   SECCIONES ENMARCADAS EN NEGRO      */
+/* ===================================== */
+
+.section-black {
+    background: #000;
+    border-radius: 26px;
+    margin: 60px auto;
+    padding: 60px 30px;
+    width: 100%;
+    box-shadow: 0 0 45px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* TITULOS */
+.section-black h1,
+.section-black h2,
+.section-black h3,
+.section-black h4,
+.section-black h5,
+.section-black h6 {
+    color: #fff !important;
+}
+
+/* TEXTOS */
+.section-black p,
+.section-black span,
+.section-black small,
+.section-black .text-muted {
+    color: rgba(255,255,255,0.85) !important;
+}
+
+/* CARDS ADENTRO */
+.section-black .card,
+.section-black .catalog-card,
+.section-black .bc-card,
+.section-black .product-card {
+    background: #111 !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    border-radius: 16px !important;
+    color: #fff !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,.55) !important;
+}
+
+/* PRECIOS EN AZUL */
+.section-black .text-primary {
+    color: #4DA3FF !important;
+}
+
+/* Swiper pagination */
+.section-black .swiper-pagination-bullet {
+    background: #fff !important;
+    opacity: .4 !important;
+}
+
+.section-black .swiper-pagination-bullet-active {
+    background: #4da3ff !important;
+    opacity: 1 !important;
+}
