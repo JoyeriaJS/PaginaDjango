@@ -47,6 +47,34 @@
       <script src="https://unpkg.com/swiper@9/swiper-bundle.min.js"></script>
       <script>AOS.init({ once:true, duration:750 });</script>
     {% endblock %}
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const root = document.documentElement;
+    const btn = document.getElementById("themeToggle");
+
+    // Lee el tema guardado
+    let saved = localStorage.getItem("theme");
+    if (saved === "dark") {
+        root.setAttribute("data-theme", "dark");
+    }
+
+    // Alternar tema
+    btn?.addEventListener("click", () => {
+        let current = root.getAttribute("data-theme");
+
+        if (current === "dark") {
+            root.removeAttribute("data-theme");
+            localStorage.setItem("theme", "light");
+        } else {
+            root.setAttribute("data-theme", "dark");
+            localStorage.setItem("theme", "dark");
+        }
+    });
+
+});
+</script>
+
   </body>
 </html>
 
