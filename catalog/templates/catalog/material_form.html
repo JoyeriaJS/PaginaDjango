@@ -1,23 +1,105 @@
 {% extends "catalog/base_admin.html" %}
 {% block title %}{{ title }}{% endblock %}
+
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h1 class="h4 m-0">{{ title }}</h1>
-  <a href="{% url 'catalog:material_list' %}" class="btn btn-outline-secondary">Volver</a>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold m-0" style="font-size:1.6rem;">{{ title }}</h1>
+    <a href="{% url 'catalog:discount_list' %}" class="btn btn-secondary px-4" style="border-radius:12px;">Volver</a>
 </div>
 
-<form method="post" class="card p-3">
-  {% csrf_token %}
-  <div class="mb-3">
-    {{ form.name.label_tag }}
-    {{ form.name }}
-    {% if form.name.errors %}
-      <div class="text-danger small">{{ form.name.errors|striptags }}</div>
-    {% endif %}
-  </div>
-  <div class="d-flex gap-2">
-    <button class="btn btn-primary" type="submit">Guardar</button>
-    <a class="btn btn-light" href="{% url 'catalog:material_list' %}">Cancelar</a>
-  </div>
-</form>
+<div class="card shadow-sm border-0 p-4" style="border-radius:16px;">
+    
+    <form method="post" class="row g-4">
+        {% csrf_token %}
+
+        <!-- Nombre / Código -->
+        <div class="col-md-6">
+            <label class="form-label fw-semibold">Nombre del descuento</label>
+            {{ form.name }} 
+            {{ form.name.errors }}
+        </div>
+        <div class="col-md-6">
+            <label class="form-label fw-semibold">Código (opcional)</label>
+            {{ form.code }}
+            {{ form.code.errors }}
+        </div>
+
+        <!-- Tipo / Valor -->
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Tipo</label>
+            {{ form.dtype }}
+            {{ form.dtype.errors }}
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Valor</label>
+            {{ form.value }}
+            {{ form.value.errors }}
+        </div>
+
+        <!-- Ámbito / Subtotal mínimo -->
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Ámbito</label>
+            {{ form.scope }}
+            {{ form.scope.errors }}
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">Subtotal mínimo</label>
+            {{ form.min_subtotal }}
+            {{ form.min_subtotal.errors }}
+        </div>
+
+        <!-- Producto / Categoría -->
+        <div class="col-md-6">
+            <label class="form-label fw-semibold">Producto (si aplica)</label>
+            {{ form.product }}
+            {{ form.product.errors }}
+        </div>
+        <div class="col-md-6">
+            <label class="form-label fw-semibold">Categoría (si aplica)</label>
+            {{ form.category }}
+            {{ form.category.errors }}
+        </div>
+
+        <!-- Fechas -->
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Inicio</label>
+            {{ form.start_at }}
+            {{ form.start_at.errors }}
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Fin</label>
+            {{ form.end_at }}
+            {{ form.end_at.errors }}
+        </div>
+
+        <!-- Usos / Activo / Stackable -->
+        <div class="col-md-2">
+            <label class="form-label fw-semibold">Límite de usos</label>
+            {{ form.usage_limit }}
+            {{ form.usage_limit.errors }}
+        </div>
+
+        <div class="col-md-1 d-flex align-items-center pt-4">
+            <div class="form-check">
+                {{ form.is_active }}
+                <label class="form-check-label fw-semibold">Activo</label>
+            </div>
+        </div>
+
+        <div class="col-md-1 d-flex align-items-center pt-4">
+            <div class="form-check">
+                {{ form.stackable }}
+                <label class="form-check-label fw-semibold">Acumulable</label>
+            </div>
+        </div>
+
+        <div class="col-12 d-flex justify-content-end mt-4">
+            <button class="btn btn-primary px-4" style="border-radius:12px;">Guardar</button>
+        </div>
+
+    </form>
+
+</div>
+
 {% endblock %}

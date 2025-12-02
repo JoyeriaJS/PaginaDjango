@@ -1,43 +1,108 @@
 {% extends "catalog/base_admin.html" %}
 {% block title %}Descuentos{% endblock %}
+
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h1 class="h4 m-0">Descuentos</h1>
-  <a href="{% url 'catalog:discount_create' %}" class="btn btn-primary">Nuevo</a>
+
+<!-- Encabezado -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold m-0" style="font-size:1.7rem;">Descuentos</h1>
+    <a href="{% url 'catalog:discount_create' %}" class="btn btn-primary px-4 py-2" style="border-radius:12px;">
+        + Nuevo descuento
+    </a>
 </div>
+
+<!-- Tabla -->
 <div class="table-responsive">
-  <table class="table table-striped align-middle">
-    <thead>
-      <tr><th>Nombre</th><th>Código</th><th>Tipo</th><th>Valor</th><th>Ámbito</th><th>Vigencia</th><th>Usos</th><th class="text-end">Acciones</th></tr>
-    </thead>
-    <tbody>
-      {% for d in items %}
-      <tr>
-        <td>{{ d.name }}</td>
-        <td>{{ d.code|default:"—" }}</td>
-        <td>{{ d.get_dtype_display }}</td>
-        <td>{{ d.value }}</td>
-        <td>
-          {{ d.get_scope_display }}
-          {% if d.product %}<div class="small text-muted">{{ d.product.name }}</div>{% endif %}
-          {% if d.category %}<div class="small text-muted">{{ d.category.name }}</div>{% endif %}
-        </td>
-        <td class="small">
-          {% if d.start_at %}{{ d.start_at|date:"d-m-Y H:i" }}{% else %}—{% endif %} → {% if d.end_at %}{{ d.end_at|date:"d-m-Y H:i" }}{% else %}—{% endif %}
-          <div class="text-muted">{{ d.is_active|yesno:"Activo,Inactivo" }}</div>
-        </td>
-        <td>{{ d.times_used }}/{{ d.usage_limit|default:"∞" }}</td>
-        <td class="text-end">
-          <a class="btn btn-sm btn-outline-primary" href="{% url 'catalog:discount_edit' d.pk %}">Editar</a>
-          <form action="{% url 'catalog:discount_delete' d.pk %}" method="post" class="d-inline">
-            {% csrf_token %}<button class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar descuento {{ d.name|escapejs }}?')">Eliminar</button>
-          </form>
-        </td>
-      </tr>
-      {% empty %}
-      <tr><td colspan="8" class="text-center text-muted py-4">Sin descuentos</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    <table class="table align-middle table-hover">
+
+        <thead class="table-light" style="border-bottom:2px solid #eee;">
+            <tr>
+                <th>Nombre</th>
+                <th>Código</th>
+                <th>Tipo</th>
+                <th>Valor</th>
+                <th>Ámbito</th>
+                <th>Vigencia</th>
+                <th>Usos</th>
+                <th class="text-end">Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for d in items %}
+            <tr>
+
+                <td class="fw-semibold">{{ d.name }}</td>
+
+                <td class="text-muted">{{ d.code|default:"—" }}</td>
+
+                <td>{{ d.get_dtype_display }}</td>
+
+                <td><strong>{{ d.value }}</strong></td>
+
+                <td>
+                    {{ d.get_scope_display }}
+                    {% if d.product %}
+                    <div class="small text-muted">{{ d.product.name }}</div>
+                    {% endif %}
+                    {% if d.category %}
+                    <div class="small text-muted">{{ d.category.name }}</div>
+                    {% endif %}
+                </td>
+
+                <td class="small">
+                    {% if d.start_at %}
+                        {{ d.start_at|date:"d-m-Y H:i" }}
+                    {% else %}
+                        —
+                    {% endif %}
+                    →
+                    {% if d.end_at %}
+                        {{ d.end_at|date:"d-m-Y H:i" }}
+                    {% else %}
+                        —
+                    {% endif %}
+
+                    <div class="mt-1">
+                        {% if d.is_active %}
+                            <span class="badge bg-success px-3 py-2" style="border-radius:10px;">Activo</span>
+                        {% else %}
+                            <span class="badge bg-secondary px-3 py-2" style="border-radius:10px;">Inactivo</span>
+                        {% endif %}
+                    </div>
+                </td>
+
+                <td>
+                    <strong>{{ d.times_used }}</strong> / {{ d.usage_limit|default:"∞" }}
+                </td>
+
+                <td class="text-end">
+                    <a class="btn btn-sm btn-outline-primary me-1" 
+                       style="border-radius:10px;"
+                       href="{% url 'catalog:discount_edit' d.pk %}">Editar</a>
+
+                    <form action="{% url 'catalog:discount_delete' d.pk %}"
+                          method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-outline-danger"
+                                style="border-radius:10px;"
+                                onclick="return confirm('¿Eliminar descuento {{ d.name|escapejs }}?')">
+                            Eliminar
+                        </button>
+                    </form>
+                </td>
+
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="text-center text-muted py-5">
+                    No hay descuentos disponibles.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
 </div>
+
 {% endblock %}
