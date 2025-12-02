@@ -5,94 +5,139 @@
 
 <div class="container-fluid py-4">
 
-    <!-- Título -->
     <h1 class="fw-bold mb-4" style="font-size:1.7rem;">Panel de Mantenedores</h1>
 
     <div class="row g-4">
 
-        <!-- CARD COMPONENT GENERICO -->
-        {% macro admin_card(url, title, desc, image) %}
+        <!-- PRODUCTOS -->
         <div class="col-12 col-md-6 col-xl-4">
-            <a href="{{ url }}" class="text-decoration-none">
+            <a href="/panel/productos/" class="text-decoration-none">
                 <div class="card border-0 shadow-sm h-100 admin-tile" style="border-radius:16px; overflow:hidden;">
-
-                    <div class="ratio ratio-16x9 bg-dark position-relative">
-                        <img src="{{ image }}"
-                             class="w-100 h-100 object-fit-cover opacity-75"
-                             alt="">
+                    <div class="ratio ratio-16x9 position-relative">
+                        <img src="https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?q=80&w=1200&auto=format&fit=crop"
+                             class="w-100 h-100 object-fit-cover opacity-75">
                         <div class="position-absolute top-0 start-0 w-100 h-100"
-                             style="background:linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));">
-                        </div>
+                             style="background:linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.65));"></div>
                     </div>
-
-                    <div class="card-body d-flex justify-content-between align-items-center">
-
+                    <div class="card-body d-flex justify-content-between">
                         <div>
-                            <div class="h5 text-dark fw-semibold mb-1">{{ title }}</div>
-                            <div class="small text-muted">{{ desc }}</div>
+                            <div class="h5 fw-semibold text-dark mb-1">Productos</div>
+                            <div class="small text-muted">Crear, editar, eliminar y listar productos</div>
                         </div>
-
-                        <span class="btn btn-outline-primary px-3"
-                              style="border-radius:10px;">Ir →</span>
-
+                        <span class="btn btn-outline-primary px-3">Ir →</span>
                     </div>
                 </div>
             </a>
         </div>
-        {% endmacro %}
-
-        <!-- PRODUCTOS -->
-        {{ admin_card(
-            "/panel/productos/",
-            "Productos",
-            "Crear, editar, eliminar y listar productos",
-            "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?q=80&w=1200&auto=format&fit=crop"
-        ) }}
 
         <!-- BANNERS -->
-        {{ admin_card(
-            "/panel/banners/",
-            "Banners",
-            "Gestionar imágenes y posiciones del home",
-            "https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1200&auto=format&fit=crop"
-        ) }}
+        <div class="col-12 col-md-6 col-xl-4">
+            <a href="/panel/banners/" class="text-decoration-none">
+                <div class="card border-0 shadow-sm h-100 admin-tile" style="border-radius:16px; overflow:hidden;">
+                    <div class="ratio ratio-16x9 position-relative">
+                        <img src="https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1200&auto=format&fit=crop"
+                             class="w-100 h-100 object-fit-cover opacity-75">
+                        <div class="position-absolute top-0 start-0 w-100 h-100"
+                             style="background:linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.65));"></div>
+                    </div>
+                    <div class="card-body d-flex justify-content-between">
+                        <div>
+                            <div class="h5 fw-semibold text-dark mb-1">Banners</div>
+                            <div class="small text-muted">Gestionar imágenes y posiciones del home</div>
+                        </div>
+                        <span class="btn btn-outline-primary px-3">Ir →</span>
+                    </div>
+                </div>
+            </a>
+        </div>
 
         <!-- MATERIALES -->
-        {{ admin_card(
-            "/panel/materiales/",
-            "Materiales",
-            "Mantener catálogo de materiales",
-            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop"
-        ) }}
+        <div class="col-12 col-md-6 col-xl-4">
+            <a href="/panel/materiales/" class="text-decoration-none">
+                <div class="card border-0 shadow-sm h-100 admin-tile" style="border-radius:16px; overflow:hidden;">
+                    <div class="ratio ratio-16x9 position-relative">
+                        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop"
+                             class="w-100 h-100 object-fit-cover opacity-75">
+                        <div class="position-absolute top-0 start-0 w-100 h-100"
+                             style="background:linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.65));"></div>
+                    </div>
+                    <div class="card-body d-flex justify-content-between">
+                        <div>
+                            <div class="h5 fw-semibold text-dark mb-1">Materiales</div>
+                            <div class="small text-muted">Mantener catálogo de materiales</div>
+                        </div>
+                        <span class="btn btn-outline-primary px-3">Ir →</span>
+                    </div>
+                </div>
+            </a>
+        </div>
 
         <!-- CATEGORÍAS -->
-        {{ admin_card(
-            "/panel/categorias/",
-            "Categorías",
-            "Crear, editar, eliminar y listar categorías",
-            "https://images.unsplash.com/photo-1603575449153-232229da8b92?q=80&w=1200&auto=format&fit=crop"
-        ) }}
+        <div class="col-12 col-md-6 col-xl-4">
+            <a href="/panel/categorias/" class="text-decoration-none">
+                <div class="card border-0 shadow-sm h-100 admin-tile" style="border-radius:16px; overflow:hidden;">
+                    <div class="ratio ratio-16x9 position-relative">
+                        <img src="https://images.unsplash.com/photo-1603575449153-232229da8b92?q=80&w=1200&auto=format&fit=crop"
+                             class="w-100 h-100 object-fit-cover opacity-75">
+                        <div class="position-absolute top-0 start-0 w-100 h-100"
+                             style="background:linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.65));"></div>
+                    </div>
+                    <div class="card-body d-flex justify-content-between">
+                        <div>
+                            <div class="h5 fw-semibold text-dark mb-1">Categorías</div>
+                            <div class="small text-muted">Crear, editar, eliminar y listar categorías</div>
+                        </div>
+                        <span class="btn btn-outline-primary px-3">Ir →</span>
+                    </div>
+                </div>
+            </a>
+        </div>
 
         <!-- MENÚ -->
-        {{ admin_card(
-            "/panel/menu/",
-            "Menú superior",
-            "Gestionar enlaces del menú superior",
-            "https://images.unsplash.com/photo-1504274066651-8d31a536b11a?q=80&w=1200&auto=format&fit=crop"
-        ) }}
+        <div class="col-12 col-md-6 col-xl-4">
+            <a href="/panel/menu/" class="text-decoration-none">
+                <div class="card border-0 shadow-sm h-100 admin-tile" style="border-radius:16px; overflow:hidden;">
+                    <div class="ratio ratio-16x9 position-relative">
+                        <img src="https://images.unsplash.com/photo-1504274066651-8d31a536b11a?q=80&w=1200&auto=format&fit=crop"
+                             class="w-100 h-100 object-fit-cover opacity-75">
+                        <div class="position-absolute top-0 start-0 w-100 h-100"
+                             style="background:linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.65));"></div>
+                    </div>
+                    <div class="card-body d-flex justify-content-between">
+                        <div>
+                            <div class="h5 fw-semibold text-dark mb-1">Menú superior</div>
+                            <div class="small text-muted">Gestionar enlaces del menú superior</div>
+                        </div>
+                        <span class="btn btn-outline-primary px-3">Ir →</span>
+                    </div>
+                </div>
+            </a>
+        </div>
 
         <!-- DESCUENTOS -->
-        {{ admin_card(
-            "/panel/descuentos/",
-            "Descuentos",
-            "Crear, editar, eliminar y listar códigos de descuento",
-            "https://images.unsplash.com/photo-1607082349566-187342175e2f?q=80&w=1200&auto=format&fit=crop"
-        ) }}
+        <div class="col-12 col-md-6 col-xl-4">
+            <a href="/panel/descuentos/" class="text-decoration-none">
+                <div class="card border-0 shadow-sm h-100 admin-tile" style="border-radius:16px; overflow:hidden;">
+                    <div class="ratio ratio-16x9 position-relative">
+                        <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?q=80&w=1200&auto=format&fit=crop"
+                             class="w-100 h-100 object-fit-cover opacity-75">
+                        <div class="position-absolute top-0 start-0 w-100 h-100"
+                             style="background:linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.65));"></div>
+                    </div>
+                    <div class="card-body d-flex justify-content-between">
+                        <div>
+                            <div class="h5 fw-semibold text-dark mb-1">Descuentos</div>
+                            <div class="small text-muted">Crear, editar, eliminar y listar códigos de descuento</div>
+                        </div>
+                        <span class="btn btn-outline-primary px-3">Ir →</span>
+                    </div>
+                </div>
+            </a>
+        </div>
 
     </div>
 </div>
 
-<!-- ESTILOS -->
 <style>
     .admin-tile {
         transition: transform .2s ease, box-shadow .2s ease;
