@@ -1,14 +1,23 @@
 {% extends "base_site.html" %}
 {% load static %}
-{% block title %}Checkout — Artesanías Pachy{% endblock %}
+{% block title %}Checkout — Casteable{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-  <h1 class="h3 mb-3">Finalizar compra</h1>
+<div class="container py-5">
 
-  <div class="row g-4">
+  <h1 class="fw-bold mb-4">Finalizar compra</h1>
+
+  <div class="row g-5">
+
+    <!-- ============================ -->
+    <!-- FORMULARIO PRINCIPAL -->
+    <!-- ============================ -->
     <div class="col-lg-7">
-      <div class="card card-elev p-3">
+
+      <div class="card card-elev p-4">
+
+        <h4 class="fw-bold mb-3">Datos de envío</h4>
+
         <form method="post" novalidate>
           {% csrf_token %}
 
@@ -16,127 +25,149 @@
             <div class="alert alert-danger">{{ form.non_field_errors }}</div>
           {% endif %}
 
-          <div class="row g-3">
+          <!-- Nombre / Apellido -->
+          <div class="row g-3 mb-2">
             <div class="col-md-6">
-              <label class="form-label">Nombre</label>
+              <label class="form-label fw-semibold">Nombre</label>
               {{ form.first_name }}
               {{ form.first_name.errors }}
             </div>
             <div class="col-md-6">
-              <label class="form-label">Apellido</label>
+              <label class="form-label fw-semibold">Apellido</label>
               {{ form.last_name }}
               {{ form.last_name.errors }}
             </div>
+          </div>
 
+          <!-- RUT / Teléfono -->
+          <div class="row g-3 mb-2">
             <div class="col-md-6">
-              <label class="form-label">RUT</label>
+              <label class="form-label fw-semibold">RUT</label>
               {{ form.rut }}
               {{ form.rut.errors }}
             </div>
             <div class="col-md-6">
-              <label class="form-label">Teléfono</label>
+              <label class="form-label fw-semibold">Teléfono</label>
               {{ form.phone }}
               {{ form.phone.errors }}
             </div>
+          </div>
 
-            <div class="col-12">
-              <label class="form-label">Email</label>
-              {{ form.email }}
-              {{ form.email.errors }}
-            </div>
+          <!-- Email -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email</label>
+            {{ form.email }}
+            {{ form.email.errors }}
+          </div>
 
-            <div class="col-12">
-              <label class="form-label">Dirección</label>
-              {{ form.address_line }}
-              {{ form.address_line.errors }}
-            </div>
+          <!-- Dirección -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Dirección</label>
+            {{ form.address_line }}
+            {{ form.address_line.errors }}
+          </div>
 
+          <!-- Comuna / Ciudad / Región -->
+          <div class="row g-3 mb-2">
             <div class="col-md-4">
-              <label class="form-label">Comuna</label>
+              <label class="form-label fw-semibold">Comuna</label>
               {{ form.comuna }}
               {{ form.comuna.errors }}
             </div>
             <div class="col-md-4">
-              <label class="form-label">Ciudad</label>
+              <label class="form-label fw-semibold">Ciudad</label>
               {{ form.ciudad }}
               {{ form.ciudad.errors }}
             </div>
             <div class="col-md-4">
-              <label class="form-label">Región</label>
+              <label class="form-label fw-semibold">Región</label>
               {{ form.region }}
               {{ form.region.errors }}
             </div>
+          </div>
 
+          <!-- Código Postal / Envío -->
+          <div class="row g-3 mb-2">
             <div class="col-md-6">
-              <label class="form-label">Código Postal (opcional)</label>
+              <label class="form-label fw-semibold">Código Postal (opcional)</label>
               {{ form.postal_code }}
               {{ form.postal_code.errors }}
             </div>
-
             <div class="col-md-6">
-              <label class="form-label">Envío</label>
+              <label class="form-label fw-semibold">Método de envío</label>
               {{ form.shipping_method }}
               {{ form.shipping_method.errors }}
             </div>
+          </div>
 
-            <div class="col-12">
-              <label class="form-label">Notas del pedido (opcional)</label>
-              {{ form.notes }}
-              {{ form.notes.errors }}
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Notas del pedido</label>
+            {{ form.notes }}
+            {{ form.notes.errors }}
+          </div>
+
+          <div class="d-flex justify-content-between mt-4">
+            <a href="{% url 'core:cart_detail' %}" class="btn btn-outline-secondary">Volver</a>
+
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-secondary px-4" type="submit" name="save">Guardar</button>
+              <button class="btn btn-primary px-4" type="submit" name="pay">Guardar y pagar</button>
             </div>
           </div>
 
-          <div class="d-flex gap-2 mt-3">
-            <button class="btn btn-outline-secondary" type="submit" name="save">Guardar</button>
-            <button class="btn btn-primary" type="submit" name="pay">Guardar y pagar</button>
-          </div>
         </form>
       </div>
     </div>
 
+    <!-- ============================ -->
+    <!-- RESUMEN DEL PEDIDO -->
+    <!-- ============================ -->
     <div class="col-lg-5">
-      <div class="card p-3">
-        <h5 class="mb-3">Resumen</h5>
+      <div class="card card-elev p-4">
+
+        <h4 class="fw-bold mb-3">Resumen del pedido</h4>
 
         <ul class="list-group list-group-flush mb-3">
           {% for it in items %}
-          <li class="list-group-item d-flex justify-content-between">
+          <li class="list-group-item d-flex justify-content-between align-items-center py-3">
             <div>
               <div class="fw-semibold">{{ it.name }}</div>
-              <div class="small text-muted">x{{ it.qty }}</div>
+              <div class="small text-muted">Cantidad: x{{ it.qty }}</div>
             </div>
-            <div class="text-end">
-              <div>${{ it.total }}</div>
-            </div>
+            <strong>${{ it.total }}</strong>
           </li>
           {% endfor %}
         </ul>
 
-        <div class="d-flex justify-content-between">
-          <span>Subtotal</span>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-muted">Subtotal</span>
           <strong>${{ subtotal }}</strong>
         </div>
+
         {% if tax and tax > 0 %}
-        <div class="d-flex justify-content-between">
-          <span>Impuestos</span>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-muted">Impuestos</span>
           <strong>${{ tax }}</strong>
         </div>
         {% endif %}
+
         {% if shipping and shipping > 0 %}
-        <div class="d-flex justify-content-between">
-          <span>Envío</span>
+        <div class="d-flex justify-content-between mb-1">
+          <span class="text-muted">Envío</span>
           <strong>${{ shipping }}</strong>
         </div>
         {% endif %}
+
         <hr>
+
         <div class="d-flex justify-content-between fs-5">
-          <span>Total</span>
-          <strong>${{ grand_total }}</strong>
+          <span class="fw-bold">Total</span>
+          <span class="fw-bold text-primary">${{ grand_total }}</span>
         </div>
 
-        <a href="{% url 'core:cart_detail' %}" class="btn btn-link mt-2">Volver al carrito</a>
       </div>
     </div>
+
   </div>
 </div>
 {% endblock %}
