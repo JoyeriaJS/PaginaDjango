@@ -26,22 +26,22 @@
 
                             <div class="col-12">
                                 <label class="form-label">Dirección</label>
-                                {{ form.address_line }}
+                                {{ form.address_line.as_widget(attrs={"class": "form-control"}) }}
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label">Comuna</label>
-                                {{ form.comuna }}
+                                {{ form.comuna.as_widget(attrs={"class": "form-control"}) }}
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label">Ciudad</label>
-                                {{ form.ciudad }}
+                                {{ form.ciudad.as_widget(attrs={"class": "form-control"}) }}
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label">Región</label>
-                                {{ form.region }}
+                                {{ form.region.as_widget(attrs={"class": "form-control"}) }}
                             </div>
 
                             <div class="col-12">
