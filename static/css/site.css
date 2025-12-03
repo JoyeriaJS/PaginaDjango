@@ -578,20 +578,39 @@ select {
     color: #fff;
 }
 
-/* ----- CHECKBOX ELEGANTE NEGRO ----- */
-.form-check-input {
-    border: 2px solid #000 !important;
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
+/* ====== REEMPLAZAR BOOTSTRAP PRIMARY POR NEGRO ====== */
+
+/* Textos primarios (antes azules) */
+.text-primary {
+    color: #000 !important;
 }
 
-.form-check-input:checked {
+/* Precios u otros con fw-bold + text-primary */
+.price,
+.fw-bold.text-primary {
+    color: #000 !important;
+}
+
+/* Botones primarios */
+.btn-primary {
     background-color: #000 !important;
     border-color: #000 !important;
+    color: #fff !important;
 }
 
-.form-check-input:focus {
-    box-shadow: none !important;
-    outline: none !important;
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #222 !important;
+    border-color: #222 !important;
+}
+
+/* Badges (etiquetas tipo "Nuevo", cantidades, etc.) */
+.badge.bg-primary {
+    background-color: #000 !important;
+}
+
+/* Paginación activa, sliders, etc. */
+.page-item.active .page-link,
+.swiper-pagination-bullet-active {
+    background-color: #000 !important;
 }
