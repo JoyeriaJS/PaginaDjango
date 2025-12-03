@@ -222,11 +222,14 @@
         {% for p in latest_products %}
         <div class="swiper-slide">
           <a class="bc-card text-decoration-none" href="{% url 'core:product_detail' p.pk %}">
+            
             {% with img=p.images.first %}
             {% if img %}
-              <img src="{{ img.image.url }}">
+              <div class="product-img-wrapper">
+                <img src="{{ img.image.url }}" class="product-img">
+              </div>
             {% else %}
-              <div class="bg-light" style="height:180px;"></div>
+              <div class="product-img-wrapper bg-light"></div>
             {% endif %}
             {% endwith %}
 
@@ -245,6 +248,7 @@
   </div>
 </section>
 {% endif %}
+
 
 {% include "includes/occasions.html" %}
 
