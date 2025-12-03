@@ -41,7 +41,7 @@ urlpatterns = [
     path("register/", views_auth.register_view, name="register"),
     path("logout/", views_auth.logout_view, name="logout"),
    
-    path("cuenta/", include("accounts.urls")),
+    #path("cuenta/", include("accounts.urls")),
     
     
 ]
