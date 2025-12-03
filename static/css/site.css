@@ -445,3 +445,20 @@ select {
     background: #4da3ff !important;
     opacity: 1 !important;
 }
+
+.product-img-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1 !important;
+  overflow: hidden;
+  background: #f8f9fa;
+  border-radius: 12px;
+  position: relative;
+}
+
+.product-img-wrapper img,
+.product-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block;
+}
