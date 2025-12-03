@@ -1,0 +1,59 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+
+        {% include "accounts/sidebar.html" %}
+
+        <div class="col-lg-9">
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <h3 class="mb-4">📦 Mis compras</h3>
+
+                    {% if orders %}
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>ID Pago</th>
+                                        <th>Fecha</th>
+                                        <th>Total</th>
+                                        <th>Estado</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in orders %}
+                                        <tr>
+                                            <td>{{ order.payment_id }}</td>
+                                            <td>{{ order.created_at|date:"d/m/Y H:i" }}</td>
+                                            <td>${{ order.total|floatformat:"0" }}</td>
+                                            <td>{{ order.status }}</td>
+                                            <td>
+                                                <a href="{% url 'accounts:order_detail' order.id %}" 
+                                                   class="btn btn-primary btn-sm">
+                                                    Ver detalles
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    {% else %}
+                        <div class="alert alert-info">
+                            Aún no tienes compras registradas.
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
