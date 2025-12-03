@@ -226,7 +226,7 @@
             {% with img=p.images.first %}
             {% if img %}
               <div class="product-img-wrapper">
-                <img src="{{ img.image.url }}" class="product-img">
+                <img src="{{ img.image.url }}" alt="{{ p.name }}">
               </div>
             {% else %}
               <div class="product-img-wrapper bg-light"></div>
