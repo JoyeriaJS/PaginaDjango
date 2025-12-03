@@ -4,7 +4,11 @@ from . import views
 app_name = "accounts"
 
 urlpatterns = [
-    path("panel/", views.dashboard, name="dashboard"),
+    # Dashboard principal al entrar a /cuenta/
+    path("", views.dashboard, name="dashboard"),
+
+    # (Opcional: seguir manteniendo /cuenta/panel/)
+    path("panel/", views.dashboard, name="dashboard_alt"),
 
     # Perfil
     path("perfil/", views.profile, name="profile"),
