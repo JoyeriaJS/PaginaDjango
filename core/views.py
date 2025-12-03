@@ -407,22 +407,37 @@ def update_cart(request):
     request.session.modified = True
 
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
-        # recalcula totales si usas esa respuesta en AJAX
+
         cart_count = sum(i["qty"] for i in cart.values())
-        # aquí pon tu lógica de precios/totales
+
+        lines = []
+        subtotal = 0
+
+        for pid, item in cart.items():
+            product = Product.objects.get(pk=pid)
+            line_total = product.price * item["qty"]
+            subtotal += line_total
+
+            lines.append({
+                "id": pid,
+                "line_total": line_total,
+            })
+
+        # si tienes cupones/descuentos ya ajustas aquí
+        grand_total = subtotal
+
         return JsonResponse({
             "ok": True,
             "cart_count": cart_count,
-            # "subtotal": ...,
-            # "grand_total": ...,
-            # "lines": [{"id": pid, "line_total": ...}, ...]
+            "subtotal": subtotal,
+            "grand_total": grand_total,
+            "lines": lines,
             "messages": changed_msgs,
             "empty": (cart_count == 0),
         })
 
-    for m in changed_msgs:
-        messages.warning(request, m)
-    return redirect("core:cart_detail")
+
+    
 
 def clear_cart(request):
     if request.method != "POST":
