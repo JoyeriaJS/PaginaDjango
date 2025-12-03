@@ -6,17 +6,17 @@
             🏠 Mi cuenta
         </a>
 
-        <a href="{% url 'accounts:orders_list' %}"
+        <a href="{% url 'accounts:detalle_orden' %}"
            class="list-group-item list-group-item-action {% if 'cuenta/compras' in request.path %}active{% endif %}">
             📦 Mis compras
         </a>
 
-        <a href="#"
+        <a href="{% url 'accounts:profile %}"
            class="list-group-item list-group-item-action">
             👤 Perfil (pronto)
         </a>
 
-        <a href="#"
+        <a href="{% url 'accounts:adress_list' %}"
            class="list-group-item list-group-item-action">
             📍 Dirección (pronto)
         </a>
