@@ -6,8 +6,8 @@
             🏠 Mi cuenta
         </a>
 
-        <a href="{% url 'accounts:orders' %}"
-           class="list-group-item list-group-item-action {% if 'cuenta/ordenes' in request.path %}active{% endif %}">
+        <a href="{% url 'accounts:orders_list' %}"
+           class="list-group-item list-group-item-action {% if 'cuenta/compras' in request.path %}active{% endif %}">
             📦 Mis compras
         </a>
 

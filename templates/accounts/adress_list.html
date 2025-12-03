@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        {% include "accounts/sidebar.html" %}
+
+        <div class="col-lg-9">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="mb-3">Historial de compras</h3>
+
+                    {% if orders %}
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Fecha</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for o in orders %}
+                                    <tr>
+                                        <td>{{ o.id }}</td>
+                                        <td>{{ o.created_at|date:"d/m/Y H:i" }}</td>
+                                        <td>${{ o.total|floatformat:0 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>No tienes compras todavía.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
