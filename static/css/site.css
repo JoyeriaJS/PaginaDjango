@@ -447,7 +447,7 @@ select {
 }
 
 .product-img-wrapper {
-  width: 13%;
+  width: 10%;
   aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 8px;
