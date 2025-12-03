@@ -77,7 +77,7 @@
       <!-- ====================== -->
       {% if request.user.is_authenticated %}
         <div class="nav-item dropdown">
-          <a class="btn btn-primary dropdown-toggle text-white rounded-pill px-3"
+          <a class="btn btn-elegant dropdown-toggle text-white rounded-pill px-3"
              href="#" role="button" data-bs-toggle="dropdown">
             Mi Cuenta
           </a>
@@ -111,7 +111,7 @@
       {% else %}
         <!-- Botones si NO está logueado -->
         <a class="btn btn-outline-primary me-2" href="{% url 'core:login' %}">Ingresar</a>
-        <a class="btn btn-primary text-white" href="{% url 'core:register' %}">Crear cuenta</a>
+        <a class="btn btn-elegant text-white" href="{% url 'core:register' %}">Crear cuenta</a>
       {% endif %}
 
     </div>

@@ -548,3 +548,33 @@ select {
     height: 160px;
   }
 }
+
+/* Botón elegante negro */
+.btn-elegant {
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #000;
+    border-radius: 6px;
+    transition: all .25s ease;
+}
+
+.btn-elegant:hover {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+}
+
+/* Botón contorno estilo dorado */
+.btn-elegant-outline {
+    background-color: transparent;
+    color: #000;
+    border: 1px solid #000;
+    border-radius: 6px;
+    transition: all .25s ease;
+}
+
+.btn-elegant-outline:hover {
+    background-color: #000;
+    color: #fff;
+}
+
