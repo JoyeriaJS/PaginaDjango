@@ -6,18 +6,18 @@
             🏠 Mi cuenta
         </a>
 
-        <a href="{% url 'accounts:orders_list' %}"
-           class="list-group-item list-group-item-action {% if 'cuenta/compras' in request.path %}active{% endif %}">
+        <a href="{% url 'accounts:historial' %}"
+           class="list-group-item list-group-item-action {% if 'cuenta/historial' in request.path %}active{% endif %}">
             📦 Mis compras
         </a>
 
         <a href="{% url 'accounts:profile' %}"
-           class="list-group-item list-group-item-action {% if 'cuenta/perfil' in request.path %}active{% endif %}">
+           class="list-group-item list-group-item-action {% if 'cuenta/profile' in request.path %}active{% endif %}">
             👤 Perfil
         </a>
 
-        <a href="{% url 'accounts:address_list' %}"
-           class="list-group-item list-group-item-action {% if 'cuenta/direcciones' in request.path %}active{% endif %}">
+        <a href="{% url 'accounts:adress_list' %}"
+           class="list-group-item list-group-item-action {% if 'cuenta/adress_list' in request.path %}active{% endif %}">
             📍 Direcciones
         </a>
 
