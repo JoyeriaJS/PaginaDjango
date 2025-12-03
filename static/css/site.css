@@ -578,3 +578,20 @@ select {
     color: #fff;
 }
 
+/* ----- CHECKBOX ELEGANTE NEGRO ----- */
+.form-check-input {
+    border: 2px solid #000 !important;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: #000 !important;
+    border-color: #000 !important;
+}
+
+.form-check-input:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
