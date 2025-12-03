@@ -437,6 +437,7 @@ def update_cart(request):
         })
 
 
+   
     
 
 def clear_cart(request):
