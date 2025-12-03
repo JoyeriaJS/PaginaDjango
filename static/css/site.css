@@ -457,8 +457,8 @@ select {
 
 .product-img-wrapper img,
 .product-img {
-  width: 50% !important;
-  height: 50% !important;
+  width: 100% !important;
+  height: 100% !important;
   object-fit: cover !important;
   display: block;
 }
