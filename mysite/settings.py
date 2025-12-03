@@ -32,6 +32,7 @@ CSRF_TRUSTED_ORIGINS = [
 # --- Apps --------------------------------------------------------------------
 INSTALLED_APPS = [
     # Django core
+    'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

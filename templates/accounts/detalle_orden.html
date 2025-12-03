@@ -1,0 +1,54 @@
+{% extends "base_site.html" %}
+
+{% block title %}Detalle de orden{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <div class="row g-4">
+
+        {% include "accounts/sidebar.html" %}
+
+        <div class="col-lg-9">
+            <div class="card shadow-sm border-0 p-4">
+
+                <h3 class="fw-bold">Orden #{{ order.payment_id }}</h3>
+                <p class="text-muted">{{ order.created_at|date:"d/m/Y H:i" }}</p>
+
+                <hr>
+
+                <h5 class="fw-semibold mb-3">Datos de envío</h5>
+                <p>
+                    {{ order.first_name }} {{ order.last_name }}<br>
+                    {{ order.address_line }}<br>
+                    {{ order.comuna }}, {{ order.ciudad }}<br>
+                    {{ order.region }}
+                </p>
+
+                <hr>
+
+                <h5 class="fw-semibold mb-3">Productos</h5>
+
+                <ul class="list-group mb-3">
+                    {% for item in order.items.all %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            {{ item.product.name }} <br>
+                            <small class="text-muted">Cantidad: {{ item.quantity }}</small>
+                        </div>
+                        <strong>${{ item.total }}</strong>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                <div class="text-end">
+                    <h4 class="fw-bold">Total: ${{ order.total }}</h4>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

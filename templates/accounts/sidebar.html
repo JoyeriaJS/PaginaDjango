@@ -1,0 +1,30 @@
+<div class="col-lg-3">
+    <div class="list-group shadow-sm">
+
+        <a href="{% url 'accounts:dashboard' %}"
+           class="list-group-item list-group-item-action {% if request.path == '/cuenta/' %}active{% endif %}">
+            🏠 Mi cuenta
+        </a>
+
+        <a href="{% url 'accounts:orders' %}"
+           class="list-group-item list-group-item-action {% if 'cuenta/ordenes' in request.path %}active{% endif %}">
+            📦 Mis compras
+        </a>
+
+        <a href="#"
+           class="list-group-item list-group-item-action">
+            👤 Perfil (pronto)
+        </a>
+
+        <a href="#"
+           class="list-group-item list-group-item-action">
+            📍 Dirección (pronto)
+        </a>
+
+        <a href="{% url 'core:logout' %}"
+           class="list-group-item list-group-item-action text-danger">
+            🚪 Cerrar sesión
+        </a>
+
+    </div>
+</div>

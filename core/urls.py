@@ -2,6 +2,8 @@ from django.urls import path
 from .views import home
 from . import views
 from . import views_auth
+from django.urls import path, include
+
 
 app_name = "core"
 urlpatterns = [
@@ -39,7 +41,7 @@ urlpatterns = [
     path("register/", views_auth.register_view, name="register"),
     path("logout/", views_auth.logout_view, name="logout"),
    
-    
+    path("cuenta/", include("accounts.urls")),
     
     
 ]

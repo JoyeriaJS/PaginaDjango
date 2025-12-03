@@ -1,0 +1,48 @@
+{% extends "base_site.html" %}
+{% load static %}
+
+{% block title %}Mi cuenta{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <div class="row g-4">
+
+        {% include "accounts/sidebar.html" %}
+
+        <div class="col-lg-9">
+            <div class="card shadow-sm border-0 p-4">
+
+                <h2 class="fw-bold mb-3">👋 Hola, {{ request.user.first_name|default:request.user.username }}</h2>
+                <p class="text-muted mb-4">Bienvenido a tu panel personal</p>
+
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="p-3 border rounded bg-light">
+                            <div class="fw-bold">📦 Órdenes</div>
+                            <span class="text-muted">Historial de compras</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="p-3 border rounded bg-light">
+                            <div class="fw-bold">👤 Perfil</div>
+                            <span class="text-muted">Información personal</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="p-3 border rounded bg-light">
+                            <div class="fw-bold">📍 Dirección</div>
+                            <span class="text-muted">Datos de envío</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
