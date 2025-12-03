@@ -1,0 +1,66 @@
+{% extends "base_site.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+
+        {% include "accounts/sidebar.html" %}
+
+        <div class="col-lg-9">
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <h3 class="mb-4">
+                        {% if form.instance.pk %}
+                            ✏️ Editar dirección
+                        {% else %}
+                            ➕ Nueva dirección
+                        {% endif %}
+                    </h3>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="row g-3">
+
+                            <div class="col-12">
+                                <label class="form-label">Dirección</label>
+                                {{ form.address_line }}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Comuna</label>
+                                {{ form.comuna }}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Ciudad</label>
+                                {{ form.ciudad }}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Región</label>
+                                {{ form.region }}
+                            </div>
+
+                            <div class="col-12">
+                                <button class="btn btn-primary" type="submit">
+                                    Guardar dirección
+                                </button>
+
+                                <a href="{% url 'accounts:address_list' %}" class="btn btn-secondary ms-2">
+                                    Cancelar
+                                </a>
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

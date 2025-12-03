@@ -4,35 +4,65 @@
 {% block content %}
 <div class="container py-4">
     <div class="row">
+
         {% include "accounts/sidebar.html" %}
 
         <div class="col-lg-9">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h3 class="mb-3">Historial de compras</h3>
 
-                    {% if orders %}
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Fecha</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for o in orders %}
-                                    <tr>
-                                        <td>{{ o.id }}</td>
-                                        <td>{{ o.created_at|date:"d/m/Y H:i" }}</td>
-                                        <td>${{ o.total|floatformat:0 }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="m-0">📍 Direcciones de envío</h3>
+                        <a href="{% url 'accounts:address_create' %}" class="btn btn-primary">
+                            + Nueva dirección
+                        </a>
+                    </div>
+
+                    {% if addresses %}
+                        <div class="list-group">
+                            {% for adr in addresses %}
+                                <div class="list-group-item d-flex justify-content-between align-items-start">
+
+                                    <div>
+                                        <strong>{{ adr.address_line }}</strong><br>
+                                        {{ adr.comuna }}, {{ adr.ciudad }}<br>
+                                        {{ adr.region }}
+
+                                        {% if adr.is_default %}
+                                            <span class="badge bg-success ms-2">Predeterminada</span>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="d-flex gap-2">
+                                        <a href="{% url 'accounts:address_edit' adr.id %}"
+                                           class="btn btn-sm btn-outline-secondary">
+                                            Editar
+                                        </a>
+
+                                        <a href="{% url 'accounts:address_delete' adr.id %}"
+                                           class="btn btn-sm btn-outline-danger"
+                                           onclick="return confirm('¿Eliminar esta dirección?');">
+                                            Eliminar
+                                        </a>
+
+                                        {% if not adr.is_default %}
+                                            <a href="{% url 'accounts:address_default' adr.id %}"
+                                               class="btn btn-sm btn-outline-primary">
+                                                Usar como predeterminada
+                                            </a>
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+                            {% endfor %}
+                        </div>
+
                     {% else %}
-                        <p>No tienes compras todavía.</p>
+                        <div class="alert alert-info">
+                            Aún no tienes direcciones guardadas.
+                        </div>
                     {% endif %}
+
                 </div>
             </div>
         </div>
