@@ -588,7 +588,7 @@ select {
 /* Precios u otros con fw-bold + text-primary */
 .price,
 .fw-bold.text-primary {
-    color: #000 !important;
+    color: #ffffff !important;
 }
 
 /* Botones primarios */
