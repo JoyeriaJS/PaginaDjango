@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 
 from .models import Address
 from catalog.models import Order
+from .forms import AddressForm
 
 # PANEL GENERAL
 @login_required
@@ -110,3 +111,19 @@ def orders_list(request):
 def order_detail(request, pk):
     order = get_object_or_404(Order, pk=pk, email=request.user.email)
     return render(request, "accounts/order_detail.html", {"order": order})
+
+
+
+
+def address_create(request):
+    if request.method == "POST":
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            direccion = form.save(commit=False)
+            direccion.user = request.user
+            direccion.save()
+            return redirect("accounts:address_list")
+    else:
+        form = AddressForm()
+
+    return render(request, "accounts/address_create.html", {"form": form})
