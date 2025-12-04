@@ -707,7 +707,7 @@ footer a:hover {
 /* Título */
 h1[itemprop="name"] {
   font-weight: 700;
-  color: #fff !important;
+  color: #000000 !important;
 }
 
 /* Info inferior */
@@ -719,7 +719,7 @@ h1[itemprop="name"] {
 [itemprop="price"] {
   font-size: 2rem;
   font-weight: 700;
-  color: #d4af37 !important;
+  color: #000000 !important;
 }
 
 /* Stock */
@@ -731,7 +731,7 @@ h1[itemprop="name"] {
 
 /* Descripción */
 [itemprop="description"] {
-  color: #dcdcdc !important;
+  color: #000000 !important;
   line-height: 1.6;
 }
 
