@@ -627,3 +627,41 @@ footer .bi {
   font-size: 1rem;
   margin-right: 6px;
 }
+/* Fondo del footer */
+footer.bg-black {
+  background: #0e0e0e !important;
+}
+
+/* Hover de links (se mantienen blancos) */
+footer a:hover {
+  color: #ffffff !important;
+}
+
+/* Íconos */
+footer .bi {
+  font-size: 1rem;
+  margin-right: 6px;
+}
+
+/* ===== NUEVO: texto blanco en todo el footer ===== */
+footer.bg-black,
+footer.bg-black * {
+  color: #ffffff !important;
+}
+
+/* Mantener títulos dorados */
+footer h5,
+footer h6 {
+  color: #d4af37 !important;
+}
+
+/* Links siempre blancos */
+footer a {
+  color: #ffffff !important;
+  opacity: 0.85;
+}
+
+footer a:hover {
+  opacity: 1;
+  color: #ffffff !important;
+}
