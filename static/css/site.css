@@ -667,163 +667,136 @@ footer a:hover {
 }
 
 
-/* ================================================================
-   NAVBAR CASTEABLE — PREMIUM DARK + TRANSPARENTE + SCROLL EFFECT
-   ================================================================ */
+/* ================================================
+   PRODUCT DETAIL — CASTEABLE PREMIUM BLACK/GOLD
+   ================================================ */
 
-/* Estado inicial → transparente (como Apple) */
-.navbar {
-  background: rgba(0, 0, 0, 0) !important;
-  backdrop-filter: blur(0px);
-  transition: background 0.35s ease, backdrop-filter 0.35s ease, padding 0.3s ease;
-  border-bottom: 1px solid transparent !important;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-
-/* Estado scrolleado → negro elegante */
-.navbar.scrolled {
-  background: rgba(14, 14, 14, 0.97) !important;
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid #222 !important;
-  padding-top: 0.6rem;
-  padding-bottom: 0.6rem;
-}
-
-/* Marca CASTEABLE */
-.navbar .navbar-brand {
-  color: #ffffff !important;
-  font-weight: 700;
-  font-size: 1.3rem;
-  letter-spacing: 0.6px;
-  transition: color 0.2s;
-}
-
-.navbar .navbar-brand:hover {
-  color: #d4af37 !important;
-}
-
-/* Links */
-.navbar .nav-link {
-  color: #ffffff !important;
-  opacity: 0.85;
-  padding-left: 0.75rem !important;
-  padding-right: 0.75rem !important;
-  transition: 0.25s;
-}
-
-.navbar .nav-link:hover {
-  opacity: 1;
-  color: #d4af37 !important;
-}
-
-/* Dropdown Dark */
-.navbar .dropdown-menu {
+/* Contenedor principal */
+.gallery-elev {
+  border: 1px solid #222 !important;
+  border-radius: 12px;
   background: #0e0e0e !important;
+}
+
+/* Imagen principal */
+#pd-main img {
+  transition: 0.3s ease-in-out;
+}
+
+#pd-main:hover img {
+  transform: scale(1.02);
+}
+
+/* Miniaturas */
+.thumb-64 {
+  width: 64px;
+  height: 64px;
   border: 1px solid #333 !important;
-  padding: 0.4rem 0;
+  transition: 0.2s ease;
+  background: #111;
 }
 
-.navbar .dropdown-item {
-  color: #fff !important;
-  transition: 0.2s;
-}
-
-.navbar .dropdown-item:hover {
-  background: #111 !important;
-  color: #d4af37 !important;
-}
-
-/* Buscador Dark */
-.navbar input.form-control {
-  background: #1a1a1a !important;
-  border: 1px solid #333 !important;
-  color: #ffffff !important;
-  padding-left: 12px;
-  padding-right: 12px;
-  border-radius: 8px;
-}
-
-.navbar input.form-control::placeholder {
-  color: #888 !important;
-}
-
-/* Botón carrito PREMIUM */
-.btn-elegant {
-  background: #111 !important;
-  border: 1px solid #333 !important;
-  color: #fff !important;
-  transition: 0.25s;
-}
-
-.btn-elegant:hover {
-  color: #d4af37 !important;
+.thumb-64:hover {
   border-color: #d4af37 !important;
 }
 
-/* Badge del carrito */
-.btn-elegant .badge {
+.thumb-64 img {
+  object-fit: cover;
+}
+
+/* Título */
+h1[itemprop="name"] {
+  font-weight: 700;
+  color: #fff !important;
+}
+
+/* Info inferior */
+.text-muted {
+  color: #bcbcbc !important;
+}
+
+/* Precio */
+[itemprop="price"] {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #d4af37 !important;
+}
+
+/* Stock */
+.text-success,
+.text-warning,
+.text-danger {
+  font-size: 0.9rem !important;
+}
+
+/* Descripción */
+[itemprop="description"] {
+  color: #dcdcdc !important;
+  line-height: 1.6;
+}
+
+/* Botón "Agregar al carrito" */
+.sticky-cta button.btn-primary {
+  background: #0e0e0e !important;
+  border: 1px solid #d4af37 !important;
+  color: #d4af37 !important;
+  transition: 0.3s ease;
+}
+
+.sticky-cta button.btn-primary:hover {
   background: #d4af37 !important;
   color: #000 !important;
 }
 
-/* Selector de idioma */
-#lang-switcher {
-  background: #1a1a1a !important;
+/* Input cantidad */
+.sticky-cta input {
+  background: #111 !important;
   border: 1px solid #333 !important;
   color: #fff !important;
-  border-radius: 8px;
 }
 
-#lang-switcher:hover {
+.sticky-cta input:focus {
   border-color: #d4af37 !important;
 }
 
-/* Botón Dark Mode */
-#themeToggle {
+/* Etiquetas (tags) */
+.badge.bg-light {
   background: #1a1a1a !important;
-  color: #ffffff !important;
-  border: 1px solid #333 !important;
-  border-radius: 50px;
-  transition: 0.25s;
+  color: #bcbcbc !important;
+  border-color: #333 !important;
 }
 
-#themeToggle:hover {
+.badge.bg-light:hover {
+  border-color: #d4af37 !important;
   color: #d4af37 !important;
+}
+
+/* Relacionados */
+.card-elev {
+  border: 1px solid #222 !important;
+  background: #0e0e0e !important;
+  transition: 0.25s ease;
+}
+
+.card-elev:hover {
+  transform: translateY(-4px);
   border-color: #d4af37 !important;
 }
 
-/* Íconos */
-.navbar .bi {
-  color: #fff !important;
-  font-size: 1.1rem;
-  transition: 0.25s;
+.card-elev img {
+  transition: 0.3s ease;
 }
 
-.navbar a:hover .bi {
-  color: #d4af37 !important;
+.card-elev:hover img {
+  transform: scale(1.04);
 }
 
-/* Móvil menu panel */
-@media (max-width: 992px) {
-  .navbar {
-    background: rgba(14, 14, 14, 1) !important;
-    border-bottom: 1px solid #222 !important;
-  }
-
-  .navbar-collapse {
-    background: #0e0e0e !important;
-    padding: 1rem;
-    border-radius: 12px;
-  }
-
-  .nav-link {
-    padding: 0.75rem !important;
-    border-radius: 6px;
-  }
-
-  .nav-link:hover {
-    background: #111 !important;
-  }
+/* Modal Zoom */
+#imgZoomModal .modal-content {
+  border: 1px solid #333 !important;
 }
 
+#imgZoomModal button {
+  background: #d4af37 !important;
+  color: #000 !important;
+}
