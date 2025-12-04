@@ -1192,9 +1192,8 @@ h3.fw-bold, h3.h6 {
 
 /* Botones secundarios */
 .btn-outline-casteable {
-  background: transparent !important;
   border: 1px solid #333 !important;
-  color: #ffffff !important;
+  color: #000000 !important;
   border-radius: 50px !important;
 }
 
