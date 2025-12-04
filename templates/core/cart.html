@@ -80,6 +80,32 @@
             <strong id="cart-subtotal">${{ subtotal }}</strong>
           </div>
 
+          <!-- ============================ -->
+          <!-- BLOQUE: CÓDIGO DE DESCUENTO -->
+          <!-- ============================ -->
+          <form method="post" action="{% url 'core:apply_discount' %}" class="mb-2">
+            {% csrf_token %}
+
+            <label class="form-label small">Código de descuento</label>
+            <div class="input-group">
+              <input type="text"
+                     name="code"
+                     class="form-control"
+                     placeholder="Ingresa tu cupón"
+                     value="{{ applied_code|default:'' }}">
+              <button class="btn btn-primary" type="submit">Aplicar</button>
+            </div>
+
+            {% if discount_error %}
+              <div class="text-danger small mt-1">{{ discount_error }}</div>
+            {% endif %}
+            {% if applied_code %}
+              <div class="text-success small mt-1">
+                Cupón aplicado: <strong>{{ applied_code }}</strong>
+              </div>
+            {% endif %}
+          </form>
+
           {% if discount_amount and discount_amount > 0 %}
             <div class="d-flex justify-content-between text-success">
               <span>Descuento</span>
@@ -88,6 +114,7 @@
           {% endif %}
 
           <hr class="my-2">
+
           <div class="d-flex justify-content-between fs-5">
             <span>Total</span>
             <strong id="cart-grandtotal">${{ grand_total }}</strong>
