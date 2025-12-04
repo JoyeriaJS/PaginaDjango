@@ -466,7 +466,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-    const catalogSections = JSON.parse(`{{ sections_config|safe }}`);
+    const catalogSections = JSON.parse(`{{ sections_config|default:"[]"|safe }}`);
 
     catalogSections.forEach(sec => {
 
