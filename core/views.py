@@ -799,7 +799,26 @@ def checkout(request):
     if grand_total < 0:
         grand_total = Decimal("0")
 
+    # ============================================================
+    # 🔥 AUTOCOMPLETAR SOLO SI ES LA PRIMERA VEZ (NO PISA LO EXISTENTE)
+    # ============================================================
     initial = request.session.get("checkout_data") or {}
+
+    if not initial:  # si no hay data previa → autocompletar
+        default_addr = Address.objects.filter(user=request.user, is_default=True).first()
+        if default_addr:
+            initial = {
+                "first_name": request.user.first_name or "",
+                "last_name": request.user.last_name or "",
+                "email": request.user.email or "",
+                "address_line": default_addr.address_line,
+                "comuna": default_addr.comuna,
+                "ciudad": default_addr.ciudad,
+                "region": default_addr.region,
+                "notes": default_addr.extra or "",
+            }
+
+    # ============================================================
 
     if request.method == "POST":
         form = CheckoutForm(request.POST)
