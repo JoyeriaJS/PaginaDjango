@@ -75,38 +75,40 @@
       <div class="col-12 col-lg-6">
         <div class="card p-3 mt-3 mt-lg-0" style="min-width:320px">
 
+          <!-- SUBTOTAL -->
           <div class="d-flex justify-content-between mb-2">
             <span>Subtotal</span>
             <strong id="cart-subtotal">${{ subtotal }}</strong>
           </div>
 
           <!-- ============================ -->
-          <!-- BLOQUE: CÓDIGO DE DESCUENTO -->
+          <!-- FORMULARIO DE CUPÓN -->
           <!-- ============================ -->
-          <form method="post" action="{% url 'core:apply_discount' %}" class="mb-2">
+          <form method="post" action="{% url 'core:apply_coupon' %}" class="mb-2">
             {% csrf_token %}
-
             <label class="form-label small">Código de descuento</label>
+
             <div class="input-group">
               <input type="text"
-                     name="code"
+                     name="coupon"
                      class="form-control"
                      placeholder="Ingresa tu cupón"
-                     value="{{ applied_code|default:'' }}">
+                     value="{{ discount_code|default:'' }}">
               <button class="btn btn-primary" type="submit">Aplicar</button>
             </div>
 
-            {% if discount_error %}
-              <div class="text-danger small mt-1">{{ discount_error }}</div>
-            {% endif %}
-            {% if applied_code %}
-              <div class="text-success small mt-1">
-                Cupón aplicado: <strong>{{ applied_code }}</strong>
+            {% if discount_code %}
+              <div class="d-flex justify-content-between mt-2">
+                <span class="text-success small">Cupón aplicado: <strong>{{ discount_code }}</strong></span>
+                <form method="post" action="{% url 'core:remove_coupon' %}">
+                  {% csrf_token %}
+                  <button class="btn btn-sm btn-outline-danger">Quitar</button>
+                </form>
               </div>
             {% endif %}
           </form>
 
-          {% if discount_amount and discount_amount > 0 %}
+          {% if discount_amount > 0 %}
             <div class="d-flex justify-content-between text-success">
               <span>Descuento</span>
               <strong>- ${{ discount_amount }}</strong>
@@ -135,8 +137,8 @@
 </div>
 
 <!-- ============================
-     ACTUALIZACIÓN AUTOMÁTICA
-=============================== -->
+     ACTUALIZACIÓN DINÁMICA
+================================ -->
 <script>
 document.querySelectorAll(".qty-input").forEach(input => {
     input.addEventListener("change", function () {
@@ -160,7 +162,6 @@ document.querySelectorAll(".qty-input").forEach(input => {
 
             if (!data.ok) return;
 
-            // Actualizar total por línea
             data.lines.forEach(line => {
                 const el = document.getElementById("line-total-" + line.id);
                 if (el) {
@@ -170,7 +171,6 @@ document.querySelectorAll(".qty-input").forEach(input => {
                 }
             });
 
-            // Subtotal y total
             if (data.grand_total) {
                 document.getElementById("cart-grandtotal").textContent = "$" + data.grand_total;
             }
@@ -179,7 +179,6 @@ document.querySelectorAll(".qty-input").forEach(input => {
                 document.getElementById("cart-subtotal").textContent = "$" + data.subtotal;
             }
 
-            // Si el carrito queda vacío → recargar
             if (data.empty) {
                 location.reload();
             }
@@ -187,5 +186,4 @@ document.querySelectorAll(".qty-input").forEach(input => {
     });
 });
 </script>
-
 {% endblock %}
