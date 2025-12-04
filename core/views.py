@@ -23,6 +23,7 @@ from catalog.models import Order, OrderItem
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
+from accounts.models import Address
 
 try:
     from weasyprint import HTML
