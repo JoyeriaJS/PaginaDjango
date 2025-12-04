@@ -142,7 +142,7 @@
               <div class="thumb-1x1 mb-2">
                 {% with img=fp.product.images.first %}
                   {% if img %}
-                  <img src="{{ img.image.url }}">
+                  <img src="{{ img.image.url }}" alt="{{ fp.product.name }}" loading="lazy">
                   {% endif %}
                 {% endwith %}
               </div>
@@ -164,7 +164,7 @@
 {% endif %}
 
 <!-- ========================================================= -->
-<!-- CATÁLOGOS ADMIN DINÁMICOS (CORREGIDO & PROFESIONAL) -->
+<!-- CATÁLOGOS ADMIN DINÁMICOS -->
 <!-- ========================================================= -->
 {% for sec in catalog_sections %}
 <section class="py-5 bg-light">
@@ -186,7 +186,7 @@
             <div class="catalog-card p-2 text-center">
               {% with img=p.images.first %}
               {% if img %}
-                <img src="{{ img.image.url }}">
+                <img src="{{ img.image.url }}" alt="{{ p.name }}" loading="lazy">
               {% endif %}
               {% endwith %}
               <h6 class="fw-semibold mt-2">{{ p.name }}</h6>
@@ -219,13 +219,12 @@
     <div class="infinite-carousel">
       <div class="track">
 
-        {# Primera ronda de productos #}
         {% for p in latest_products %}
         <a class="product-card" href="{% url 'core:product_detail' p.pk %}">
           <div class="img-box">
             {% with img=p.images.first %}
               {% if img %}
-                <img src="{{ img.image.url }}" alt="{{ p.name }}">
+                <img src="{{ img.image.url }}" alt="{{ p.name }}" loading="lazy">
               {% else %}
                 <div class="img-placeholder"></div>
               {% endif %}
@@ -239,13 +238,12 @@
         </a>
         {% endfor %}
 
-        {# Segunda ronda (duplicado para scroll infinito) #}
         {% for p in latest_products %}
         <a class="product-card" href="{% url 'core:product_detail' p.pk %}">
           <div class="img-box">
             {% with img=p.images.first %}
               {% if img %}
-                <img src="{{ img.image.url }}" alt="{{ p.name }}">
+                <img src="{{ img.image.url }}" alt="{{ p.name }}" loading="lazy">
               {% else %}
                 <div class="img-placeholder"></div>
               {% endif %}
@@ -265,7 +263,6 @@
   </div>
 </section>
 {% endif %}
-
 
 {% include "includes/occasions.html" %}
 
@@ -288,7 +285,7 @@
             <div class="thumb-1x1 mb-2">
               {% with prod=c.products.first %}
                 {% if prod and prod.images.first %}
-                <img src="{{ prod.images.first.image.url }}">
+                <img src="{{ prod.images.first.image.url }}" alt="{{ c.name }}" loading="lazy">
                 {% endif %}
               {% endwith %}
             </div>
@@ -320,7 +317,7 @@
         <a href="{% url 'core:product_detail' p.pk %}" class="product-card text-decoration-none h-100">
           {% with img=p.images.first %}
           {% if img %}
-            <img src="{{ img.image.url }}" class="card-img-top">
+            <img src="{{ img.image.url }}" class="card-img-top" alt="{{ p.name }}" loading="lazy">
           {% else %}
             <div class="ratio ratio-1x1 bg-light d-flex align-items-center justify-content-center text-muted">
               Sin imagen
@@ -408,7 +405,6 @@
 {% block extra_js %}
 {{ block.super }}
 
-
 <script src="https://unpkg.com/swiper@9/swiper-bundle.min.js"></script>
 
 <script>
@@ -438,9 +434,6 @@ new Swiper('.testimonials-swiper', {
   breakpoints: { 768: { slidesPerView: 2 }, 1200: { slidesPerView: 3 } }
 });
 
-/* ========================== */
-/* Featured Products Swiper   */
-/* ========================== */
 document.addEventListener("DOMContentLoaded", function () {
 
   const fpSwiper = new Swiper(".featured-swiper", {
@@ -511,7 +504,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
-
-
 
 {% endblock %}
