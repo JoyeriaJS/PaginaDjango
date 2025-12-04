@@ -700,7 +700,7 @@ footer a:hover {
 }
 
 .navbar .navbar-brand:hover {
-  color: #d4af37 !important;
+  color: #000000 !important;
 }
 
 /* Links */
@@ -714,7 +714,7 @@ footer a:hover {
 
 .navbar .nav-link:hover {
   opacity: 1;
-  color: #d4af37 !important;
+  color: #000000 !important;
 }
 
 /* Dropdown Dark */
@@ -731,7 +731,7 @@ footer a:hover {
 
 .navbar .dropdown-item:hover {
   background: #111 !important;
-  color: #d4af37 !important;
+  color: #000000 !important;
 }
 
 /* Buscador Dark */
