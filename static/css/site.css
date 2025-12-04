@@ -614,3 +614,16 @@ select {
 .swiper-pagination-bullet-active {
     background-color: #000 !important;
 }
+
+footer.bg-black {
+  background: #0e0e0e !important;
+}
+
+footer a:hover {
+  color: #ffffff !important;
+}
+
+footer .bi {
+  font-size: 1rem;
+  margin-right: 6px;
+}

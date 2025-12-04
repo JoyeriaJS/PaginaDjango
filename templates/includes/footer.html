@@ -1,40 +1,68 @@
-<footer class="mt-5 border-top bg-light">
-  <div class="container py-5 ">
-    <div class="row g-4">
+<footer class="mt-5 bg-black text-light pt-5">
+  <div class="container pb-5">
+
+    <div class="row g-5">
+
+      <!-- Marca -->
       <div class="col-12 col-md-4">
-        <h5 class="mb-3">CASTEABLE</h5>
-        <p class="text-muted mb-2">Insumos, resinas y materiales premium para joyería y fundición en Chile.</p>
+        <h5 class="fw-bold mb-3" style="color:#d4af37;">CASTEABLE</h5>
+        <p class="text-muted">
+          Proveedor líder en resinas BlueCast, silicona, ceras 3D y herramientas certificadas para joyería y fundición.
+        </p>
+
         <div class="d-flex gap-3 mt-3">
-          <a href="https://www.instagram.com/" target="_blank" rel="noopener" class="link-secondary">Instagram</a>
-          <a href="https://www.facebook.com/" target="_blank" rel="noopener" class="link-secondary">Facebook</a>
-          <a href="mailto:contacto@artesaniaspachy.cl" class="link-secondary">Email</a>
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener" class="text-muted text-decoration-none">
+            <i class="bi bi-instagram"></i> Instagram
+          </a>
+          <a href="https://www.facebook.com/" target="_blank" rel="noopener" class="text-muted text-decoration-none">
+            <i class="bi bi-facebook"></i> Facebook
+          </a>
+          <a href="mailto:contacto@casteable.cl" class="text-muted text-decoration-none">
+            <i class="bi bi-envelope"></i> Email
+          </a>
         </div>
       </div>
 
+      <!-- Contacto -->
       <div class="col-12 col-md-4">
-        <h6 class="mb-2">Contacto</h6>
-        <ul class="list-unstyled text-muted mb-3">
+        <h6 class="fw-semibold mb-3" style="color:#d4af37;">Contacto</h6>
+
+        <ul class="list-unstyled text-muted mb-3 small">
           <li>📍 Santiago, Chile</li>
           <li>✉️ contacto@casteable.cl</li>
           <li>📞 +56 9 1234 5678</li>
         </ul>
-        <a href="mailto:contacto@artesaniaspachy.cl" class="btn btn-elegant btn-sm">Escríbenos</a>
+
+        <a href="mailto:contacto@casteable.cl" class="btn btn-elegant btn-sm rounded-pill px-4">
+          Escríbenos
+        </a>
       </div>
 
+      <!-- Mapa -->
       <div class="col-12 col-md-4">
-        <h6 class="mb-2">Dónde estamos</h6>
-        <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow-sm">
-          <!-- Reemplaza el src por tu dirección exacta (Google Maps Embed) -->
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.4704430892357!2d-70.65208748793788!3d-33.43704799671625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c5a30e896471%3A0x469fba708c65fb1d!2sArtesanias%20Pachy!5e0!3m2!1ses-419!2scl!4v1759180244683!5m2!1ses-419!2scl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <h6 class="fw-semibold mb-3" style="color:#d4af37;">Dónde estamos</h6>
+        <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow" style="border:1px solid #222;">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18..." 
+            style="border:0;" 
+            loading="lazy" 
+            allowfullscreen 
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
         </div>
       </div>
+
     </div>
 
-    <div class="d-flex justify-content-between align-items-center pt-4 mt-4 border-top">
-      <div class="small text-muted">© {{ now|date:"Y" }} Castable. Todos los derechos reservados.</div>
+    <!-- Línea inferior -->
+    <div class="d-flex justify-content-between align-items-center pt-4 mt-5 border-top border-secondary">
+      <div class="small text-muted">
+        © {{ now|date:"Y" }} CASTEABLE. Todos los derechos reservados.
+      </div>
       <div class="small">
         <a href="/politica-privacidad" class="text-muted text-decoration-none">Política de privacidad</a>
       </div>
     </div>
+
   </div>
 </footer>
