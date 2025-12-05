@@ -17,7 +17,7 @@
       <!-- Buscador -->
       <form class="d-flex me-auto ms-lg-3 my-2 my-lg-0" method="get" action="{% url 'core:search' %}">
         <input class="form-control" type="search" name="q"
-               placeholder="Buscar productos…"
+               placeholder="{% trans 'Buscar productos…' %}"
                aria-label="Buscar" value="{{ request.GET.q }}">
       </form>
 
@@ -62,7 +62,7 @@
       <a href="{% url 'core:cart_detail' %}"
          class="btn btn-elegant d-flex align-items-center gap-2 position-relative me-3">
         <span class="bi bi-bag"></span>
-        <span>Carrito</span>
+        <span>{% trans "Carrito" %}</span>
 
         {% if cart_count %}
           <span class="badge bg-primary text-white position-absolute"
@@ -77,44 +77,48 @@
         <div class="nav-item dropdown">
           <a class="btn btn-elegant dropdown-toggle text-white rounded-pill px-3"
              href="#" role="button" data-bs-toggle="dropdown">
-            Mi Cuenta
+            {% trans "Mi Cuenta" %}
           </a>
 
           <ul class="dropdown-menu dropdown-menu-end shadow-sm">
 
             <li><a class="dropdown-item" href="{% url 'accounts:dashboard' %}">
-              Panel
+              {% trans "Panel" %}
             </a></li>
 
             <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
-              Perfil
+              {% trans "Perfil" %}
             </a></li>
 
             <li><a class="dropdown-item" href="{% url 'accounts:address_list' %}">
-              Direcciones
+              {% trans "Direcciones" %}
             </a></li>
 
             <li><a class="dropdown-item" href="{% url 'accounts:orders_list' %}">
-              Historial de compras
+              {% trans "Historial de compras" %}
             </a></li>
 
             <li><hr class="dropdown-divider"></li>
 
             <li><a class="dropdown-item text-danger" href="{% url 'core:logout' %}">
-              Cerrar sesión
+              {% trans "Cerrar sesión" %}
             </a></li>
           </ul>
         </div>
 
       {% else %}
-        <a class="btn btn-elegant text-white" href="{% url 'core:login' %}">Ingresar</a>
-        <a class="btn btn-elegant text-white" href="{% url 'core:register' %}">Crear cuenta</a>
+        <a class="btn btn-elegant text-white" href="{% url 'core:login' %}">
+          {% trans "Ingresar" %}
+        </a>
+        <a class="btn btn-elegant text-white" href="{% url 'core:register' %}">
+          {% trans "Crear cuenta" %}
+        </a>
       {% endif %}
 
     </div>
   </div>
 
-  <!-- FORM OCULTO PARA i18n (OBLIGATORIO) -->
+  <!-- FORM OCULTO PARA i18n -->
   <form id="lang-form" method="post" action="{% url 'set_language' %}" class="d-none">
     {% csrf_token %}
     <input type="hidden" name="language" id="lang-input">
