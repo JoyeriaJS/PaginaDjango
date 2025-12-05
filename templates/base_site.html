@@ -49,9 +49,17 @@
     {% endblock %}
 
     <!-- =============================== -->
-    <!-- GOOGLE TRANSLATE REAL -->
+    <!-- GOOGLE TRANSLATE -->
     <!-- =============================== -->
-    <div id="google_translate_element" style="display:none;"></div>
+
+    <style>
+      #google_translate_element {
+          position: fixed;
+          top: -9999px;
+      }
+    </style>
+
+    <div id="google_translate_element"></div>
 
     <script>
       function googleTranslateElementInit() {
@@ -65,22 +73,44 @@
 
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-    <!-- Forzar traducción al seleccionar idioma -->
+    <!-- Cambio de idioma seguro -->
     <script>
-      window.changeLang = function(lang) {
-        const select = document.querySelector(".goog-te-combo");
-        if (!select) return;
-        select.value = lang;
-        select.dispatchEvent(new Event("change"));
-      };
+    window.changeLang = function(lang) {
+        function apply() {
+            const select = document.querySelector(".goog-te-combo");
+            if (select) {
+                select.value = lang;
+                select.dispatchEvent(new Event("change"));
+            } else {
+                setTimeout(apply, 300);
+            }
+        }
+        apply();
+    };
+    </script>
+
+    <!-- Mantener idioma al navegar -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const cookieLang = document.cookie.split("; ").find(r => r.startsWith("googtrans="));
+        if (cookieLang) {
+            const target = cookieLang.split("=")[1].split("/").pop();
+            setTimeout(() => {
+                const select = document.querySelector(".goog-te-combo");
+                if (select) {
+                    select.value = target;
+                    select.dispatchEvent(new Event("change"));
+                }
+            }, 500);
+        }
+    });
     </script>
 
     <!-- =============================== -->
-    <!-- THEME DARK/LIGHT -->
+    <!-- DARK THEME -->
     <!-- =============================== -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-
           const root = document.documentElement;
           const btn = document.getElementById("themeToggle");
 
@@ -100,9 +130,7 @@
       });
     </script>
 
-    <!-- =============================== -->
-    <!-- NAVBAR SCROLL EFFECT -->
-    <!-- =============================== -->
+    <!-- NAV SCROLL -->
     <script>
       document.addEventListener("scroll", () => {
           const nav = document.querySelector(".navbar");
@@ -110,31 +138,6 @@
           else nav.classList.remove("scrolled");
       });
     </script>
-
-    <script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    // Leer idioma guardado por Google Translate
-    const cookieLang = document.cookie.split("; ").find(row => row.startsWith("googtrans="));
-    
-    // SI EXISTE IDIOMA → volver a aplicarlo
-    if (cookieLang) {
-        const value = cookieLang.split("=")[1];  // formato "/es/en"
-        
-        const targetLang = value.split("/").pop(); // idioma final ("en" o "es")
-
-        // Esperar a que cargue Google Translate
-        setTimeout(() => {
-            const combo = document.querySelector(".goog-te-combo");
-            if (combo) {
-                combo.value = targetLang;
-                combo.dispatchEvent(new Event("change"));
-            }
-        }, 500);
-    }
-
-});
-</script>
 
   </body>
 </html>
