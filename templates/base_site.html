@@ -86,6 +86,15 @@ document.addEventListener("scroll", () => {
 });
 </script>
 
+<script>
+  window.changeLang = function(lang) {
+      const form = document.getElementById("lang-form");
+      document.getElementById("lang-input").value = lang;
+      form.submit();
+  }
+</script>
+
+
 
   </body>
 </html>
