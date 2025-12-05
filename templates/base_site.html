@@ -1,6 +1,6 @@
 {% load static %}
 <!doctype html>
-<html lang="{{ request.LANGUAGE_CODE|default:'es' }}" data-theme="light">
+<html lang="es" data-theme="light">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,7 +25,7 @@
   </head>
 
   <body>
-    
+
     {% include "includes/navbar.html" %}
 
     {% if messages %}
@@ -49,6 +49,33 @@
     {% endblock %}
 
     <!-- =============================== -->
+    <!-- GOOGLE TRANSLATE REAL -->
+    <!-- =============================== -->
+    <div id="google_translate_element" style="display:none;"></div>
+
+    <script>
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'es',
+            includedLanguages: 'es,en',
+            autoDisplay: false
+        }, 'google_translate_element');
+      }
+    </script>
+
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <!-- Forzar traducción al seleccionar idioma -->
+    <script>
+      window.changeLang = function(lang) {
+        const select = document.querySelector(".goog-te-combo");
+        if (!select) return;
+        select.value = lang;
+        select.dispatchEvent(new Event("change"));
+      };
+    </script>
+
+    <!-- =============================== -->
     <!-- THEME DARK/LIGHT -->
     <!-- =============================== -->
     <script>
@@ -57,16 +84,11 @@
           const root = document.documentElement;
           const btn = document.getElementById("themeToggle");
 
-          // Lee el tema guardado
           let saved = localStorage.getItem("theme");
-          if (saved === "dark") {
-              root.setAttribute("data-theme", "dark");
-          }
+          if (saved === "dark") root.setAttribute("data-theme", "dark");
 
-          // Alternar tema
           btn?.addEventListener("click", () => {
               let current = root.getAttribute("data-theme");
-
               if (current === "dark") {
                   root.removeAttribute("data-theme");
                   localStorage.setItem("theme", "light");
@@ -75,7 +97,6 @@
                   localStorage.setItem("theme", "dark");
               }
           });
-
       });
     </script>
 
@@ -85,29 +106,10 @@
     <script>
       document.addEventListener("scroll", () => {
           const nav = document.querySelector(".navbar");
-          if (window.scrollY > 50) {
-              nav.classList.add("scrolled");
-          } else {
-              nav.classList.remove("scrolled");
-          }
+          if (window.scrollY > 50) nav.classList.add("scrolled");
+          else nav.classList.remove("scrolled");
       });
     </script>
-
-    <!-- =============================== -->
-    <!-- CAMBIO DE IDIOMA DJANGO -->
-    <!-- =============================== -->
-    <script>
-      window.changeLang = function(lang) {
-          document.getElementById("lang-input").value = lang;
-          document.getElementById("lang-form").submit();
-      }
-    </script>
-
-    <!-- Formulario oculto necesario para cambiar idioma -->
-    <form id="lang-form" method="post" action="/i18n/setlang/" style="display:none;">
-      {% csrf_token %}
-      <input type="hidden" name="language" id="lang-input">
-    </form>
 
   </body>
 </html>
