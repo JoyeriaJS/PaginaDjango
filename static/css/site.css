@@ -1275,3 +1275,73 @@ h3.fw-bold, h3.h6 {
     background: #111 !important;
   }
 }
+
+/* ====================================================================
+   FIX NAVBAR — Desktop intacto, Mobile ordenado
+   ==================================================================== */
+
+/* DESKTOP (mantener TODO igual) */
+@media (min-width: 992px) {
+  .navbar {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+}
+
+/* MOBILE (acomodar orden y espaciamiento) */
+@media (max-width: 991px) {
+
+  /* Navbar mobile fondo negro */
+  .navbar {
+    background: #0e0e0e !important;
+    border-bottom: 1px solid #222 !important;
+  }
+
+  /* Collapse más ordenado */
+  #mainNav {
+    padding: 1rem !important;
+    background: #0e0e0e !important;
+    border-radius: 12px;
+  }
+
+  /* Form buscador */
+  #mainNav form {
+    margin-bottom: 1rem;
+  }
+
+  /* Menú dinámico */
+  #mainNav .navbar-nav .nav-link {
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    color: #fff !important;
+  }
+
+  #mainNav .navbar-nav .nav-link:hover {
+    background: #111;
+  }
+
+  /* Botones "Ingresar, Crear cuenta, Carrito" */
+  #mainNav .btn-elegant {
+    width: 100%;
+    margin-bottom: 0.7rem;
+    justify-content: center;
+  }
+
+  /* Selector de idioma */
+  #lang-switcher {
+    width: 100% !important;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Dark mode */
+  #themeToggle {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  /* Alinear íconos dentro de botones mobile */
+  #mainNav .bi {
+    margin-right: 6px;
+  }
+}
