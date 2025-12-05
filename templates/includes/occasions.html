@@ -1,51 +1,108 @@
-
-<!-- <section class="py-5">
+<section class="py-5 section-black">
   <div class="container">
-    <div class="d-flex justify-content-between align-items-end mb-3">
-      <h2 class="h4 m-0">Descubre por ocasión</h2>
+
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <h2 class="fw-bold text-white m-0">Descubre por ocasión</h2>
     </div>
-    <div class="row g-3">
+
+    <div class="row g-4 occasion-grid">
+
+      <!-- Ocasión 1 -->
       <div class="col-6 col-md-3">
-        <a class="card card-elev overflow-hidden text-decoration-none" href="/buscar/?q=regalo">
-          <div class="ratio ratio-1x1">
-            <img src="https://picsum.photos/seed/regalo/600" alt="Regalos" style="object-fit:cover;">
+        <a class="occasion-card text-decoration-none" href="/buscar/?q=regalo">
+          <div class="oc-image">
+            <img src="https://picsum.photos/seed/regalo/600" alt="Regalos">
           </div>
-          <div class="card-body text-center">
-            <div class="fw-semibold text-dark">Regalos especiales</div>
+          <div class="oc-overlay">
+            <span>Regalos especiales</span>
           </div>
         </a>
       </div>
+
+      <!-- Ocasión 2 -->
       <div class="col-6 col-md-3">
-        <a class="card card-elev overflow-hidden text-decoration-none" href="/buscar/?q=minimalista">
-          <div class="ratio ratio-1x1">
-            <img src="https://picsum.photos/seed/min/600" alt="Minimalista" style="object-fit:cover;">
+        <a class="occasion-card text-decoration-none" href="/buscar/?q=minimalista">
+          <div class="oc-image">
+            <img src="https://picsum.photos/seed/min/600" alt="Minimalista">
           </div>
-          <div class="card-body text-center">
-            <div class="fw-semibold text-dark">Estilo minimalista</div>
+          <div class="oc-overlay">
+            <span>Estilo minimalista</span>
           </div>
         </a>
       </div>
+
+      <!-- Ocasión 3 -->
       <div class="col-6 col-md-3">
-        <a class="card card-elev overflow-hidden text-decoration-none" href="/buscar/?q=clasico">
-          <div class="ratio ratio-1x1">
-            <img src="https://picsum.photos/seed/clasico/600" alt="Clásico" style="object-fit:cover;">
+        <a class="occasion-card text-decoration-none" href="/buscar/?q=clasico">
+          <div class="oc-image">
+            <img src="https://picsum.photos/seed/clasico/600" alt="Clásico">
           </div>
-          <div class="card-body text-center">
-            <div class="fw-semibold text-dark">Clásicos</div>
+          <div class="oc-overlay">
+            <span>Clásicos</span>
           </div>
         </a>
       </div>
+
+      <!-- Ocasión 4 -->
       <div class="col-6 col-md-3">
-        <a class="card card-elev overflow-hidden text-decoration-none" href="/buscar/?q=exclusivo">
-          <div class="ratio ratio-1x1">
-            <img src="https://picsum.photos/seed/exclusivo/600" alt="Exclusivo" style="object-fit:cover;">
+        <a class="occasion-card text-decoration-none" href="/buscar/?q=exclusivo">
+          <div class="oc-image">
+            <img src="https://picsum.photos/seed/exclusivo/600" alt="Exclusivo">
           </div>
-          <div class="card-body text-center">
-            <div class="fw-semibold text-dark">Piezas únicas</div>
+          <div class="oc-overlay">
+            <span>Piezas únicas</span>
           </div>
         </a>
       </div>
+
     </div>
   </div>
 </section>
- -->
+
+<style>
+/* ============================
+   OCASIONES — PREMIUM DESIGN
+   ============================ */
+
+.occasion-card {
+    display: block;
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    height: 220px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.25);
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.occasion-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 26px rgba(0,0,0,.35);
+}
+
+.oc-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .4s ease;
+}
+
+.occasion-card:hover .oc-image img {
+    transform: scale(1.08);
+}
+
+.oc-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 18px 12px;
+    background: linear-gradient(to top, rgba(0,0,0,.65), transparent);
+    text-align: center;
+}
+
+.oc-overlay span {
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.4px;
+}
+</style>
