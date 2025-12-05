@@ -1200,3 +1200,78 @@ h3.fw-bold, h3.h6 {
   border-color: #d4af37 !important;
   color: #d4af37 !important;
 }
+
+
+/* ============================
+   NAVBAR MOBILE FIX – CASTEABLE
+   ============================ */
+@media (max-width: 992px) {
+
+  /* Navbar siempre visible pero con efecto elegante */
+  .navbar {
+    background: rgba(14,14,14,0.95) !important;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #222;
+    padding-top: 0.7rem !important;
+    padding-bottom: 0.7rem !important;
+  }
+
+  /* Botón hamburguesa blanco */
+  .navbar-toggler {
+    border-color: rgba(255,255,255,0.4) !important;
+  }
+
+  .navbar-toggler-icon {
+    background-image: none !important;
+    position: relative;
+    width: 24px;
+    height: 2px;
+    background: #fff !important;
+    display: block;
+  }
+
+  /* Líneas hamburguesa */
+  .navbar-toggler-icon::before,
+  .navbar-toggler-icon::after {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    left: 0;
+    background: #fff;
+    transition: 0.25s;
+  }
+
+  .navbar-toggler-icon::before {
+    top: -7px;
+  }
+
+  .navbar-toggler-icon::after {
+    top: 7px;
+  }
+
+  /* Panel mobile con animación */
+  .navbar-collapse {
+    background: #0e0e0e !important;
+    border-radius: 12px;
+    padding: 1rem;
+    animation: fadeSlide .25s ease;
+  }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(-10px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+
+  /* Links mobile más grandes y táctiles */
+  .navbar .nav-link {
+    padding: 0.85rem !important;
+    border-radius: 6px;
+    font-size: 1.05rem;
+    opacity: 1;
+  }
+
+  .navbar .nav-link:hover {
+    background: #111 !important;
+  }
+}
