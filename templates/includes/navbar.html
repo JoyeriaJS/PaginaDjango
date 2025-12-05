@@ -2,33 +2,27 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top shadow-sm">
   <div class="container">
 
-    <!-- ========================= -->
-    <!-- LOGO -->
-    <!-- ========================= -->
+    <!-- Logo -->
     <a class="navbar-brand fw-bold" href="/">Casteable</a>
 
-    <!-- ========================= -->
-    <!-- BOTÓN MOBILE -->
-    <!-- ========================= -->
+    <!-- Botón móvil -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#mainNav" aria-controls="mainNav"
             aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- ========================= -->
-    <!-- NAV DESKTOP (NO TOCAR) -->
-    <!-- ========================= -->
-    <div class="d-none d-lg-flex align-items-center gap-3">
+    <div class="collapse navbar-collapse" id="mainNav">
 
       <!-- Buscador -->
-      <form class="d-flex" method="get" action="{% url 'core:search' %}">
-        <input class="form-control" type="search" name="q" placeholder="Buscar productos…"
-               value="{{ request.GET.q }}">
+      <form class="d-flex me-auto ms-lg-3 my-2 my-lg-0" method="get" action="{% url 'core:search' %}">
+        <input class="form-control" type="search" name="q"
+               placeholder="Buscar productos…"
+               aria-label="Buscar" value="{{ request.GET.q }}">
       </form>
 
-      <!-- Menú -->
-      <ul class="navbar-nav mb-0">
+      <!-- Menú dinámico -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         {% for it in main_menu %}
           {% if it.children %}
             <li class="nav-item dropdown">
@@ -49,106 +43,76 @@
         {% endfor %}
       </ul>
 
-      <!-- Idioma -->
-      <select id="lang-switcher" class="form-select form-select-sm"
+      <!-- Selector de idioma -->
+      <select id="lang-switcher"
+              class="form-select form-select-sm me-3"
               style="width:auto"
               onchange="window.changeLang && window.changeLang(this.value)">
         <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>ES</option>
         <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
       </select>
 
-      <!-- Modo oscuro -->
-      <button id="themeToggle" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+      <!-- Dark Mode -->
+      <button id="themeToggle"
+              class="btn btn-sm btn-outline-secondary rounded-pill px-3 me-2">
         🌙
       </button>
 
       <!-- Carrito -->
       <a href="{% url 'core:cart_detail' %}"
-         class="btn btn-elegant d-flex align-items-center position-relative">
-        <i class="bi bi-bag"></i>
+         class="btn btn-elegant d-flex align-items-center gap-2 position-relative me-3">
+        <span class="bi bi-bag"></span>
+        <span>Carrito</span>
+
         {% if cart_count %}
-          <span class="badge bg-primary position-absolute" style="top:-6px; right:-6px;">
+          <span class="badge bg-primary text-white position-absolute"
+                style="top:-6px; right:-6px; font-size:0.65rem;">
             {{ cart_count }}
           </span>
         {% endif %}
       </a>
 
-      <!-- Cuenta -->
+      <!-- ====================== -->
+      <!-- MENÚ DE CUENTA -->
+      <!-- ====================== -->
       {% if request.user.is_authenticated %}
-        <div class="dropdown">
-          <a class="btn btn-elegant dropdown-toggle text-white" data-bs-toggle="dropdown">Mi Cuenta</a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="{% url 'accounts:dashboard' %}">Panel</a></li>
-            <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Perfil</a></li>
-            <li><a class="dropdown-item" href="{% url 'accounts:address_list' %}">Direcciones</a></li>
-            <li><a class="dropdown-item" href="{% url 'accounts:orders_list' %}">Historial</a></li>
-            <li><hr></li>
-            <li><a class="dropdown-item text-danger" href="{% url 'core:logout' %}">Cerrar sesión</a></li>
+        <div class="nav-item dropdown">
+          <a class="btn btn-elegant dropdown-toggle text-white rounded-pill px-3"
+             href="#" role="button" data-bs-toggle="dropdown">
+            Mi Cuenta
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+
+            <li><a class="dropdown-item" href="{% url 'accounts:dashboard' %}">
+              Panel
+            </a></li>
+
+            <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
+              Perfil
+            </a></li>
+
+            <li><a class="dropdown-item" href="{% url 'accounts:address_list' %}">
+              Direcciones
+            </a></li>
+
+            <li><a class="dropdown-item" href="{% url 'accounts:orders_list' %}">
+              Historial de compras
+            </a></li>
+
+            <li><hr class="dropdown-divider"></li>
+
+            <li><a class="dropdown-item text-danger" href="{% url 'core:logout' %}">
+              Cerrar sesión
+            </a></li>
           </ul>
         </div>
+
       {% else %}
+        <!-- Botones si NO está logueado -->
         <a class="btn btn-elegant text-white" href="{% url 'core:login' %}">Ingresar</a>
+        <a class="btn btn-elegant text-white" href="{% url 'core:register' %}">Crear cuenta</a>
       {% endif %}
-    </div>
-
-    <!-- ========================= -->
-    <!-- NAV MOBILE (SOLO MOBILE) -->
-    <!-- ========================= -->
-    <div class="collapse navbar-collapse d-lg-none" id="mainNav">
-
-      <!-- Buscador -->
-      <form class="d-flex my-3" method="get" action="{% url 'core:search' %}">
-        <input class="form-control" type="search" name="q"
-               placeholder="Buscar productos…" value="{{ request.GET.q }}">
-      </form>
-
-      <!-- Menú dinámico -->
-      <ul class="navbar-nav mb-3">
-        {% for it in main_menu %}
-          {% if it.children %}
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="{{ it.url }}" data-bs-toggle="dropdown">
-                {{ it.title }}
-              </a>
-              <ul class="dropdown-menu">
-                {% for ch in it.children %}
-                  <li><a class="dropdown-item" href="{{ ch.url }}">{{ ch.title }}</a></li>
-                {% endfor %}
-              </ul>
-            </li>
-          {% else %}
-            <li class="nav-item">
-              <a class="nav-link" href="{{ it.url }}">{{ it.title }}</a>
-            </li>
-          {% endif %}
-        {% endfor %}
-      </ul>
-
-      <!-- Carrito -->
-      <a class="btn btn-elegant w-100 mb-2" href="{% url 'core:cart_detail' %}">
-        Carrito {% if cart_count %}<span class="badge bg-primary">{{ cart_count }}</span>{% endif %}
-      </a>
-
-      <!-- Cuenta -->
-      {% if request.user.is_authenticated %}
-        <a class="btn btn-elegant w-100 mb-2" href="{% url 'accounts:dashboard' %}">Mi Cuenta</a>
-      {% else %}
-        <a class="btn btn-elegant w-100 mb-2" href="{% url 'core:login' %}">Ingresar</a>
-        <a class="btn btn-elegant w-100 mb-3" href="{% url 'core:register' %}">Crear cuenta</a>
-      {% endif %}
-
-      <!-- Idioma + oscuro -->
-      <div class="d-flex justify-content-between align-items-center gap-3 mt-2">
-        <select id="lang-switcher" class="form-select form-select-sm" style="max-width:110px"
-                onchange="window.changeLang && window.changeLang(this.value)">
-          <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>ES</option>
-          <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
-        </select>
-
-        <button id="themeToggle" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
-          🌙
-        </button>
-      </div>
 
     </div>
   </div>
