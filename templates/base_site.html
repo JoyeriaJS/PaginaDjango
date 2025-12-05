@@ -111,5 +111,30 @@
       });
     </script>
 
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Leer idioma guardado por Google Translate
+    const cookieLang = document.cookie.split("; ").find(row => row.startsWith("googtrans="));
+    
+    // SI EXISTE IDIOMA → volver a aplicarlo
+    if (cookieLang) {
+        const value = cookieLang.split("=")[1];  // formato "/es/en"
+        
+        const targetLang = value.split("/").pop(); // idioma final ("en" o "es")
+
+        // Esperar a que cargue Google Translate
+        setTimeout(() => {
+            const combo = document.querySelector(".goog-te-combo");
+            if (combo) {
+                combo.value = targetLang;
+                combo.dispatchEvent(new Event("change"));
+            }
+        }, 500);
+    }
+
+});
+</script>
+
   </body>
 </html>
