@@ -2675,3 +2675,18 @@ form .form-select,
     color: #fff !important;      /* texto blanco en dark mode */
     border-color: #333 !important;
 }
+/* ============================================
+   FIX DEFINITIVO — SUBTOTAL INVISIBLE
+   ============================================ */
+
+.summary-row,
+.summary-row *,
+.summary-row .fw-bold,
+.summary-row .text-end {
+    color: #ffffff !important;
+}
+
+.cart-summary .summary-row,
+.cart-summary .summary-row * {
+    color: #ffffff !important;
+}
