@@ -2856,42 +2856,52 @@ a.btn {
 }
 
 /* ===============================================
-   FIX VISIBILIDAD — SIDEBAR CUENTA (list-group)
+   SIDEBAR CUENTA — ESTÁTICO, SIN HOVER
    =============================================== */
 
-/* Textos de cada item del menú */
+/* Todos los ítems del sidebar */
 .list-group-item {
+    background: transparent !important;
     color: #ffffff !important;
-    background-color: transparent !important;
-    border-color: rgba(255,255,255,0.15) !important;
+    border: none !important;
+    font-weight: 500;
 }
 
-/* Item activo */
+/* Ícono + texto */
+.list-group-item * {
+    color: #ffffff !important;
+}
+
+/* Ítem activo (la página actual) */
 .list-group-item.active {
-    background-color: #d4af37 !important; /* Dorado */
+    background: #d4af37 !important;  /* Dorado */
     color: #000 !important;
-    border-color: #d4af37 !important;
     font-weight: 600;
+    border-radius: 6px !important;
 }
 
-/* Íconos dentro del texto */
-.list-group-item .emoji,
-.list-group-item span,
-.list-group-item strong {
+/* Ícono dentro del item activo */
+.list-group-item.active * {
+    color: #000 !important;
+}
+
+/* SIN HOVER — no cambia color */
+.list-group-item:hover {
+    background: transparent !important;
     color: #ffffff !important;
 }
 
-/* Hover */
-.list-group-item:hover {
-    background-color: rgba(255,255,255,0.12) !important;
-    color: #fff !important;
-}
-
-/* Botón "Cerrar sesión" en rojo visible */
+/* Botón cerrar sesión */
 .list-group-item.text-danger {
     color: #ff6b6b !important;
 }
+
+.list-group-item.text-danger * {
+    color: #ff6b6b !important;
+}
+
+/* Cerrar sesión sin hover */
 .list-group-item.text-danger:hover {
-    background-color: rgba(255,107,107,0.15) !important;
-    color: #ffaaaa !important;
+    background: transparent !important;
+    color: #ff6b6b !important;
 }
