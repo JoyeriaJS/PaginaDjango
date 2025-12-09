@@ -2776,66 +2776,81 @@ a.btn {
 }
 
 /* ============================================================
-   FIX DEFINITIVO — RESUMEN DEL CHECKOUT CASTEABLE
-   Hace visibles TODOS los textos del resumen, montos, labels
-   y arregla el botón "Aplicar".
+   FIX COMPLETO — CARRITO CASTEABLE (TEXTO INVISIBLE, BOTONES, INPUTS)
    ============================================================ */
 
-/* Contenedor del resumen (detecta cualquier variante) */
-.cart-summary,
-.cart-summary * {
-    color: #ffffff !important;
+/* Card del resumen (col derecha) */
+.container .card {
+  background: #0e0e0e !important;
+  color: #fff !important;
+  border: 1px solid #222 !important;
 }
 
-/* Texto gris (Subtotal, Código descuento, Total, etc.) */
-.cart-summary .text-muted,
-.cart-summary span,
-.cart-summary label,
-.cart-summary small {
-    color: #ffffff !important;
+/* Subtotal, Total, Descuento, Labels */
+.container .card span,
+.container .card label,
+.container .card .text-muted,
+.container .card strong {
+  color: #fff !important;
 }
 
-/* Monto subtotal y otros strong */
-.cart-summary strong {
-    color: #ffffff !important;
+/* Inputs del cupón */
+.container .card input.form-control {
+  background: #1a1a1a !important;
+  border: 1px solid #444 !important;
+  color: #fff !important;
 }
 
-/* Monto Total (en dorado) */
-.cart-summary .total,
-.cart-summary .total strong {
-    color: #d4af37 !important;
+.container .card input.form-control::placeholder {
+  color: #ccc !important;
 }
 
-/* Input de cupón */
-#coupon-input,
-#id_coupon,
-input[name="coupon"],
-.cart-summary input[type="text"] {
-    background: #1a1a1a !important;
-    border: 1px solid #444 !important;
-    color: #ffffff !important;
-}
-
-.cart-summary input[type="text"]::placeholder {
-    color: #bbbbbb !important;
-}
-
-/* BOTÓN APLICAR CUPÓN — que se veía blanco */
-.cart-summary button,
-.cart-summary .btn-apply,
-button[name="apply_coupon"] {
+/* Botón "Aplicar" */
+.container .card .btn-casteable-apply {
     background: #000 !important;
     color: #fff !important;
-    border: 1px solid #444 !important;
-    border-radius: 8px !important;
-    padding: 8px 14px !important;
-    transition: 0.2s ease;
+    border: 1px solid #555 !important;
 }
 
-.cart-summary button:hover,
-.cart-summary .btn-apply:hover,
-button[name="apply_coupon"]:hover {
+.container .card .btn-casteable-apply:hover {
     background: #222 !important;
     border-color: #d4af37 !important;
     color: #d4af37 !important;
+}
+
+/* Botón "Quitar" (cupón aplicado) */
+.container .card .btn-outline-casteable {
+  background: #000 !important;
+  border: 1px solid #444 !important;
+  color: #fff !important;
+}
+
+.container .card .btn-outline-casteable:hover {
+  background: #222 !important;
+  border-color: #d4af37 !important;
+  color: #d4af37 !important;
+}
+
+/* Títulos grandes: Total */
+.container .card .fs-5 span,
+.container .card .fs-5 strong {
+  color: #fff !important;
+}
+
+/* Línea separadora */
+.container .card hr {
+  border-color: #333 !important;
+}
+
+/* Botón "Ir a pagar" */
+.container .card .btn-pay {
+  background: #d4af37 !important;
+  color: #000 !important;
+  font-weight: 700 !important;
+  border-radius: 40px !important;
+  border: none !important;
+}
+
+.container .card .btn-pay:hover {
+  background: #b9972f !important;
 }
