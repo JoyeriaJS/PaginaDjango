@@ -2675,20 +2675,19 @@ form .form-select,
     color: #fff !important;      /* texto blanco en dark mode */
     border-color: #333 !important;
 }
-/* --------------------------------------------
-   FIX REAL — SUBTOTAL Y VALOR INVISIBLE
---------------------------------------------- */
+/* ==========================================
+   FIX DEFINITIVO — Colores del Resumen
+   ========================================== */
 
-.cart-summary .label,
-.cart-summary .label *,
-.cart-summary .value,
-.cart-summary .value *,
-.cart-summary .text-muted,
-.cart-summary .text-end,
-.cart-summary .fw-bold {
+/* Todo texto dentro del bloque de resumen */
+.cart-summary,
+.cart-summary * {
     color: #ffffff !important;
 }
-.cart-summary span,
-.cart-summary p {
+
+/* Asegurar que el monto siempre sea visible */
+.cart-summary strong,
+.cart-summary .text-end,
+.cart-summary .fw-bold {
     color: #ffffff !important;
 }
