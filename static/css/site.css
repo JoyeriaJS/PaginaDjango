@@ -2776,36 +2776,66 @@ a.btn {
 }
 
 /* ============================================================
-   FIX DEFINITIVO PARA SUBTOTAL, TOTAL Y MONTOS EN CHECKOUT
+   FIX DEFINITIVO — RESUMEN DEL CHECKOUT CASTEABLE
+   Hace visibles TODOS los textos del resumen, montos, labels
+   y arregla el botón "Aplicar".
    ============================================================ */
 
-/* Esto afecta directamente al contenedor de resumen */
-.cart-summary, 
+/* Contenedor del resumen (detecta cualquier variante) */
+.cart-summary,
 .cart-summary * {
     color: #ffffff !important;
 }
 
-/* Monto Total especial en dorado */
-.cart-summary .total,
-.cart-summary .grand-total,
-.cart-summary .total strong {
-    color: #d4af37 !important;
-}
-
-/* Valores numéricos forzados */
-.cart-summary strong,
-.cart-summary .value {
-    color: #ffffff !important;
-}
-
-/* Texto como “Subtotal”, “Código de descuento”, etc. */
+/* Texto gris (Subtotal, Código descuento, Total, etc.) */
+.cart-summary .text-muted,
 .cart-summary span,
 .cart-summary label,
 .cart-summary small {
     color: #ffffff !important;
 }
 
-/* Placeholder visible */
-.cart-summary input::placeholder {
-    color: #dddddd !important;
+/* Monto subtotal y otros strong */
+.cart-summary strong {
+    color: #ffffff !important;
+}
+
+/* Monto Total (en dorado) */
+.cart-summary .total,
+.cart-summary .total strong {
+    color: #d4af37 !important;
+}
+
+/* Input de cupón */
+#coupon-input,
+#id_coupon,
+input[name="coupon"],
+.cart-summary input[type="text"] {
+    background: #1a1a1a !important;
+    border: 1px solid #444 !important;
+    color: #ffffff !important;
+}
+
+.cart-summary input[type="text"]::placeholder {
+    color: #bbbbbb !important;
+}
+
+/* BOTÓN APLICAR CUPÓN — que se veía blanco */
+.cart-summary button,
+.cart-summary .btn-apply,
+button[name="apply_coupon"] {
+    background: #000 !important;
+    color: #fff !important;
+    border: 1px solid #444 !important;
+    border-radius: 8px !important;
+    padding: 8px 14px !important;
+    transition: 0.2s ease;
+}
+
+.cart-summary button:hover,
+.cart-summary .btn-apply:hover,
+button[name="apply_coupon"]:hover {
+    background: #222 !important;
+    border-color: #d4af37 !important;
+    color: #d4af37 !important;
 }
