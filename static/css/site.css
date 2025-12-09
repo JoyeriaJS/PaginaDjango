@@ -2724,3 +2724,75 @@ input[value="Aplicar descuento"]:hover {
     color: #fff !important;
     border-color: #222 !important;
 }
+
+/* ============================================================
+   🔥 FIX TOTAL VISIBILIDAD — CHECKOUT CASTEABLE (BLACK THEME)
+   ============================================================ */
+
+/* Títulos principales */
+.checkout-wrapper h1,
+.checkout-wrapper h2,
+.checkout-wrapper h3,
+.checkout-wrapper h4 {
+    color: #ffffff !important;
+}
+
+/* Etiquetas del formulario */
+.checkout-wrapper label,
+.checkout-wrapper .form-label {
+    color: #ffffff !important;
+}
+
+/* Textos secundarios */
+.checkout-wrapper .text-muted,
+.checkout-wrapper small,
+.checkout-wrapper span {
+    color: #e0e0e0 !important;
+}
+
+/* Subtotal y Total */
+.checkout-wrapper .summary-line span,
+.checkout-wrapper .summary-line strong,
+.checkout-wrapper .summary-line .label,
+.checkout-wrapper .summary-line .value {
+    color: #ffffff !important;
+}
+
+/* Forzar SUBTOTAL */
+.checkout-wrapper span.text-muted,
+.checkout-wrapper .d-flex span {
+    color: #ffffff !important;
+}
+
+/* Forzar el monto del subtotal */
+.checkout-wrapper .d-flex strong,
+.checkout-wrapper strong {
+    color: #ffffff !important;
+}
+
+/* Total grande */
+.checkout-wrapper .total,
+.checkout-wrapper .grand-total {
+    color: #d4af37 !important;
+    font-weight: 700 !important;
+}
+
+/* Inputs visibles al escribir */
+.checkout-wrapper input,
+.checkout-wrapper select,
+.checkout-wrapper textarea {
+    color: #000 !important;          /* Texto negro dentro del input */
+    background: #ffffff !important;  /* Fondo blanco para que se vea */
+}
+
+/* Placeholder gris oscuro */
+.checkout-wrapper input::placeholder,
+.checkout-wrapper textarea::placeholder {
+    color: #777 !important;
+}
+
+/* Botones "Volver" y "Guardar datos" */
+.checkout-wrapper .btn,
+.checkout-wrapper button {
+    color: #ffffff !important;
+}
