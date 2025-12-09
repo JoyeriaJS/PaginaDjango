@@ -2522,55 +2522,65 @@ textarea::placeholder {
 }
 
 /* ==========================================================
-   FIX DEFINITIVO — FORMULARIO CHECKOUT (LABELS + PLACEHOLDERS)
+   🔥 FIX GLOBAL CHECKOUT — TODO EL TEXTO A BLANCO
    ========================================================== */
 
-/* Etiquetas como "Nombre", "Apellido", etc. */
-.checkout-wrapper label,
-.checkout-container label,
-.form-label,
-.checkout-wrapper .form-label,
-.checkout-container .form-label {
+/* Títulos de secciones como "Datos de envío" y "Resumen del pedido" */
+.checkout-title,
+h4.checkout-title,
+.card h4,
+.card h5,
+.card-title {
     color: #ffffff !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
 }
 
-/* Placeholder dentro de los inputs (Nombre, Dirección, etc.) */
-.checkout-wrapper input::placeholder,
-.checkout-wrapper select::placeholder,
-.checkout-wrapper textarea::placeholder,
-.checkout-container input::placeholder,
-.checkout-container select::placeholder,
-.checkout-container textarea::placeholder,
-input::placeholder,
-select::placeholder,
-textarea::placeholder {
-    color: #cccccc !important; /* gris claro visible */
+/* Etiquetas de formulario */
+.form-label,
+.card .form-label,
+.card label,
+label {
+    color: #ffffff !important;
+}
+
+/* Textos dentro de inputs */
+input,
+select,
+textarea {
+    color: #ffffff !important;
+}
+
+/* Placeholder blanco suave */
+::placeholder {
+    color: #cccccc !important;
     opacity: 1 !important;
 }
 
-/* Texto de ayuda bajo los campos (si lo usas) */
-.checkout-wrapper .form-text,
-.checkout-container .form-text {
+/* Subtítulos tipo "Subtotal", "Total", "Envío" */
+.text-muted,
+.card .text-muted,
+.summary-label,
+.summary-title {
     color: #ffffff !important;
 }
 
-/* Texto dentro de los selects */
-.checkout-wrapper select,
-.checkout-container select {
+/* Valores (números, precios) */
+.summary-value,
+.cart-summary .value,
+.cart-summary .total,
+.card .fw-bold {
     color: #ffffff !important;
 }
 
-/* Inputs — asegurar borde visible */
-.checkout-wrapper .form-control,
-.checkout-container .form-control {
+/* Líneas de subtotal/total (por si usan muted) */
+.card small,
+.card span {
     color: #ffffff !important;
-    border: 1px solid #555 !important;
 }
 
-/* Focus del input */
-.checkout-wrapper .form-control:focus,
-.checkout-container .form-control:focus {
-    border-color: #d4af37 !important;
-    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.35) !important;
+/* Items del resumen */
+.list-group-item {
+    background: transparent !important;
+    color: #ffffff !important;
+    border-color: #333 !important;
 }
