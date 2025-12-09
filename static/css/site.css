@@ -2584,16 +2584,6 @@ textarea {
     color: #ffffff !important;
     border-color: #333 !important;
 }
-/* ----- FIX FINAL SUBTOTAL (solo el número) ----- */
-.cart-summary .summary-row .value,
-.cart-summary .summary-row span,
-.cart-summary .summary-value,
-.summary-row .value,
-.summary-row span.text-end,
-.summary-row span.fw-bold,
-.cart-summary .text-end {
-    color: #ffffff !important;
-}
 
 
 /* Botones del checkout (Volver / Guardar / Continuar) */
@@ -2625,4 +2615,24 @@ textarea {
 .btn-outline-dark:hover {
     background: #d4af37 !important;
     color: #000 !important;
+}
+
+/* ============================
+   FIX DEFINITIVO — RESUMEN DEL PEDIDO
+   Hace visibles:
+   - Subtotal
+   - Número del subtotal
+   - Números alineados a la derecha
+   ============================ */
+
+.cart-summary span,
+.cart-summary .value,
+.cart-summary .summary-value,
+.cart-summary .text-end,
+.cart-summary .fw-bold,
+.cart-summary .float-end,
+.cart-summary .order-amount,
+.cart-summary .amount,
+.cart-summary .summary-number {
+    color: #ffffff !important;
 }
