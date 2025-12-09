@@ -1,5 +1,4 @@
 {% extends "base_site.html" %}
-{% load static %}
 
 {% block title %}Editar dirección{% endblock %}
 
@@ -21,28 +20,30 @@
 
                     <div class="row g-3">
 
+                        <!-- Nombre identificador: Casa, Trabajo, etc -->
                         <div class="col-md-6">
-                            <label class="form-label text-white">Nombre completo</label>
+                            <label class="form-label text-white">Nombre</label>
                             <input type="text" name="name" class="form-control"
                                    value="{{ address.name }}">
                         </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label text-white">Teléfono</label>
-                            <input type="text" name="phone" class="form-control"
-                                   value="{{ address.phone }}">
-                        </div>
-
+                        <!-- Campo dirección -->
                         <div class="col-12">
                             <label class="form-label text-white">Dirección</label>
-                            <input type="text" name="address" class="form-control"
-                                   value="{{ address.address }}">
+                            <input type="text" name="address_line" class="form-control"
+                                   value="{{ address.address_line }}">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label text-white">Comuna</label>
+                            <input type="text" name="comuna" class="form-control"
+                                   value="{{ address.comuna }}">
                         </div>
 
                         <div class="col-md-4">
                             <label class="form-label text-white">Ciudad</label>
-                            <input type="text" name="city" class="form-control"
-                                   value="{{ address.city }}">
+                            <input type="text" name="ciudad" class="form-control"
+                                   value="{{ address.ciudad }}">
                         </div>
 
                         <div class="col-md-4">
@@ -51,10 +52,9 @@
                                    value="{{ address.region }}">
                         </div>
 
-                        <div class="col-md-4">
-                            <label class="form-label text-white">Código postal</label>
-                            <input type="text" name="zip" class="form-control"
-                                   value="{{ address.zip }}">
+                        <div class="col-12">
+                            <label class="form-label text-white">Información adicional</label>
+                            <textarea name="extra" class="form-control">{{ address.extra }}</textarea>
                         </div>
 
                     </div>
