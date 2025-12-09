@@ -2633,3 +2633,31 @@ textarea {
 .text-secondary {
     color: #ffffff !important;
 }
+/* ==========================================
+   FIX INPUT TEXT VISIBILITY — CHECKOUT DARK
+   ========================================== */
+
+form .form-control,
+form .form-select,
+.input-holder input,
+.input-holder select,
+.input-holder textarea {
+    color: #000 !important;            /* Texto visible en modo claro */
+    background: #ffffff !important;    /* Fondo blanco */
+}
+
+/* Placeholder visible */
+form .form-control::placeholder,
+.input-holder input::placeholder,
+.input-holder textarea::placeholder {
+    color: #555 !important;
+}
+
+/* Cuando se escribe, que se vea negro */
+form .form-control:focus,
+.input-holder input:focus,
+.input-holder textarea:focus {
+    color: #000 !important;
+    background: #ffffff !important;
+    border-color: #d4af37 !important;
+}
