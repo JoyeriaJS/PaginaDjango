@@ -2675,18 +2675,20 @@ form .form-select,
     color: #fff !important;      /* texto blanco en dark mode */
     border-color: #333 !important;
 }
-/* ============================================
-   FIX DEFINITIVO — SUBTOTAL INVISIBLE
-   ============================================ */
+/* --------------------------------------------
+   FIX REAL — SUBTOTAL Y VALOR INVISIBLE
+--------------------------------------------- */
 
-.summary-row,
-.summary-row *,
-.summary-row .fw-bold,
-.summary-row .text-end {
+.cart-summary .label,
+.cart-summary .label *,
+.cart-summary .value,
+.cart-summary .value *,
+.cart-summary .text-muted,
+.cart-summary .text-end,
+.cart-summary .fw-bold {
     color: #ffffff !important;
 }
-
-.cart-summary .summary-row,
-.cart-summary .summary-row * {
+.cart-summary span,
+.cart-summary p {
     color: #ffffff !important;
 }
