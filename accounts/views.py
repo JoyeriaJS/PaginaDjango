@@ -25,7 +25,16 @@ def dashboard(request):
 # PERFIL
 @login_required
 def profile(request):
+    if request.method == "POST":
+        user = request.user
+        user.first_name = request.POST.get("first_name")
+        user.last_name = request.POST.get("last_name")
+        user.email = request.POST.get("email")
+        user.username = request.POST.get("username")
+        user.save()
+        messages.success(request, "Perfil actualizado correctamente.")
     return render(request, "accounts/profile.html")
+
 
 @login_required
 def profile_edit(request):
