@@ -2325,41 +2325,53 @@ h3.h6 {
   }
 }
 /* ==========================================================
-   FIX — LINKS SUBRAYADOS INVISIBLES EN CHECKOUT (BLACK MODE)
+   FIX — TEXTOS INVISIBLES EN CHECKOUT (FORM LABELS + HELP)
    ========================================================== */
 
-/* Enlaces subrayados como "¿Tienes un cupón?" */
-.checkout-wrapper a,
-.checkout-wrapper a *,
-.checkout-summary a,
-.checkout-summary a *,
-.checkout-container a,
-.checkout-container a * {
+/* Labels principales del formulario */
+.checkout-wrapper .form-label,
+.checkout-container .form-label,
+.checkout-wrapper label,
+.checkout-container label,
+form .form-label {
     color: #ffffff !important;
-    text-decoration-color: #ffffff !important;
+    font-weight: 600 !important;
 }
 
-/* Hover en dorado */
-.checkout-wrapper a:hover,
-.checkout-summary a:hover,
-.checkout-container a:hover {
-    color: #d4af37 !important;
-    text-decoration-color: #d4af37 !important;
+/* Textos pequeños tipo "Este campo es obligatorio" */
+.form-text,
+small.text-muted,
+.checkout-wrapper small,
+.checkout-container small {
+    color: #cccccc !important;
 }
 
-/* Clases Bootstrap problemáticas */
-a.text-decoration-underline,
-a.link-secondary,
-.text-reset a,
-a.text-muted {
+/* Placeholders muy tenues → hacerlos más visibles */
+.checkout-wrapper .form-control::placeholder,
+.checkout-container .form-control::placeholder,
+.checkout-wrapper input::placeholder,
+.checkout-container input::placeholder {
+    color: #b0b0b0 !important;
+}
+
+/* Texto de selects */
+.checkout-wrapper .form-select,
+.checkout-container .form-select {
     color: #ffffff !important;
-    text-decoration-color: #ffffff !important;
 }
 
-a.text-decoration-underline:hover,
-a.link-secondary:hover {
-    color: #d4af37 !important;
-    text-decoration-color: #d4af37 !important;
+/* Labels de radios y checkboxes */
+.checkout-wrapper .form-check-label,
+.checkout-container .form-check-label,
+.form-check-label {
+    color: #ffffff !important;
+}
+
+/* Color del ícono del select flechita */
+.checkout-wrapper select,
+.checkout-container select {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
 }
 
 
