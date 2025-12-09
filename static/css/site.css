@@ -2894,3 +2894,85 @@ a.btn {
 .list-group .list-group-item * {
     color: inherit !important;
 }
+/* ==========================================================
+   FIX PANEL DE CUENTA — TEXTO INVISIBLE / FONDO BLANCO
+   ========================================================== */
+
+/* Contenedor principal del panel (lado derecho) */
+.account-panel,
+.account-content,
+.col-lg-9 {
+    background-color: #0e0e0e !important;   /* Fondo oscuro uniforme */
+    color: #fff !important;                 /* Texto visible */
+    border: 1px solid #222 !important;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+/* Títulos: "Perfil", "Información personal", etc. */
+.account-panel h1,
+.account-panel h2,
+.account-panel h3,
+.account-content h1,
+.account-content h2,
+.account-content h3,
+.col-lg-9 h1,
+.col-lg-9 h2,
+.col-lg-9 h3 {
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+/* Subtítulos en gris que desaparecían */
+.account-panel .text-muted,
+.account-content .text-muted,
+.col-lg-9 .text-muted {
+    color: #cccccc !important;  /* gris claro visible */
+}
+
+/* Labels de formulario */
+.account-panel label,
+.account-content label,
+.col-lg-9 label {
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+/* Inputs dentro de cuenta */
+.account-panel input,
+.account-panel select,
+.account-panel textarea,
+.account-content input,
+.account-content select,
+.account-content textarea,
+.col-lg-9 input,
+.col-lg-9 select,
+.col-lg-9 textarea {
+    background: #1a1a1a !important;
+    color: #ffffff !important;
+    border: 1px solid #333 !important;
+}
+
+/* Texto dentro de los inputs */
+.account-panel input::placeholder,
+.account-content input::placeholder,
+.col-lg-9 input::placeholder {
+    color: #aaaaaa !important;
+}
+
+/* Botones */
+.account-panel .btn,
+.account-content .btn,
+.col-lg-9 .btn {
+    background: #000 !important;
+    color: #fff !important;
+    border: 1px solid #333 !important;
+}
+
+.account-panel .btn:hover,
+.account-content .btn:hover,
+.col-lg-9 .btn:hover {
+    background: #333 !important;
+    border-color: #d4af37 !important;
+    color: #d4af37 !important;
+}
