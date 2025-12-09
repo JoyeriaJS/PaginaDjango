@@ -2324,4 +2324,63 @@ h3.h6 {
     height: 52px;
   }
 }
+/* ==========================================================
+   FIX — VISIBILIDAD DE TEXTO EN CHECKOUT (BLACK MODE)
+   ========================================================== */
+
+/* Forzar texto blanco en todas las etiquetas */
+.checkout-wrapper label,
+.checkout-wrapper .form-label {
+  color: #ffffff !important;
+}
+
+/* Subtítulos y textos secundarios */
+.checkout-wrapper .text-muted,
+.checkout-summary .label,
+.checkout-products .product-qty {
+  color: #ffffff !important;
+  opacity: 0.85;
+}
+
+/* Valores dentro del resumen */
+.checkout-summary .value {
+  color: #ffffff !important;
+}
+
+/* Inputs y selects: texto siempre blanco */
+.checkout-wrapper .form-control,
+.checkout-wrapper .form-select {
+  color: #ffffff !important;
+}
+
+/* Placeholder más visible */
+.checkout-wrapper .form-control::placeholder {
+  color: rgba(255,255,255,0.55) !important;
+}
+
+/* Cupón aplicado */
+.coupon-applied {
+  color: #d4af37 !important;
+}
+
+/* Radios: texto siempre visible */
+.checkout-radio {
+  color: #ffffff !important;
+}
+
+/* Botón secundario (volver/cancelar) */
+.btn-checkout-secondary {
+  color: #ffffff !important;
+}
+
+/* Total del resumen — asegurar contraste */
+.checkout-summary .total {
+  color: #d4af37 !important;
+}
+
+/* Texto interior de lista de productos */
+.checkout-products .product-name {
+  color: #ffffff !important;
+}
+
 
