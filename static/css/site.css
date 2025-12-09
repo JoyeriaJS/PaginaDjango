@@ -2325,62 +2325,41 @@ h3.h6 {
   }
 }
 /* ==========================================================
-   FIX — VISIBILIDAD DE TEXTO EN CHECKOUT (BLACK MODE)
+   FIX — LINKS SUBRAYADOS INVISIBLES EN CHECKOUT (BLACK MODE)
    ========================================================== */
 
-/* Forzar texto blanco en todas las etiquetas */
-.checkout-wrapper label,
-.checkout-wrapper .form-label {
-  color: #ffffff !important;
+/* Enlaces subrayados como "¿Tienes un cupón?" */
+.checkout-wrapper a,
+.checkout-wrapper a *,
+.checkout-summary a,
+.checkout-summary a *,
+.checkout-container a,
+.checkout-container a * {
+    color: #ffffff !important;
+    text-decoration-color: #ffffff !important;
 }
 
-/* Subtítulos y textos secundarios */
-.checkout-wrapper .text-muted,
-.checkout-summary .label,
-.checkout-products .product-qty {
-  color: #ffffff !important;
-  opacity: 0.85;
+/* Hover en dorado */
+.checkout-wrapper a:hover,
+.checkout-summary a:hover,
+.checkout-container a:hover {
+    color: #d4af37 !important;
+    text-decoration-color: #d4af37 !important;
 }
 
-/* Valores dentro del resumen */
-.checkout-summary .value {
-  color: #ffffff !important;
+/* Clases Bootstrap problemáticas */
+a.text-decoration-underline,
+a.link-secondary,
+.text-reset a,
+a.text-muted {
+    color: #ffffff !important;
+    text-decoration-color: #ffffff !important;
 }
 
-/* Inputs y selects: texto siempre blanco */
-.checkout-wrapper .form-control,
-.checkout-wrapper .form-select {
-  color: #ffffff !important;
-}
-
-/* Placeholder más visible */
-.checkout-wrapper .form-control::placeholder {
-  color: rgba(255,255,255,0.55) !important;
-}
-
-/* Cupón aplicado */
-.coupon-applied {
-  color: #d4af37 !important;
-}
-
-/* Radios: texto siempre visible */
-.checkout-radio {
-  color: #ffffff !important;
-}
-
-/* Botón secundario (volver/cancelar) */
-.btn-checkout-secondary {
-  color: #ffffff !important;
-}
-
-/* Total del resumen — asegurar contraste */
-.checkout-summary .total {
-  color: #d4af37 !important;
-}
-
-/* Texto interior de lista de productos */
-.checkout-products .product-name {
-  color: #ffffff !important;
+a.text-decoration-underline:hover,
+a.link-secondary:hover {
+    color: #d4af37 !important;
+    text-decoration-color: #d4af37 !important;
 }
 
 
