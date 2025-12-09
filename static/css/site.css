@@ -2694,3 +2694,33 @@ form .form-control:focus,
     border-color: #000 !important;
     box-shadow: none !important;
 }
+
+/* ==============================================
+   BOTÓN "APLICAR DESCUENTO" — FORZAR NEGRO
+   ============================================== */
+
+.btn-apply-coupon,
+button[name="apply_coupon"],
+input[type="submit"][value="Aplicar"],
+input[type="submit"][value="Aplicar descuento"],
+input[value="Aplicar"],
+input[value="Aplicar descuento"] {
+    background: #000 !important;
+    color: #fff !important;
+    border: 1px solid #000 !important;
+    opacity: 1 !important;
+    border-radius: 6px !important;
+    padding: 8px 18px !important;
+}
+
+/* Hover */
+.btn-apply-coupon:hover,
+button[name="apply_coupon"]:hover,
+input[type="submit"][value="Aplicar"]:hover,
+input[type="submit"][value="Aplicar descuento"]:hover,
+input[value="Aplicar"]:hover,
+input[value="Aplicar descuento"]:hover {
+    background: #222 !important;
+    color: #fff !important;
+    border-color: #222 !important;
+}
