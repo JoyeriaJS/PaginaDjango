@@ -2617,3 +2617,19 @@ textarea {
     color: #000 !important;
 }
 
+/* ==========================================
+   FIX SUBTOTAL — CASTEABLE CHECKOUT DARK MODE
+   ========================================== */
+
+/* Línea del subtotal */
+.d-flex.justify-content-between.mb-1 span,
+.d-flex.justify-content-between.mb-1 strong {
+    color: #ffffff !important;
+}
+
+/* Evitar que Bootstrap ponga gris */
+.text-muted,
+.text-body-secondary,
+.text-secondary {
+    color: #ffffff !important;
+}
