@@ -2854,3 +2854,86 @@ a.btn {
 .container .card .btn-pay:hover {
   background: #b9972f !important;
 }
+
+/* ============================================
+   FIX — PÁGINA MI CUENTA (VISIBILIDAD TOTAL)
+   ============================================ */
+
+/* Títulos principales */
+.account-wrapper h1,
+.account-wrapper h2,
+.account-wrapper h3,
+.account-wrapper .section-title,
+.account-wrapper .title {
+    color: #ffffff !important;
+}
+
+/* Menú lateral: Mi cuenta, Mis compras, Perfil, Direcciones, Cerrar sesión */
+.account-nav a,
+.account-nav .nav-link,
+.account-menu a {
+    color: #ffffff !important;
+}
+.account-nav .nav-link.active,
+.account-nav .nav-link:hover {
+    color: #d4af37 !important;
+}
+
+/* Subtítulos como "Órdenes", "Historial de compras", "Perfil", etc. */
+.account-section h4,
+.account-section h5,
+.account-section-header,
+.account-subtitle {
+    color: #ffffff !important;
+}
+
+/* Etiquetas informativas: "Información personal", "Datos de envío", etc. */
+.text-muted,
+.small,
+label,
+.form-label,
+.account-info-label {
+    color: #ffffff !important;
+    opacity: 0.9 !important;
+}
+
+/* Datos de usuario dentro de la cuenta */
+.account-info,
+.account-data,
+.account-wrapper span,
+.account-wrapper p {
+    color: #ffffff !important;
+}
+
+/* Tablas del historial de compras */
+.account-table,
+.account-table td,
+.account-table th {
+    color: #ffffff !important;
+}
+
+/* Botones dentro de la página de cuenta */
+.account-wrapper .btn,
+.account-wrapper button {
+    color: #000 !important;
+    background: #d4af37 !important;
+    border: 1px solid #d4af37 !important;
+}
+
+.account-wrapper .btn:hover {
+    background: #b9972f !important;
+    border-color: #b9972f !important;
+}
+
+/* Inputs – que se vea lo que uno escribe */
+.account-wrapper input,
+.account-wrapper select,
+.account-wrapper textarea {
+    background: #111 !important;
+    border: 1px solid #333 !important;
+    color: #ffffff !important;
+}
+
+.account-wrapper input::placeholder {
+    color: #aaaaaa !important;
+}
