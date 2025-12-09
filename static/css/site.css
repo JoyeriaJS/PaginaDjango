@@ -2636,3 +2636,42 @@ textarea {
 .cart-summary .summary-number {
     color: #ffffff !important;
 }
+
+/* ============================================
+   FIX GLOBAL — NÚMEROS DE SUBTOTAL Y TOTALES
+   Se aplica tanto en tabla como en resúmenes
+   ============================================ */
+
+table .text-end,
+table .fw-bold,
+table .cart-subtotal,
+table td span,
+.summary-row .value,
+.summary-row .text-end,
+.summary-row span,
+.order-summary .text-end,
+.order-summary span {
+    color: #ffffff !important;
+}
+
+/* ============================================
+   FIX FORMULARIOS — TEXTO INVISIBLE
+   ============================================ */
+
+form .form-control,
+form .form-select,
+.input-holder input,
+.input-holder select,
+.input-holder textarea {
+    color: #000 !important;      /* texto siempre visible */
+}
+
+[data-theme="dark"] form .form-control,
+[data-theme="dark"] form .form-select,
+[data-theme="dark"] .input-holder input,
+[data-theme="dark"] .input-holder select,
+[data-theme="dark"] .input-holder textarea {
+    background: #1a1a1a !important;
+    color: #fff !important;      /* texto blanco en dark mode */
+    border-color: #333 !important;
+}
