@@ -2676,36 +2676,3 @@ form .form-select,
     border-color: #333 !important;
 }
 
-/* ==========================================
-   FIX TOTAL — FORZAR VISIBILIDAD EN CHECKOUT
-   ========================================== */
-
-/* Textos del checkout que Bootstrap deja grises */
-.checkout-wrapper,
-.checkout-wrapper *,
-.table-dark-casteable *,
-.table *,
-.d-flex.justify-content-between.py-2.border-bottom span,
-.d-flex.justify-content-between.py-2.border-bottom strong {
-    color: #ffffff !important;
-}
-
-/* Subtotal específicamente */
-.d-flex.justify-content-between.py-2.border-bottom strong,
-.d-flex.justify-content-between.py-2.border-bottom span {
-    color: #ffffff !important;
-}
-
-/* Si usa text-muted o similares */
-.text-muted,
-.text-body-secondary,
-.text-secondary {
-    color: #ffffff !important;
-}
-
-/* Inputs del formulario (para que no escribas blanco sobre blanco) */
-form .form-control,
-form .form-select {
-    color: #000 !important;        /* texto interno negro */
-    background: #ffffff !important; /* fondo blanco */
-}
