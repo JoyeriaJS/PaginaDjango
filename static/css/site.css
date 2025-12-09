@@ -2661,3 +2661,36 @@ form .form-control:focus,
     background: #ffffff !important;
     border-color: #d4af37 !important;
 }
+
+/* ==============================================
+   FIX BOTONES DEL CARRITO — SIEMPRE NEGROS
+   ============================================== */
+
+.cart-wrapper .btn,
+.cart-summary .btn,
+.btn-outline-casteable,
+.btn-elegant-outline {
+    background: #000 !important;   /* Negro sólido */
+    color: #fff !important;        /* Texto blanco */
+    border: 1px solid #000 !important;
+    opacity: 1 !important;         /* Nunca transparentes */
+}
+
+/* Hover también negro (ligero tono gris para feedback) */
+.cart-wrapper .btn:hover,
+.cart-summary .btn:hover,
+.btn-outline-casteable:hover,
+.btn-elegant-outline:hover {
+    background: #222 !important;   
+    color: #fff !important;
+    border-color: #222 !important;
+}
+
+/* Deshabilitar cualquier efecto anterior */
+.cart-wrapper .btn:focus,
+.cart-summary .btn:focus {
+    background: #000 !important;
+    color: #fff !important;
+    border-color: #000 !important;
+    box-shadow: none !important;
+}
