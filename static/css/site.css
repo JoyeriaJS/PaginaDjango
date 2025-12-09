@@ -2774,3 +2774,38 @@ button.btn,
 a.btn {
     color: #ffffff !important;
 }
+
+/* ============================================================
+   FIX DEFINITIVO PARA SUBTOTAL, TOTAL Y MONTOS EN CHECKOUT
+   ============================================================ */
+
+/* Esto afecta directamente al contenedor de resumen */
+.cart-summary, 
+.cart-summary * {
+    color: #ffffff !important;
+}
+
+/* Monto Total especial en dorado */
+.cart-summary .total,
+.cart-summary .grand-total,
+.cart-summary .total strong {
+    color: #d4af37 !important;
+}
+
+/* Valores numéricos forzados */
+.cart-summary strong,
+.cart-summary .value {
+    color: #ffffff !important;
+}
+
+/* Texto como “Subtotal”, “Código de descuento”, etc. */
+.cart-summary span,
+.cart-summary label,
+.cart-summary small {
+    color: #ffffff !important;
+}
+
+/* Placeholder visible */
+.cart-summary input::placeholder {
+    color: #dddddd !important;
+}
