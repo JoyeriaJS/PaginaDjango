@@ -2374,4 +2374,97 @@ small.text-muted,
     color: #ffffff !important;
 }
 
+/* ==========================================================
+   FIX FINAL CHECKOUT — TITULOS, SUBTOTALES, BOTONES INVISIBLES
+   ========================================================== */
+
+/* ===== TÍTULOS PRINCIPALES DEL CHECKOUT ===== */
+.checkout-wrapper h2,
+.checkout-wrapper h3,
+.checkout-wrapper h4,
+.checkout-wrapper h5,
+.checkout-wrapper h6,
+.checkout-container h2,
+.checkout-container h3,
+.checkout-container h4,
+.checkout-container h5,
+.checkout-container h6 {
+    color: #ffffff !important;
+}
+
+/* Título "Datos de envío" específicamente */
+.checkout-wrapper .section-title,
+.checkout-wrapper .shipping-title {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+/* Título "Resumen del pedido" */
+.checkout-summary h3,
+.checkout-summary h4,
+.checkout-summary h5 {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+/* ===== SUBTOTALES, ETIQUETAS DE PRECIOS ===== */
+.checkout-summary .label,
+.checkout-summary .value,
+.checkout-summary span,
+.checkout-summary .row span {
+    color: #ffffff !important;
+}
+
+/* Subtotal, envío, descuentos, etc */
+.checkout-summary .label {
+    font-weight: 600 !important;
+    opacity: 0.9;
+}
+
+/* Los montos como $10000 */
+.checkout-summary .value {
+    font-weight: 700 !important;
+}
+
+/* ===== EL TÍTULO "TOTAL" ===== */
+.checkout-summary .total-label,
+.checkout-summary .total-text {
+    color: #ffffff !important;
+    font-size: 1.3rem !important;
+    font-weight: 700 !important;
+}
+
+/* El número del total ya se ve bien, no lo tocamos */
+
+/* ===== BOTONES "VOLVER" Y "GUARDAR" ===== */
+.checkout-wrapper .btn-outline-casteable,
+.checkout-wrapper .btn-outline-secondary,
+.checkout-wrapper .btn-secondary,
+.checkout-wrapper a.btn {
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+
+.checkout-wrapper .btn-outline-casteable:hover,
+.checkout-wrapper .btn-outline-secondary:hover,
+.checkout-wrapper .btn-secondary:hover,
+.checkout-wrapper a.btn:hover {
+    color: #000 !important;
+    background: #d4af37 !important;
+    border-color: #d4af37 !important;
+}
+
+/* Botón primario (Guardar / Continuar) */
+.checkout-wrapper .btn-primary,
+.checkout-container .btn-primary {
+    background: #d4af37 !important;
+    border-color: #d4af37 !important;
+    color: #000 !important;
+}
+
+/* ===== TEXTOS DENTRO DEL RESUMEN ===== */
+.checkout-summary * {
+    color: #ffffff !important;
+}
+
 
