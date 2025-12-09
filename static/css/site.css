@@ -2855,53 +2855,88 @@ a.btn {
   background: #b9972f !important;
 }
 
-/* ===============================================
-   SIDEBAR CUENTA — ESTÁTICO, SIN HOVER
-   =============================================== */
+/* ==========================================================
+   FIX GLOBAL CUENTA / SIDEBAR — TODO VISIBLE
+   ========================================================== */
 
-/* Todos los ítems del sidebar */
+/* --- SIDEBAR: todos los elementos siempre visibles --- */
 .list-group-item {
     background: transparent !important;
     color: #ffffff !important;
     border: none !important;
-    font-weight: 500;
+    font-weight: 500 !important;
 }
 
-/* Ícono + texto */
 .list-group-item * {
     color: #ffffff !important;
 }
 
-/* Ítem activo (la página actual) */
+/* Ítem activo */
 .list-group-item.active {
-    background: #d4af37 !important;  /* Dorado */
+    background: #d4af37 !important;
     color: #000 !important;
-    font-weight: 600;
+    font-weight: 600 !important;
     border-radius: 6px !important;
 }
 
-/* Ícono dentro del item activo */
 .list-group-item.active * {
     color: #000 !important;
 }
 
-/* SIN HOVER — no cambia color */
+/* Sin hover */
 .list-group-item:hover {
     background: transparent !important;
     color: #ffffff !important;
 }
 
-/* Botón cerrar sesión */
-.list-group-item.text-danger {
-    color: #ff6b6b !important;
-}
-
+/* Cerrar sesión */
+.list-group-item.text-danger,
 .list-group-item.text-danger * {
     color: #ff6b6b !important;
 }
 
-/* Cerrar sesión sin hover */
-.list-group-item.text-danger:hover {
-    background: transparent !important;
-    color: #ff6b6b !important;
+/* --- CONTENIDO DE CUENTA: títulos y textos --- */
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff !important;
+}
+
+.text-muted {
+    color: #d0d0d0 !important; /* Gris claro visible */
+}
+
+p, span, label, strong, small, li {
+    color: #ffffff !important;
+}
+
+/* Labels e inputs dentro de Perfil / Direcciones */
+.form-label {
+    color: #ffffff !important;
+}
+
+.form-control {
+    background: #1b1b1b !important;
+    color: #ffffff !important;
+    border: 1px solid #444 !important;
+}
+
+.form-control::placeholder {
+    color: #bcbcbc !important;
+}
+
+/* Botones dentro de cuenta */
+.btn,
+.btn-primary,
+.btn-outline-casteable,
+button {
+    color: #ffffff !important;
+}
+
+/* Botón outline */
+.btn-outline-casteable {
+    border-color: #fff !important;
+}
+
+.btn-outline-casteable:hover {
+    background: #ffffff !important;
+    color: #000 !important;
 }
