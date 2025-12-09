@@ -2856,87 +2856,41 @@ a.btn {
 }
 
 /* ==========================================================
-   FIX GLOBAL CUENTA / SIDEBAR — TODO VISIBLE
+   FIX DEFINITIVO SIDEBAR CUENTA — TODO SIEMPRE VISIBLE
    ========================================================== */
 
-/* --- SIDEBAR: todos los elementos siempre visibles --- */
-.list-group-item {
-    background: transparent !important;
-    color: #ffffff !important;
-    border: none !important;
-    font-weight: 500 !important;
+/* Fondo real para cada item */
+.list-group .list-group-item {
+    background-color: #111 !important;   /* Fondo oscuro siempre */
+    color: #fff !important;              /* Texto blanco siempre */
+    border: 1px solid #222 !important;   /* Borde fino */
 }
 
-.list-group-item * {
-    color: #ffffff !important;
+/* Ítem activo (el seleccionado) */
+.list-group .list-group-item.active {
+    background-color: #d4af37 !important;  /* Dorado */
+    color: #000 !important;                /* Texto negro */
+    font-weight: 700 !important;
+    border-color: #d4af37 !important;
 }
 
-/* Ítem activo */
-.list-group-item.active {
-    background: #d4af37 !important;
-    color: #000 !important;
-    font-weight: 600 !important;
-    border-radius: 6px !important;
+/* Evitar hover que invierte colores */
+.list-group .list-group-item:hover {
+    background-color: #1a1a1a !important;
+    color: #fff !important;
 }
 
-.list-group-item.active * {
-    color: #000 !important;
+/* Cerrar sesión rojo */
+.list-group .list-group-item.text-danger {
+    color: #ff5f5f !important;
 }
 
-/* Sin hover */
-.list-group-item:hover {
-    background: transparent !important;
-    color: #ffffff !important;
+.list-group .list-group-item.text-danger:hover {
+    background-color: #1a1a1a !important;
+    color: #ff5f5f !important;
 }
 
-/* Cerrar sesión */
-.list-group-item.text-danger,
-.list-group-item.text-danger * {
-    color: #ff6b6b !important;
-}
-
-/* --- CONTENIDO DE CUENTA: títulos y textos --- */
-h1, h2, h3, h4, h5, h6 {
-    color: #ffffff !important;
-}
-
-.text-muted {
-    color: #d0d0d0 !important; /* Gris claro visible */
-}
-
-p, span, label, strong, small, li {
-    color: #ffffff !important;
-}
-
-/* Labels e inputs dentro de Perfil / Direcciones */
-.form-label {
-    color: #ffffff !important;
-}
-
-.form-control {
-    background: #1b1b1b !important;
-    color: #ffffff !important;
-    border: 1px solid #444 !important;
-}
-
-.form-control::placeholder {
-    color: #bcbcbc !important;
-}
-
-/* Botones dentro de cuenta */
-.btn,
-.btn-primary,
-.btn-outline-casteable,
-button {
-    color: #ffffff !important;
-}
-
-/* Botón outline */
-.btn-outline-casteable {
-    border-color: #fff !important;
-}
-
-.btn-outline-casteable:hover {
-    background: #ffffff !important;
-    color: #000 !important;
+/* Íconos */
+.list-group .list-group-item * {
+    color: inherit !important;
 }
