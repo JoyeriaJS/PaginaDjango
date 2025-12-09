@@ -2584,14 +2584,17 @@ textarea {
     color: #ffffff !important;
     border-color: #333 !important;
 }
-/* Valor del subtotal en checkout */
-.summary-value,
-.cart-summary .value,
-.cart-summary .total-value,
+/* ----- FIX FINAL SUBTOTAL (solo el número) ----- */
+.cart-summary .summary-row .value,
+.cart-summary .summary-row span,
+.cart-summary .summary-value,
 .summary-row .value,
-.text-end.fw-bold {
+.summary-row span.text-end,
+.summary-row span.fw-bold,
+.cart-summary .text-end {
     color: #ffffff !important;
 }
+
 
 /* Botones del checkout (Volver / Guardar / Continuar) */
 .checkout-form .btn,
