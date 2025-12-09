@@ -2855,85 +2855,43 @@ a.btn {
   background: #b9972f !important;
 }
 
-/* ============================================
-   FIX — PÁGINA MI CUENTA (VISIBILIDAD TOTAL)
-   ============================================ */
+/* ===============================================
+   FIX VISIBILIDAD — SIDEBAR CUENTA (list-group)
+   =============================================== */
 
-/* Títulos principales */
-.account-wrapper h1,
-.account-wrapper h2,
-.account-wrapper h3,
-.account-wrapper .section-title,
-.account-wrapper .title {
+/* Textos de cada item del menú */
+.list-group-item {
     color: #ffffff !important;
+    background-color: transparent !important;
+    border-color: rgba(255,255,255,0.15) !important;
 }
 
-/* Menú lateral: Mi cuenta, Mis compras, Perfil, Direcciones, Cerrar sesión */
-.account-nav a,
-.account-nav .nav-link,
-.account-menu a {
-    color: #ffffff !important;
-}
-.account-nav .nav-link.active,
-.account-nav .nav-link:hover {
-    color: #d4af37 !important;
-}
-
-/* Subtítulos como "Órdenes", "Historial de compras", "Perfil", etc. */
-.account-section h4,
-.account-section h5,
-.account-section-header,
-.account-subtitle {
-    color: #ffffff !important;
-}
-
-/* Etiquetas informativas: "Información personal", "Datos de envío", etc. */
-.text-muted,
-.small,
-label,
-.form-label,
-.account-info-label {
-    color: #ffffff !important;
-    opacity: 0.9 !important;
-}
-
-/* Datos de usuario dentro de la cuenta */
-.account-info,
-.account-data,
-.account-wrapper span,
-.account-wrapper p {
-    color: #ffffff !important;
-}
-
-/* Tablas del historial de compras */
-.account-table,
-.account-table td,
-.account-table th {
-    color: #ffffff !important;
-}
-
-/* Botones dentro de la página de cuenta */
-.account-wrapper .btn,
-.account-wrapper button {
+/* Item activo */
+.list-group-item.active {
+    background-color: #d4af37 !important; /* Dorado */
     color: #000 !important;
-    background: #d4af37 !important;
-    border: 1px solid #d4af37 !important;
+    border-color: #d4af37 !important;
+    font-weight: 600;
 }
 
-.account-wrapper .btn:hover {
-    background: #b9972f !important;
-    border-color: #b9972f !important;
-}
-
-/* Inputs – que se vea lo que uno escribe */
-.account-wrapper input,
-.account-wrapper select,
-.account-wrapper textarea {
-    background: #111 !important;
-    border: 1px solid #333 !important;
+/* Íconos dentro del texto */
+.list-group-item .emoji,
+.list-group-item span,
+.list-group-item strong {
     color: #ffffff !important;
 }
 
-.account-wrapper input::placeholder {
-    color: #aaaaaa !important;
+/* Hover */
+.list-group-item:hover {
+    background-color: rgba(255,255,255,0.12) !important;
+    color: #fff !important;
+}
+
+/* Botón "Cerrar sesión" en rojo visible */
+.list-group-item.text-danger {
+    color: #ff6b6b !important;
+}
+.list-group-item.text-danger:hover {
+    background-color: rgba(255,107,107,0.15) !important;
+    color: #ffaaaa !important;
 }
