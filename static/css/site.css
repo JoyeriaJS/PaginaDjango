@@ -2584,3 +2584,42 @@ textarea {
     color: #ffffff !important;
     border-color: #333 !important;
 }
+/* Valor del subtotal en checkout */
+.summary-value,
+.cart-summary .value,
+.cart-summary .total-value,
+.summary-row .value,
+.text-end.fw-bold {
+    color: #ffffff !important;
+}
+
+/* Botones del checkout (Volver / Guardar / Continuar) */
+.checkout-form .btn,
+.cart-summary .btn,
+.card .btn {
+    color: #ffffff !important;
+    border-color: #d4af37 !important;
+}
+
+/* Hover */
+.checkout-form .btn:hover,
+.cart-summary .btn:hover,
+.card .btn:hover {
+    color: #000000 !important;
+    background-color: #d4af37 !important;
+    border-color: #d4af37 !important;
+}
+
+.btn-outline-casteable,
+.btn-outline-secondary,
+.btn-outline-dark {
+    color: #ffffff !important;
+    border-color: #d4af37 !important;
+}
+
+.btn-outline-casteable:hover,
+.btn-outline-secondary:hover,
+.btn-outline-dark:hover {
+    background: #d4af37 !important;
+    color: #000 !important;
+}
