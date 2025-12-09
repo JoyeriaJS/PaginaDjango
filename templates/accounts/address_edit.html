@@ -1,0 +1,81 @@
+{% extends "base_site.html" %}
+{% load static %}
+
+{% block title %}Editar dirección{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <div class="row g-4">
+
+        {% include "accounts/sidebar.html" %}
+
+        <div class="col-lg-9">
+            <div class="card shadow-sm border-0 p-4">
+
+                <h2 class="fw-bold mb-3 text-white">📍 Editar dirección</h2>
+                <p class="text-muted mb-4">Modifica tus datos de envío</p>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label text-white">Nombre completo</label>
+                            <input type="text" name="name" class="form-control"
+                                   value="{{ address.name }}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label text-white">Teléfono</label>
+                            <input type="text" name="phone" class="form-control"
+                                   value="{{ address.phone }}">
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label text-white">Dirección</label>
+                            <input type="text" name="address" class="form-control"
+                                   value="{{ address.address }}">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label text-white">Ciudad</label>
+                            <input type="text" name="city" class="form-control"
+                                   value="{{ address.city }}">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label text-white">Región</label>
+                            <input type="text" name="region" class="form-control"
+                                   value="{{ address.region }}">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label text-white">Código postal</label>
+                            <input type="text" name="zip" class="form-control"
+                                   value="{{ address.zip }}">
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'accounts:address_list' %}"
+                           class="btn btn-outline-casteable">
+                           Volver
+                        </a>
+
+                        <button type="submit" class="btn btn-pay">
+                            Guardar cambios
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
