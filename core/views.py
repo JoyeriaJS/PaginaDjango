@@ -955,21 +955,20 @@ def category_all(request):
     return render(request, "core/category_all.html", {"categories": categories})
 
 #CATEGORY LIST
-def category_list(request, pk):
-    category = get_object_or_404(Category, pk=pk)
+##   category = get_object_or_404(Category, pk=pk)
 
     # Productos activos y disponibles (no usamos "available" porque NO existe)
-    products = Product.objects.filter(
-        category=category,
-        is_active=True
-    ).filter(
-        models.Q(stock__gt=0) | models.Q(stock__isnull=True)
-    ).order_by("-id")
-
-    return render(request, "core/category_all.html", {
-        "category": category,
-        "products": products,
-    })
+  #  products = Product.objects.filter(
+   #     category=category,
+    #    is_active=True
+    #).filter(
+     #   models.Q(stock__gt=0) | models.Q(stock__isnull=True)
+    #).order_by("-id")
+#
+ #   return render(request, "core/category_all.html", {
+  #      "category": category,
+   #     "products": products,
+    #})
 
 def category_detail(request, pk):
     category = get_object_or_404(Category, pk=pk)
