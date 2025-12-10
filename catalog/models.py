@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 from django.utils import timezone
 #from catalog.models import Product
@@ -56,7 +57,8 @@ class Product(models.Model):
         if not self.slug:
             self.slug = slugify(f"{self.name}-{self.sku}")
         return super().save(*args, **kwargs)
-
+    def get_absolute_url(self):
+        return reverse("core:product_detail", args=[self.pk])
 
 class ProductImage(models.Model):
     product = models.ForeignKey('Product', related_name='images', on_delete=models.CASCADE)

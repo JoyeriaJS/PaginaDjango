@@ -968,28 +968,34 @@ def politica_reembolsos(request):
 def politica_cookies(request):
     return render(request, "core/politica_cookies.html")
 
-
-
-
 def search_ajax(request):
     q = request.GET.get("q", "").strip()
 
+    # Si la caja está vacía → no mostrar nada
     if not q:
         return JsonResponse({"results": []})
 
+    # Buscar productos
     products = (
         Product.objects.filter(is_active=True, name__icontains=q)
-        .order_by("-created_at")[:5]
+        .order_by("-created_at")[:8]
     )
 
-    data = []
+    results = []
+
     for p in products:
-        data.append({
+        # Obtener imagen principal SI EXISTE
+        image_url = None
+        if p.images.exists():
+            image_url = p.images.first().image.url
+
+        results.append({
             "name": p.name,
             "price": f"${p.price:,.0f}".replace(",", "."),
             "url": p.get_absolute_url(),
-            "image": p.images.first().image.url if p.images.exists() else None,
+            "image": image_url,
         })
 
-    return JsonResponse({"results": data})
+    return JsonResponse({"results": results})
+
 
