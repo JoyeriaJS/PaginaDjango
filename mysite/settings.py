@@ -16,9 +16,7 @@ SECRET_KEY = 'django-insecure-rc^*w^w&6g9_(uvx#6s*bnt!w)l0rdi%!l7mv#y%uc&x%wo5pk
 DEBUG = True
 
 
-ALLOWED_IPS = [
-    "181.42.163.131",
-]
+
 # Incluye aquí tus dominios reales (Railway y producción)
 ALLOWED_HOSTS = [
     "localhost", "127.0.0.1",
