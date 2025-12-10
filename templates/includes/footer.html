@@ -43,7 +43,7 @@
         <h6 class="fw-semibold mb-3" style="color:#d4af37;">Dónde estamos</h6>
         <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow" style="border:1px solid #222;">
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18..." 
+            src="https://www.google.com/maps/embed?pb=!1m18..."
             style="border:0;" 
             loading="lazy" 
             allowfullscreen 
@@ -55,13 +55,32 @@
     </div>
 
     <!-- Línea inferior -->
-    <div class="d-flex justify-content-between align-items-center pt-4 mt-5 border-top border-secondary">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center pt-4 mt-5 border-top border-secondary gap-2">
+
       <div class="small text-muted">
         © {{ now|date:"Y" }} CASTEABLE. Todos los derechos reservados.
       </div>
-      <div class="small">
-        <a href="/politica-privacidad" class="text-muted text-decoration-none">Política de privacidad</a>
+
+      <div class="small d-flex gap-3 flex-wrap text-center">
+
+        <a href="{% url 'core:politica_privacidad' %}" class="text-muted text-decoration-none">
+          Política de Privacidad
+        </a>
+
+        <a href="{% url 'core:terminos_condiciones' %}" class="text-muted text-decoration-none">
+          Términos y Condiciones
+        </a>
+
+        <a href="{% url 'core:politica_reembolsos' %}" class="text-muted text-decoration-none">
+          Política de Reembolsos
+        </a>
+
+        <a href="{% url 'core:politica_cookies' %}" class="text-muted text-decoration-none">
+          Política de Cookies
+        </a>
+
       </div>
+
     </div>
 
   </div>

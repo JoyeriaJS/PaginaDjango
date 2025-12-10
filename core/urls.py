@@ -49,6 +49,10 @@ urlpatterns = [
     #path('categoria/<int:pk>/', views.category_detail, name='category_detail'),
 
 
+    path("politica-privacidad/", views.politica_privacidad, name="politica_privacidad"),
+    path("terminos-condiciones/", views.terminos_condiciones, name="terminos_condiciones"),
+    path("politica-reembolsos/", views.politica_reembolsos, name="politica_reembolsos"),
+    path("politica-cookies/", views.politica_cookies, name="politica_cookies"),
 
 
     

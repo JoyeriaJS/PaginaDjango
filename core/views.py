@@ -955,4 +955,14 @@ def category_all(request):
     return render(request, "core/category_all.html", {"categories": categories})
 
 
+def politica_privacidad(request):
+    return render(request, "core/politica_privacidad.html")
 
+def terminos_condiciones(request):
+    return render(request, "core/terminos_condiciones.html")
+
+def politica_reembolsos(request):
+    return render(request, "core/politica_reembolsos.html")
+
+def politica_cookies(request):
+    return render(request, "core/politica_cookies.html")
