@@ -970,3 +970,5 @@ def category_list(request, pk):
         "category": category,
         "products": products,
     })
+
+
