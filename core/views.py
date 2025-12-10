@@ -969,6 +969,8 @@ def politica_cookies(request):
     return render(request, "core/politica_cookies.html")
 
 
+
+
 def search_ajax(request):
     q = request.GET.get("q", "").strip()
 
@@ -990,3 +992,4 @@ def search_ajax(request):
         })
 
     return JsonResponse({"results": data})
+

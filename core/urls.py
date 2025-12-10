@@ -54,6 +54,8 @@ urlpatterns = [
     path("politica-reembolsos/", views.politica_reembolsos, name="politica_reembolsos"),
     path("politica-cookies/", views.politica_cookies, name="politica_cookies"),
 
+    path("buscar/ajax/", views.search_ajax, name="search_ajax"),
+
 
     
 
