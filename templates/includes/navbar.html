@@ -15,10 +15,15 @@
     <div class="collapse navbar-collapse" id="mainNav">
 
       <!-- Buscador -->
-      <form class="d-flex me-auto ms-lg-3 my-2 my-lg-0" method="get" action="{% url 'core:search' %}">
-        <input class="form-control" type="search" name="q"
-               placeholder="Buscar productos…"
-               aria-label="Buscar" value="{{ request.GET.q }}">
+      <form class="d-flex me-auto ms-lg-3 my-2 my-lg-0 position-relative" method="get" action="{% url 'core:search' %}">
+        <input class="form-control" type="search" name="q" id="searchInput"
+              placeholder="Buscar productos…" autocomplete="off"
+              aria-label="Buscar" value="{{ request.GET.q }}">
+
+        <!-- CONTENEDOR DE RESULTADOS -->
+        <div id="searchResults"
+            class="position-absolute bg-white shadow rounded w-100"
+            style="top: 110%; left: 0; z-index: 1000; display:none;"></div>
       </form>
 
       <!-- ============================= -->
@@ -132,5 +137,59 @@
     {% csrf_token %}
     <input type="hidden" name="language" id="lang-input">
   </form>
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById("searchInput");
+    const box = document.getElementById("searchResults");
+
+    let timeout = null;
+
+    input.addEventListener("input", function () {
+        const q = this.value.trim();
+
+        clearTimeout(timeout);
+
+        if (!q) {
+            box.style.display = "none";
+            return;
+        }
+
+        timeout = setTimeout(() => {
+            fetch(`/buscar/ajax/?q=${encodeURIComponent(q)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.results.length) {
+                        box.innerHTML = `<div class="p-2 text-muted small">Sin resultados…</div>`;
+                        box.style.display = "block";
+                        return;
+                    }
+
+                    box.innerHTML = data.results
+                        .map(p => `
+                            <a href="${p.url}" class="d-flex align-items-center p-2 text-decoration-none text-dark border-bottom">
+                                <img src="${p.image || '/static/img/no-image.jpg'}"
+                                     style="width:45px; height:45px; object-fit:cover;"
+                                     class="rounded me-2">
+                                <div>
+                                    <div class="fw-semibold">${p.name}</div>
+                                    <div class="text-muted small">${p.price}</div>
+                                </div>
+                            </a>
+                        `).join("");
+
+                    box.style.display = "block";
+                });
+        }, 250);
+    });
+
+    // Ocultar cuando clic afuera
+    document.addEventListener("click", (e) => {
+        if (!box.contains(e.target) && e.target !== input) {
+            box.style.display = "none";
+        }
+    });
+});
+</script>
+
 
 </nav>

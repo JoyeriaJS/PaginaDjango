@@ -27,6 +27,7 @@ from accounts.models import Address
 from django.db.models import Q
 from django.db import models
 from catalog.models import Category
+from django.http import JsonResponse
 
 
 try:
@@ -966,3 +967,26 @@ def politica_reembolsos(request):
 
 def politica_cookies(request):
     return render(request, "core/politica_cookies.html")
+
+
+def search_ajax(request):
+    q = request.GET.get("q", "").strip()
+
+    if not q:
+        return JsonResponse({"results": []})
+
+    products = (
+        Product.objects.filter(is_active=True, name__icontains=q)
+        .order_by("-created_at")[:5]
+    )
+
+    data = []
+    for p in products:
+        data.append({
+            "name": p.name,
+            "price": f"${p.price:,.0f}".replace(",", "."),
+            "url": p.get_absolute_url(),
+            "image": p.images.first().image.url if p.images.exists() else None,
+        })
+
+    return JsonResponse({"results": data})
