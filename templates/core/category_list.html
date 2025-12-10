@@ -1,0 +1,38 @@
+{% extends "base_site.html" %}
+
+{% block content %}
+<div class="container py-4">
+
+  <h1 class="h3 mb-4">{{ category.name }}</h1>
+
+  <div class="row g-3">
+    {% for p in products %}
+      <div class="col-6 col-md-3">
+        <a href="{% url 'core:product_detail' p.pk %}"
+           class="card text-decoration-none shadow-sm h-100">
+
+          <div class="thumb-1x1">
+            {% with img=p.images.first %}
+              {% if img %}
+                <img src="{{ img.image.url }}" alt="{{ p.name }}">
+              {% else %}
+                <div class="bg-light d-flex align-items-center justify-content-center text-muted">
+                  Sin imagen
+                </div>
+              {% endif %}
+            {% endwith %}
+          </div>
+
+          <div class="card-body">
+            <div class="fw-semibold">{{ p.name }}</div>
+            <div class="fw-bold text-primary mt-1">${{ p.price }}</div>
+          </div>
+        </a>
+      </div>
+    {% empty %}
+      <p>No hay productos en esta categoría.</p>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

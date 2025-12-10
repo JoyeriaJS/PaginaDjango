@@ -82,6 +82,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'core.context_processors.categories_menu',
                 'core.context_processors.cart_badge',
                 'core.context_processors.main_menu',
                 'django.template.context_processors.debug',

@@ -1,0 +1,23 @@
+{% extends "base_site.html" %}
+
+{% block content %}
+<div class="container py-4">
+  <h1 class="h3 mb-4">Categorías</h1>
+
+  <div class="row g-3">
+    {% for cat in categories %}
+      <div class="col-6 col-md-3">
+        <a href="{% url 'core:category_list' cat.pk %}"
+           class="card text-decoration-none shadow-sm h-100">
+
+          <div class="card-body text-center">
+            <h5 class="fw-semibold">{{ cat.name }}</h5>
+          </div>
+        </a>
+      </div>
+    {% empty %}
+      <p>No hay categorías disponibles.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

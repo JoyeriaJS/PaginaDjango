@@ -21,8 +21,12 @@
                aria-label="Buscar" value="{{ request.GET.q }}">
       </form>
 
-      <!-- Menú dinámico -->
+      <!-- ============================= -->
+      <!-- Menú dinámico + Categorías -->
+      <!-- ============================= -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        <!-- Menú dinámico CMS -->
         {% for it in main_menu %}
           {% if it.children %}
             <li class="nav-item dropdown">
@@ -41,6 +45,26 @@
             </li>
           {% endif %}
         {% endfor %}
+
+        <!-- =============================== -->
+        <!-- NUEVO — Menú de Categorías -->
+        <!-- =============================== -->
+        {% if nav_categories %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+            Categorías
+          </a>
+          <ul class="dropdown-menu">
+            {% for c in nav_categories %}
+              <li>
+                <a class="dropdown-item" href="{% url 'core:category_list' c.pk %}">
+                  {{ c.name }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
+        {% endif %}
       </ul>
 
       <!-- Selector de idioma -->
@@ -82,21 +106,10 @@
 
           <ul class="dropdown-menu dropdown-menu-end shadow-sm">
 
-            <li><a class="dropdown-item" href="{% url 'accounts:dashboard' %}">
-              Panel
-            </a></li>
-
-            <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
-              Perfil
-            </a></li>
-
-            <li><a class="dropdown-item" href="{% url 'accounts:address_list' %}">
-              Direcciones
-            </a></li>
-
-            <li><a class="dropdown-item" href="{% url 'accounts:orders_list' %}">
-              Historial de compras
-            </a></li>
+            <li><a class="dropdown-item" href="{% url 'accounts:dashboard' %}">Panel</a></li>
+            <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Perfil</a></li>
+            <li><a class="dropdown-item" href="{% url 'accounts:address_list' %}">Direcciones</a></li>
+            <li><a class="dropdown-item" href="{% url 'accounts:orders_list' %}">Historial de compras</a></li>
 
             <li><hr class="dropdown-divider"></li>
 

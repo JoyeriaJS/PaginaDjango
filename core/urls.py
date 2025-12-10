@@ -43,5 +43,9 @@ urlpatterns = [
    
     #path("cuenta/", include("accounts.urls")),
     
+    #CATEGORIES
+    path("categorias/", views.category_all, name="category_all"),
+    path("categoria/<int:pk>/", views.category_list, name="category_list"),
+
     
 ]

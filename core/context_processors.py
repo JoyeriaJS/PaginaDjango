@@ -1,5 +1,7 @@
 from django.db.models import Prefetch
 from cms.models import MenuItem
+from catalog.models import Category
+
 
 def cart_badge(request):
     """
@@ -73,4 +75,13 @@ def main_menu(request):
 
     return {"main_menu": menu}
 
-    
+# ================================
+# NUEVO — Categorías para el navbar
+# ================================
+
+def categories_menu(request):
+    try:
+        categories = Category.objects.all().order_by("name")
+    except Exception:
+        categories = []
+    return {"nav_categories": categories}

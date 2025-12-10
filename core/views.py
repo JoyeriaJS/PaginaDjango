@@ -946,3 +946,17 @@ def order_pdf(request, payment_id):
     return response
 
 
+#CATEGORIES
+def category_all(request):
+    categories = Category.objects.all().order_by("name")
+    return render(request, "core/category_all.html", {"categories": categories})
+
+#CATEGORY LIST
+def category_list(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    products = Product.objects.filter(category=category, available=True)
+
+    return render(request, "core/category_list.html", {
+        "category": category,
+        "products": products
+    })
