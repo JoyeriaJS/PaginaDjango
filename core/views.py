@@ -1028,3 +1028,7 @@ def search_ajax(request):
     return JsonResponse({"results": results})
 
 
+
+def category_all(request):
+    categories = Category.objects.all().order_by("name")
+    return render(request, "core/category_all.html", {"categories": categories})
