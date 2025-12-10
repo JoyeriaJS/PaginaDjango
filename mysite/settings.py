@@ -13,11 +13,14 @@ load_dotenv(BASE_DIR / ".env")  # opcional para entorno local
 
 # --- Seguridad / Debug -------------------------------------------------------
 SECRET_KEY = 'django-insecure-rc^*w^w&6g9_(uvx#6s*bnt!w)l0rdi%!l7mv#y%uc&x%wo5pk'
-DEBUG = True
+DEBUG = False
 
+
+ALLOWED_IPS = [
+    "181.42.163.131",
+]
 # Incluye aquí tus dominios reales (Railway y producción)
 ALLOWED_HOSTS = [
-    "181.42.163.131",
     "localhost", "127.0.0.1",
     "artesaniaspachy.cl",
     "server-production-e90b5.up.railway.app",  # cambia si tu subdominio es otro
