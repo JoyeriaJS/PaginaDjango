@@ -972,17 +972,14 @@ def category_all(request):
 
 
 def category_detail(request, pk):
-    category = Category.objects.filter(pk=pk).first()
-
-    if not category:
-        return render(request, "core/category_not_found.html", status=404)
+    category = get_object_or_404(Category, pk=pk)
 
     products = Product.objects.filter(
         category=category,
         is_active=True
-    ).order_by('-created_at')
+    )
 
     return render(request, "core/category_detail.html", {
         "category": category,
-        "products": products,
+        "products": products
     })
