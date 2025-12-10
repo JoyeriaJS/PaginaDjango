@@ -9,7 +9,7 @@ app_name = "core"
 urlpatterns = [
     path("", home, name="home"),
      path('producto/<int:pk>/', views.product_detail, name='product_detail'),
-     path("categoria/<int:pk>/", views.category_list, name="category_list"),  # ← usa pk
+     #path("categoria/<int:pk>/", views.category_list, name="category_list"),  # ← usa pk
      path("buscar/", views.search, name="search"),
 
 
@@ -47,6 +47,11 @@ urlpatterns = [
     path("categorias/", views.category_all, name="category_all"),
     #path("categoria/<int:pk>/", views.category_list, name="category_list"),
     path('categoria/<int:pk>/', views.category_detail, name='category_detail'),
+
+
+
+
+    
 
     
 ]
