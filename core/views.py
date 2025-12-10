@@ -25,6 +25,9 @@ from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from accounts.models import Address
 from django.db.models import Q
+from django.db import models
+from catalog.models import Category
+
 
 try:
     from weasyprint import HTML
@@ -954,9 +957,16 @@ def category_all(request):
 #CATEGORY LIST
 def category_list(request, pk):
     category = get_object_or_404(Category, pk=pk)
-    products = Product.objects.filter(category=category, available=True)
 
-    return render(request, "core/category_list.html", {
+    # Productos activos y disponibles (no usamos "available" porque NO existe)
+    products = Product.objects.filter(
+        category=category,
+        is_active=True
+    ).filter(
+        models.Q(stock__gt=0) | models.Q(stock__isnull=True)
+    ).order_by("-id")
+
+    return render(request, "core/category_all.html", {
         "category": category,
-        "products": products
+        "products": products,
     })
