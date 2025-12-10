@@ -46,6 +46,7 @@ urlpatterns = [
     #CATEGORIES
     path("categorias/", views.category_all, name="category_all"),
     path("categoria/<int:pk>/", views.category_list, name="category_list"),
+    path('categoria/<int:pk>/', views.category_detail, name='category_detail'),
 
     
 ]
