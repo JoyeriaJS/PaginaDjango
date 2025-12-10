@@ -17,7 +17,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseBadRequest
-from catalog.models import Product, FeaturedProduct, CatalogSection
+from catalog.models import Product, FeaturedProduct, CatalogSection, Material
 from .forms import CheckoutForm
 from catalog.models import Order, OrderItem
 from django.core.mail import EmailMessage
@@ -88,45 +88,74 @@ def category_list(request, pk):
 
     qs = Product.objects.filter(is_active=True, category=category)
 
-    # --- filtros ---
+    # ---------------------------
+    # Filtro por búsqueda interna
+    # ---------------------------
     q = (request.GET.get("q") or "").strip()
     if q:
         qs = qs.filter(Q(name__icontains=q) | Q(description__icontains=q))
 
-    try:
-        min_price = int(request.GET.get("min", "") or 0)
-    except ValueError:
-        min_price = 0
-    try:
-        max_price = int(request.GET.get("max", "") or 0)
-    except ValueError:
-        max_price = 0
+    # ---------------------------
+    # Filtro por precio
+    # ---------------------------
+    min_price = request.GET.get("min")
+    max_price = request.GET.get("max")
 
-    if min_price > 0:
-        qs = qs.filter(price__gte=min_price)
-    if max_price > 0:
-        qs = qs.filter(price__lte=max_price)
+    if min_price and min_price.isdigit():
+        qs = qs.filter(price__gte=int(min_price))
 
-    # --- orden ---
-    sort = request.GET.get("sort") or ""
+    if max_price and max_price.isdigit():
+        qs = qs.filter(price__lte=int(max_price))
+
+    # ---------------------------
+    # Filtro por material
+    # ---------------------------
+    material = request.GET.get("material")
+    if material and material != "all":
+        qs = qs.filter(material_id=material)
+
+    # ---------------------------
+    # Filtro por stock
+    # ---------------------------
+    stock = request.GET.get("stock")
+    if stock == "available":
+        qs = qs.filter(stock__gt=3)
+    elif stock == "low":
+        qs = qs.filter(stock__gt=0, stock__lte=3)
+    elif stock == "out":
+        qs = qs.filter(stock=0)
+
+    # ---------------------------
+    # Orden
+    # ---------------------------
+    sort = request.GET.get("sort")
+
     if sort == "price_asc":
-        qs = qs.order_by("price", "-created_at")
+        qs = qs.order_by("price")
     elif sort == "price_desc":
-        qs = qs.order_by("-price", "-created_at")
-    else:
-        # "new" u vacío -> más nuevos primero
+        qs = qs.order_by("-price")
+    elif sort == "new":
         qs = qs.order_by("-created_at")
+    else:
+        qs = qs.order_by("-created_at")  # default
 
-    # --- paginación ---
+    # ---------------------------
+    # Paginación
+    # ---------------------------
     paginator = Paginator(qs, 12)
     page_obj = paginator.get_page(request.GET.get("page"))
+
+    # MATERIALES disponibles en esa categoría (para el filtro)
+    materials = Material.objects.filter(product__category=category).distinct()
 
     return render(request, "core/category_products.html", {
         "category": category,
         "products": page_obj.object_list,
         "page_obj": page_obj,
         "paginator": paginator,
+        "materials": materials,  # ← importante
     })
+
 
 
 # ---------- CARRITO (basado en sesión) ----------
