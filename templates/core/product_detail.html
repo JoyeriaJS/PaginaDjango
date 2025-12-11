@@ -133,25 +133,6 @@
               ${{ product.price|floatformat:0 }}
             </span>
           </div>
-
-          <!-- AHORRO -->
-          <div class="text-success fw-semibold mt-1" style="font-size:0.95rem;">
-            {% if d.dtype == 'P' %}
-              {% with ahorro=product.price|floatformat:0|add:"-"|add:product.get_final_price|floatformat:0 %}
-              Ahorra ${{ ahorro }}
-              {% endwith %}
-            {% else %}
-              Ahorra ${{ d.value|floatformat:0 }}
-            {% endif %}
-          </div>
-
-          <!-- FECHA FIN -->
-          {% if d.end_at %}
-          <div class="text-muted small mt-1">
-            Termina en {{ d.end_at|timesince }}.
-          </div>
-          {% endif %}
-
         {% else %}
           <!-- SIN DESCUENTO -->
           <span class="fw-bold d-block" style="font-size:2rem;">
