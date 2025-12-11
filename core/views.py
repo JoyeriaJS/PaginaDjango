@@ -846,8 +846,9 @@ def mp_webhook(request):
 @login_required(login_url="core:login")
 def checkout(request):
     # Protección: si el carrito está vacío
-    cart = request.session.get("cart") or {}
+    cart = get_normalized_cart(request.session)   # 🔥 FIX IMPORTANTE
     items, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
+
     if count <= 0:
         messages.info(request, "Tu carrito está vacío.")
         return redirect("core:cart_detail")
@@ -868,11 +869,11 @@ def checkout(request):
         grand_total = Decimal("0")
 
     # ============================================================
-    # 🔥 AUTOCOMPLETAR SOLO SI ES LA PRIMERA VEZ (NO PISA LO EXISTENTE)
+    # AUTOCOMPLETAR
     # ============================================================
     initial = request.session.get("checkout_data") or {}
 
-    if not initial:  # si no hay data previa → autocompletar
+    if not initial:
         default_addr = Address.objects.filter(user=request.user, is_default=True).first()
         if default_addr:
             initial = {
@@ -886,15 +887,12 @@ def checkout(request):
                 "notes": default_addr.extra or "",
             }
 
-    # ============================================================
-
     if request.method == "POST":
         form = CheckoutForm(request.POST)
         if form.is_valid():
             request.session["checkout_data"] = form.cleaned_data
             request.session.modified = True
 
-            # si hace clic en Pagar
             if "pay" in request.POST:
                 return redirect("core:mp_checkout")
             else:
@@ -914,7 +912,9 @@ def checkout(request):
         "shipping": shipping,
         "count": count,
     }
+
     return render(request, "core/checkout.html", ctx)
+
 
 
 def mp_success(request):
