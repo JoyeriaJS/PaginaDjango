@@ -622,16 +622,11 @@ def remove_coupon(request):
 #Mercado Pago views
 def _cart_lines_from_session(request):
     """
-    Convierte el carrito de sesión en items compatibles con Mercado Pago.
-    Normaliza qty incluso si viene en formatos incorrectos:
-      - {"qty": 1}
-      - {"qty": {"qty": 1}}
-      - 1
-      - "1"
+    Convierte el carrito de sesión en items compatibles con Mercado Pago,
+    usando SIEMPRE el precio final guardado en la sesión.
     """
 
     raw_cart = request.session.get("cart") or {}
-
     if not isinstance(raw_cart, dict):
         return []
 
@@ -650,12 +645,10 @@ def _cart_lines_from_session(request):
     for p in products:
         raw = raw_cart.get(str(p.id))
 
-        # ============================================================
-        # Normalizar qty correctamente
-        # ============================================================
+        # ================================
+        # NORMALIZAR QTY
+        # ================================
         qty = 0
-
-        # Caso 1: viene como dict → {"qty": X} o {"qty": {"qty": X}}
         if isinstance(raw, dict):
             q = raw.get("qty", 0)
             if isinstance(q, dict):
@@ -664,19 +657,25 @@ def _cart_lines_from_session(request):
                 qty = int(q)
             except:
                 qty = 0
-
-        # Caso 2: viene como número suelto
         else:
             try:
                 qty = int(raw)
             except:
                 qty = 0
 
-        # Saltar si qty inválida
         if qty < 1:
             continue
 
-        # Primera imagen del producto
+        # ================================
+        # 🔥 PRECIO FINAL DESDE SESIÓN
+        # ================================
+        final_price = raw.get("price")
+        if final_price is None:
+            final_price = float(p.get_final_price())  # fallback
+
+        # ================================
+        # IMAGEN
+        # ================================
         img_url = None
         try:
             img = p.images.first()
@@ -685,17 +684,20 @@ def _cart_lines_from_session(request):
         except:
             img_url = None
 
-        # Agregar item compatible con MercadoPago
+        # ================================
+        # 🔥 ENVIAR A MERCADOPAGO
+        # ================================
         items.append({
             "id": str(p.id),
             "title": p.name,
             "quantity": qty,
             "currency_id": "CLP",
-            "unit_price": float(p.price),
+            "unit_price": float(final_price),  # <<🔥 FIX OFICIAL AQUÍ
             "picture_url": img_url,
         })
 
     return items
+
 
 
 def mp_checkout(request):
@@ -846,9 +848,8 @@ def mp_webhook(request):
 @login_required(login_url="core:login")
 def checkout(request):
     # Protección: si el carrito está vacío
-    cart = get_normalized_cart(request.session)   # 🔥 FIX IMPORTANTE
+    cart = request.session.get("cart") or {}
     items, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
-
     if count <= 0:
         messages.info(request, "Tu carrito está vacío.")
         return redirect("core:cart_detail")
@@ -869,11 +870,11 @@ def checkout(request):
         grand_total = Decimal("0")
 
     # ============================================================
-    # AUTOCOMPLETAR
+    # 🔥 AUTOCOMPLETAR SOLO SI ES LA PRIMERA VEZ (NO PISA LO EXISTENTE)
     # ============================================================
     initial = request.session.get("checkout_data") or {}
 
-    if not initial:
+    if not initial:  # si no hay data previa → autocompletar
         default_addr = Address.objects.filter(user=request.user, is_default=True).first()
         if default_addr:
             initial = {
@@ -887,12 +888,15 @@ def checkout(request):
                 "notes": default_addr.extra or "",
             }
 
+    # ============================================================
+
     if request.method == "POST":
         form = CheckoutForm(request.POST)
         if form.is_valid():
             request.session["checkout_data"] = form.cleaned_data
             request.session.modified = True
 
+            # si hace clic en Pagar
             if "pay" in request.POST:
                 return redirect("core:mp_checkout")
             else:
@@ -912,9 +916,7 @@ def checkout(request):
         "shipping": shipping,
         "count": count,
     }
-
     return render(request, "core/checkout.html", ctx)
-
 
 
 def mp_success(request):
