@@ -60,6 +60,37 @@
       height: 180px;
       object-fit: cover;
   }
+  .offer-box {
+    background: #d60000;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: inline-block;
+    margin-bottom: 4px;
+}
+
+.offer-final {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #d60000;
+}
+
+.offer-original {
+    font-size: 0.9rem;
+    color: #777;
+    text-decoration: line-through;
+    margin-left: 6px;
+}
+
+.product-price-box {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
 </style>
 {% endblock %}
 
@@ -148,7 +179,26 @@
               </div>
 
               <h6 class="fw-semibold text-dark mb-1">{{ fp.product.name }}</h6>
-              <p class="fw-bold text-primary mb-2">${{ fp.product.price }}</p>
+              {% if fp.product.is_on_sale %}
+                {% with d=fp.product.get_active_discount %}
+                    <div class="offer-box mb-1">
+                        {% if d.dtype == 'P' %}
+                            OFERTA -{{ d.value|floatformat:0 }}%
+                        {% else %}
+                            OFERTA
+                        {% endif %}
+                    </div>
+
+                    <div class="product-price-box mb-2">
+                        <span class="offer-final">${{ fp.product.get_final_price|floatformat:"0" }}</span>
+                        <span class="offer-original">${{ fp.product.price|floatformat:"0" }}</span>
+                    </div>
+                {% endwith %}
+            {% else %}
+                <p class="fw-bold text-primary mb-2">${{ fp.product.price }}</p>
+            {% endif %}
+
+
 
             </div>
           </a>
@@ -190,7 +240,24 @@
               {% endif %}
               {% endwith %}
               <h6 class="fw-semibold mt-2">{{ p.name }}</h6>
-              <p class="fw-bold text-primary mb-2">${{ p.price }}</p>
+              {% if p.is_on_sale %}
+                {% with d=p.get_active_discount %}
+                    <div class="offer-box mb-1">
+                        {% if d.dtype == 'P' %}
+                            OFERTA -{{ d.value|floatformat:0 }}%
+                        {% else %}
+                            OFERTA
+                        {% endif %}
+                    </div>
+
+                    <div class="product-price-box mb-2">
+                        <span class="offer-final">${{ p.get_final_price|floatformat:"0" }}</span>
+                        <span class="offer-original">${{ p.price|floatformat:"0" }}</span>
+                    </div>
+                {% endwith %}
+            {% else %}
+                <p class="fw-bold text-primary mb-2">${{ p.price }}</p>
+            {% endif %}
             </div>
           </a>
         </div>
@@ -233,7 +300,24 @@
 
           <div class="info">
             <div class="name">{{ p.name|truncatechars:28 }}</div>
-            <div class="price">${{ p.price }}</div>
+            {% if p.is_on_sale %}
+              {% with d=p.get_active_discount %}
+                  <div class="offer-box mb-1">
+                      {% if d.dtype == 'P' %}
+                          OFERTA -{{ d.value|floatformat:0 }}%
+                      {% else %}
+                          OFERTA
+                      {% endif %}
+                  </div>
+                  <div class="product-price-box">
+                      <span class="offer-final">${{ p.get_final_price|floatformat:"0" }}</span>
+                      <span class="offer-original">${{ p.price|floatformat:"0" }}</span>
+                  </div>
+              {% endwith %}
+          {% else %}
+              <div class="price">${{ p.price }}</div>
+          {% endif %}
+
           </div>
         </a>
         {% endfor %}
@@ -252,7 +336,24 @@
 
           <div class="info">
             <div class="name">{{ p.name|truncatechars:28 }}</div>
-            <div class="price">${{ p.price }}</div>
+            {% if p.is_on_sale %}
+              {% with d=p.get_active_discount %}
+                  <div class="offer-box mb-1">
+                      {% if d.dtype == 'P' %}
+                          OFERTA -{{ d.value|floatformat:0 }}%
+                      {% else %}
+                          OFERTA
+                      {% endif %}
+                  </div>
+                  <div class="product-price-box">
+                      <span class="offer-final">${{ p.get_final_price|floatformat:"0" }}</span>
+                      <span class="offer-original">${{ p.price|floatformat:"0" }}</span>
+                  </div>
+              {% endwith %}
+          {% else %}
+              <div class="price">${{ p.price }}</div>
+          {% endif %}
+
           </div>
         </a>
         {% endfor %}
@@ -327,7 +428,25 @@
           <div class="card-body">
             <h3 class="h6 text-dark mb-1">{{ p.name }}</h3>
             <div class="small text-muted">{{ p.category.name }}</div>
-            <div class="fw-bold text-primary mt-1">${{ p.price }}</div>
+            {% if p.is_on_sale %}
+              {% with d=p.get_active_discount %}
+                  <div class="offer-box mb-1">
+                      {% if d.dtype == 'P' %}
+                          OFERTA -{{ d.value|floatformat:0 }}%
+                      {% else %}
+                          OFERTA
+                      {% endif %}
+                  </div>
+
+                  <div class="product-price-box">
+                      <span class="offer-final">${{ p.get_final_price|floatformat:"0" }}</span>
+                      <span class="offer-original">${{ p.price|floatformat:"0" }}</span>
+                  </div>
+              {% endwith %}
+          {% else %}
+              <div class="fw-bold text-primary mt-1">${{ p.price }}</div>
+          {% endif %}
+
           </div>
         </a>
       </div>
