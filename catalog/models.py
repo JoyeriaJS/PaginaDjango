@@ -5,6 +5,7 @@ from django.utils import timezone
 #from catalog.models import Product
 #from .models import Order, OrderItem
 from django.contrib import admin
+from datetime import timedelta
 
 # --- compat para migraciones antiguas (déjala aunque no la uses) ---
 def product_image_path(instance, filename):
@@ -59,6 +60,79 @@ class Product(models.Model):
         return super().save(*args, **kwargs)
     def get_absolute_url(self):
         return reverse("core:product_detail", args=[self.pk])
+    # --- ETIQUETAS AUTOMÁTICAS ---
+    def is_new(self):
+        """Producto nuevo (últimos 30 días)"""
+        return self.created_at >= timezone.now() - timedelta(days=30)
+
+    def is_low_stock(self):
+        """Producto con bajo stock"""
+        return self.stock <= 5
+
+    def is_on_sale(self):
+        """Si en el futuro quieres manejar precio rebajado"""
+        return hasattr(self, "price_sale") and self.price_sale < self.price
+    def get_active_discount(self):
+        """
+        Devuelve el descuento aplicable más fuerte (si existe).
+        Prioridad:
+        1) Descuento específico del producto
+        2) Descuento por categoría
+        3) Descuento global
+        """
+        now = timezone.now()
+
+          # importa aquí para evitar ciclos
+
+        # Base query
+        discounts = Discount.objects.filter(
+            is_active=True,
+        ).filter(
+            models.Q(start_at__isnull=True) | models.Q(start_at__lte=now),
+            models.Q(end_at__isnull=True) | models.Q(end_at__gte=now),
+        ).filter(
+            models.Q(usage_limit__isnull=True) | models.Q(times_used__lt=models.F("usage_limit"))
+        )
+
+        # Filtrar por scope
+        applicable = []
+
+        for d in discounts:
+            if d.scope == Discount.SCOPE_PRODUCT and d.product_id == self.id:
+                applicable.append(d)
+            elif d.scope == Discount.SCOPE_CATEGORY and d.category_id == self.category_id:
+                applicable.append(d)
+            elif d.scope == Discount.SCOPE_ALL:
+                applicable.append(d)
+
+        if not applicable:
+            return None
+
+        # Si hay varios, elige el que más descuento real genere
+        def discount_amount(d):
+            if d.dtype == Discount.PERCENT:
+                return (self.price * d.value) / 100
+            else:
+                return d.value
+
+        return max(applicable, key=discount_amount)
+
+    def get_final_price(self):
+        """
+        Devuelve el precio después del descuento si existe.
+        """
+        d = self.get_active_discount()
+        if not d:
+            return self.price
+
+        if d.dtype == Discount.PERCENT:
+            return self.price - ((self.price * d.value) / 100)
+        else:
+            return max(0, self.price - d.value)
+
+    def is_on_sale(self):
+        """True si existe un descuento activo"""
+        return self.get_active_discount() is not None
 
 class ProductImage(models.Model):
     product = models.ForeignKey('Product', related_name='images', on_delete=models.CASCADE)

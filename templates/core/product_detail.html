@@ -1,5 +1,5 @@
 {% extends "base_site.html" %}
-{% block title %}{{ product.name }} — Artesanías Pachy{% endblock %}
+{% block title %}{{ product.name }} — Casteable{% endblock %}
 
 {% block content %}
 <div class="container py-4" itemscope itemtype="https://schema.org/Product">
@@ -8,161 +8,257 @@
   <nav aria-label="breadcrumb" class="mb-3">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="/">Inicio</a></li>
-      <li class="breadcrumb-item"><a href="{% url 'core:category_list' product.category.pk %}">{{ product.category.name }}</a></li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'core:category_list' product.category.pk %}">
+          {{ product.category.name }}
+        </a>
+      </li>
       <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
     </ol>
   </nav>
 
   <div class="row g-4">
-    <!-- Galería -->
-    <div class="col-12 col-lg-6">
+
+    <!-- ================================================= -->
+    <!-- GALERÍA -->
+    <!-- ================================================= -->
+    <div class="col-12 col-lg-6 position-relative">
+
+      <!-- BADGE SALE -->
+      {% if product.is_on_sale %}
+      <span class="badge bg-danger position-absolute"
+            style="top:10px; left:10px; font-size:0.8rem; z-index:20;">
+        Oferta
+      </span>
+      {% endif %}
+
+      <!-- BADGE STOCK -->
+      {% if product.stock == 0 %}
+      <span class="badge bg-secondary position-absolute"
+            style="top:10px; right:10px; font-size:0.8rem; z-index:20;">
+        Sin stock
+      </span>
+      {% elif product.stock <= 3 %}
+      <span class="badge bg-warning text-dark position-absolute"
+            style="top:10px; right:10px; font-size:0.8rem; z-index:20;">
+        Bajo stock
+      </span>
+      {% endif %}
+
       <div class="card p-2 gallery-elev">
         {% with first=product.images.first %}
-          <div class="ratio ratio-1x1 rounded-3 overflow-hidden pointer"
-               id="pd-main"
-               {% if first %}data-zoom="{{ first.image.url }}"{% endif %}>
-            {% if first %}
-              <img src="{{ first.image.url }}"
-                   alt="{{ first.alt|default:product.name }}"
-                   class="w-100 h-100"
-                   style="object-fit:cover;"
-                   itemprop="image">
-            {% else %}
-              <div class="d-flex align-items-center justify-content-center text-muted">Sin imagen</div>
-            {% endif %}
-          </div>
+        <div class="ratio ratio-1x1 rounded-3 overflow-hidden pointer"
+             id="pd-main"
+             {% if first %}data-zoom="{{ first.image.url }}"{% endif %}>
+          {% if first %}
+          <img src="{{ first.image.url }}"
+               alt="{{ first.alt|default:product.name }}"
+               class="w-100 h-100"
+               style="object-fit:cover;"
+               itemprop="image">
+          {% else %}
+          <div class="d-flex align-items-center justify-content-center text-muted">Sin imagen</div>
+          {% endif %}
+        </div>
         {% endwith %}
 
-        <div class="d-flex gap-2 mt-2">
+        <!-- MINIATURAS -->
+        <div class="d-flex gap-2 mt-2 flex-wrap">
           {% for im in product.images.all %}
-            <button class="thumb-64 btn p-0 border rounded-2 overflow-hidden"
-                    type="button"
-                    data-target="#pd-main"
-                    data-src="{{ im.image.url }}">
-              <img src="{{ im.image.url }}"
-                   class="w-100 h-100"
-                   style="object-fit:cover;"
-                   alt="{{ im.alt|default:product.name }}">
-            </button>
+          <button class="thumb-64 btn p-0 border rounded-2 overflow-hidden"
+                  type="button"
+                  data-target="#pd-main"
+                  data-src="{{ im.image.url }}">
+            <img src="{{ im.image.url }}"
+                 class="w-100 h-100"
+                 style="object-fit:cover;">
+          </button>
           {% empty %}
-            <div class="text-muted small">Sin imágenes adicionales</div>
+          <div class="text-muted small">Sin imágenes adicionales</div>
           {% endfor %}
         </div>
+
       </div>
     </div>
 
-    <!-- Info -->
+    <!-- ================================================= -->
+    <!-- INFORMACIÓN DEL PRODUCTO -->
+    <!-- ================================================= -->
     <div class="col-12 col-lg-6">
-      <div class="d-flex align-items-start justify-content-between">
-        <h1 class="h3 mb-1" itemprop="name">{{ product.name }}</h1>
-        {% if product.is_new %}
-          <span class="badge bg-primary-subtle text-primary border">Nuevo</span>
-        {% endif %}
-      </div>
-      <div class="mt-3 small text-muted d-flex flex-column gap-1">
-      <div>🔒 Pago seguro con tarjetas y transferencias.</div>
-      <div>🚚 Despachos a todo Chile. Entrega promedio 2–5 días hábiles.</div>
-      <div>🔄 Cambios dentro de 10 días en su empaque original.</div>
-    </div>
 
+      <h1 class="h3 mb-1" itemprop="name">{{ product.name }}</h1>
+
+      <!-- INFORMACIÓN RÁPIDA -->
+      <div class="mt-2 small text-muted d-flex flex-column gap-1">
+        <div>🔒 Pago seguro con tarjetas y transferencias.</div>
+        <div>🚚 Envíos rápidos a todo Chile (2–5 días hábiles).</div>
+        <div>🔄 Cambios dentro de 10 días en empaque original.</div>
+      </div>
 
       {% if product.material %}
-        <div class="text-muted small">Material: {{ product.material.name }}</div>
+      <div class="text-muted small mt-2">
+        Material: <strong>{{ product.material.name }}</strong>
+      </div>
       {% endif %}
 
-      <div class="h4 mt-2" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+      <!-- PRECIO -->
+      <div class="h4 mt-3" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
         <meta itemprop="priceCurrency" content="CLP">
-        <span itemprop="price">${{ product.price }}</span>
+
+        {% if product.is_on_sale %}
+        <div class="d-flex align-items-baseline gap-2">
+
+          <span class="text-danger fw-bold" style="font-size:1.8rem;">
+            ${{ product.get_final_price|floatformat:0 }}
+          </span>
+
+          <span class="text-muted text-decoration-line-through small">
+            ${{ product.price|floatformat:0 }}
+          </span>
+
+        </div>
+        {% else %}
+        <span class="fw-bold" style="font-size:1.8rem;">
+          ${{ product.price|floatformat:0 }}
+        </span>
+        {% endif %}
+
+        <!-- STOCK LABEL -->
         {% if product.stock is not None %}
-          <div class="small mt-1 {% if product.stock > 3 %}text-success{% elif product.stock > 0 %}text-warning{% else %}text-danger{% endif %}">
-            {% if product.stock > 3 %}
-              Disponible
-            {% elif product.stock > 0 %}
-              ¡Pocas unidades!
-            {% else %}
-              Agotado
-            {% endif %}
-          </div>
+        <div class="small mt-1
+                    {% if product.stock > 3 %}text-success
+                    {% elif product.stock > 0 %}text-warning
+                    {% else %}text-danger{% endif %}">
+          {% if product.stock > 3 %}
+            Disponible
+          {% elif product.stock > 0 %}
+            ¡Pocas unidades!
+          {% else %}
+            Agotado
+          {% endif %}
+        </div>
         {% endif %}
       </div>
 
+      <!-- DESCRIPCIÓN -->
       {% if product.description %}
-        <p class="mt-3 text-muted" itemprop="description">{{ product.description }}</p>
+      <p class="mt-3 text-muted" itemprop="description">
+        {{ product.description }}
+      </p>
       {% endif %}
 
-      <!-- Agregar al carrito -->
-      {# --- Sticky add-to-cart --- #}
-          {% comment %}
-          Si stock es None => ilimitado.
-          Si stock es 0    => agotado (no mostrar form).
-          {% endcomment %}
-          {% if product.stock is not None and product.stock|default:0 <= 0 %}
-            <div class="mt-3">
-              <button class="btn btn-secondary btn-lg w-100" type="button" disabled>Agotado</button>
-            </div>
-          {% else %}
-            <form method="post" action="{% url 'core:add_to_cart' product.pk %}" class="mt-3 sticky-cta">
-              {% csrf_token %}
-              <div class="d-flex align-items-center gap-2">
-                <input class="form-control" type="number" name="qty" value="1" min="1" style="max-width:110px">
-                <button class="btn btn-primary btn-lg flex-grow-1">Agregar al carrito</button>
-              </div>
-            </form>
-          {% endif %}
-
-
-      <!-- Etiquetas (si existen) -->
-      {% if product.tags %}
-        <div class="mt-3 d-flex flex-wrap gap-2">
-          {% for t in product.tags.all %}
-            <span class="badge rounded-pill bg-light text-muted border">{{ t.name }}</span>
-          {% endfor %}
+      <!-- AGREGAR AL CARRITO -->
+      {% if product.stock == 0 %}
+        <button class="btn btn-secondary btn-lg w-100 mt-3" disabled>
+          Agotado
+        </button>
+      {% else %}
+      <form method="post"
+            action="{% url 'core:add_to_cart' product.pk %}"
+            class="mt-3 sticky-cta">
+        {% csrf_token %}
+        <div class="d-flex align-items-center gap-2">
+          <input class="form-control"
+                 type="number"
+                 name="qty"
+                 value="1"
+                 min="1"
+                 style="max-width:110px;">
+          <button class="btn btn-primary btn-lg flex-grow-1">
+            Agregar al carrito
+          </button>
         </div>
+      </form>
       {% endif %}
+
+      <!-- ETIQUETAS -->
+      {% if product.tags %}
+      <div class="mt-3 d-flex flex-wrap gap-2">
+        {% for t in product.tags.all %}
+        <span class="badge rounded-pill bg-light text-muted border">{{ t.name }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+
     </div>
   </div>
 
-  <!-- Relacionados -->
+  <!-- ================================================= -->
+  <!-- PRODUCTOS RELACIONADOS -->
+  <!-- ================================================= -->
   {% if related %}
-    <section class="mt-5">
-      <div class="d-flex justify-content-between align-items-end mb-3">
-        <h2 class="h5 m-0">También te puede interesar</h2>
-        <a class="small text-decoration-none" href="{% url 'core:category_list' product.category.pk %}">Ver más</a>
-      </div>
-      <div class="row g-3">
-        {% for p in related %}
-          <div class="col-6 col-md-3">
-            <a class="card text-decoration-none card-elev h-100" href="{% url 'core:product_detail' p.pk %}">
-              <div class="thumb-1x1">
-                {% with img=p.images.first %}
-                  {% if img %}
-                    <img src="{{ img.image.url }}" alt="{{ p.name }}">
-                  {% else %}
-                    <div class="ratio ratio-1x1 bg-light d-flex align-items-center justify-content-center text-muted">Sin imagen</div>
-                  {% endif %}
-                {% endwith %}
+  <section class="mt-5">
+    <div class="d-flex justify-content-between align-items-end mb-3">
+      <h2 class="h5 m-0">También te puede interesar</h2>
+      <a class="small text-decoration-none"
+         href="{% url 'core:category_list' product.category.pk %}">
+        Ver más
+      </a>
+    </div>
+
+    <div class="row g-3">
+      {% for p in related %}
+      <div class="col-6 col-md-3">
+
+        <a class="card text-decoration-none card-elev h-100 position-relative"
+           href="{% url 'core:product_detail' p.pk %}">
+
+          <!-- BADGE OFERTA -->
+          {% if p.is_on_sale %}
+          <span class="badge bg-danger position-absolute"
+                style="top:10px; left:10px; font-size:0.75rem;">
+            Oferta
+          </span>
+          {% endif %}
+
+          <div class="thumb-1x1">
+            {% with img=p.images.first %}
+            {% if img %}
+              <img src="{{ img.image.url }}" alt="{{ p.name }}">
+            {% else %}
+              <div class="ratio ratio-1x1 bg-light d-flex align-items-center justify-content-center text-muted">
+                Sin imagen
               </div>
-              <div class="card-body">
-                <div class="small text-muted">{{ p.category.name }}</div>
-                <div class="fw-semibold text-dark">{{ p.name }}</div>
-                <div class="fw-bold mt-1">${{ p.price }}</div>
-              </div>
-            </a>
+            {% endif %}
+            {% endwith %}
           </div>
-        {% endfor %}
+
+          <div class="card-body">
+            <div class="small text-muted">{{ p.category.name }}</div>
+            <div class="fw-semibold text-dark">{{ p.name }}</div>
+
+            {% if p.is_on_sale %}
+              <div class="fw-bold mt-1 text-danger">${{ p.get_final_price|floatformat:0 }}</div>
+              <div class="text-muted text-decoration-line-through small">
+                ${{ p.price|floatformat:0 }}
+              </div>
+            {% else %}
+              <div class="fw-bold mt-1">${{ p.price|floatformat:0 }}</div>
+            {% endif %}
+          </div>
+
+        </a>
       </div>
-    </section>
+      {% endfor %}
+    </div>
+
+  </section>
   {% endif %}
+
 </div>
 
-<!-- Modal Zoom -->
+<!-- ================================================= -->
+<!-- MODAL DE ZOOM -->
+<!-- ================================================= -->
 <div class="modal fade" id="imgZoomModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content bg-dark">
       <div class="modal-body p-0">
         <img id="imgZoomTarget" class="w-100" alt="Zoom">
       </div>
-      <button type="button" class="btn btn-light position-absolute top-0 end-0 m-2" data-bs-dismiss="modal">Cerrar</button>
+      <button type="button"
+              class="btn btn-light position-absolute top-0 end-0 m-2"
+              data-bs-dismiss="modal">Cerrar</button>
     </div>
   </div>
 </div>
@@ -171,33 +267,31 @@
 {% block extra_js %}
 {{ block.super }}
 <script>
-  (function(){
-    // Cambiar imagen principal al click en miniatura
-    document.addEventListener('click', function(e){
-      const btn = e.target.closest('button[data-target][data-src]');
-      if (!btn) return;
-      const targetSel = btn.getAttribute('data-target');
-      const src = btn.getAttribute('data-src');
-      const main = document.querySelector(targetSel);
-      if (!main) return;
+(function(){
+  // Cambiar imagen principal al click en miniatura
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('button[data-target][data-src]');
+    if (!btn) return;
+    const targetSel = btn.getAttribute('data-target');
+    const src = btn.getAttribute('data-src');
+    const main = document.querySelector(targetSel);
+    if (!main) return;
 
-      const img = main.querySelector('img');
-      if (img) img.src = src;
-      main.setAttribute('data-zoom', src);
+    const img = main.querySelector('img');
+    if (img) img.src = src;
+    main.setAttribute('data-zoom', src);
+  });
+
+  // Modal zoom
+  const pdMain = document.getElementById('pd-main');
+  if (pdMain) {
+    pdMain.addEventListener('click', function(){
+      const zoomSrc = pdMain.getAttribute('data-zoom');
+      if (!zoomSrc) return;
+      document.getElementById('imgZoomTarget').src = zoomSrc;
+      new bootstrap.Modal(document.getElementById('imgZoomModal')).show();
     });
-
-    // Abrir modal de zoom al hacer clic sobre la imagen principal
-    const pdMain = document.getElementById('pd-main');
-    if (pdMain) {
-      pdMain.addEventListener('click', function(){
-        const zoomSrc = pdMain.getAttribute('data-zoom');
-        if (!zoomSrc) return;
-        const img = document.getElementById('imgZoomTarget');
-        img.src = zoomSrc;
-        const modal = new bootstrap.Modal(document.getElementById('imgZoomModal'));
-        modal.show();
-      });
-    }
-  })();
+  }
+})();
 </script>
 {% endblock %}
