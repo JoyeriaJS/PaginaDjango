@@ -2975,3 +2975,21 @@ a.btn {
 .product-info-block * {
     color: inherit !important;
 }
+
+/* -------- FIX GENERAL PARA EL ÁREA DE INFORMACIÓN DEL PRODUCTO -------- */
+.product-detail-info {
+    color: #222 !important;        /* color estándar legible */
+    opacity: 1 !important;         /* evita opacidades heredadas */
+    position: relative;
+    z-index: 20;
+}
+
+.product-detail-info * {
+    color: #222 !important;        /* todo dentro hereda color normal */
+    opacity: 1 !important;
+}
+
+/* textos secundarios */
+.product-detail-info .text-muted {
+    color: #555 !important;        /* gris visible real, no gris pálido */
+}
