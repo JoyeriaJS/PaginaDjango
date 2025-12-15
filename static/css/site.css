@@ -214,7 +214,7 @@ html, body {
 
 .swiper-pagination-bullet {
   background: var(--brand);
-  opacity: .35;
+  opacity: 1;
 }
 
 .swiper-pagination-bullet-active {
@@ -419,7 +419,7 @@ html, body {
 /* Swiper pagination dentro de secciones negras */
 .section-black .swiper-pagination-bullet {
   background: #fff !important;
-  opacity: .4 !important;
+  opacity: 1 !important;
 }
 
 .section-black .swiper-pagination-bullet-active {
@@ -610,7 +610,7 @@ html, body {
 
 .swiper-pagination-bullet {
   background: var(--brand);
-  opacity: 0.35;
+  opacity: 1;
 }
 
 .swiper-pagination-bullet-active {
@@ -948,7 +948,7 @@ select {
 /* Swiper pagination dentro de bloque negro */
 .section-black .swiper-pagination-bullet {
     background: #fff !important;
-    opacity: .4 !important;
+    opacity: 1 !important;
 }
 
 .section-black .swiper-pagination-bullet-active {
@@ -1161,7 +1161,7 @@ footer h6 {
 /* Links */
 footer a {
   color: #ffffff !important;
-  opacity: 0.85;
+  opacity: 1;
   text-decoration: none;
 }
 
@@ -1213,7 +1213,7 @@ footer .bi {
 /* Links */
 .navbar .nav-link {
   color: #ffffff !important;
-  opacity: 0.85;
+  opacity: 1;
   padding-left: 0.75rem !important;
   padding-right: 0.75rem !important;
   transition: 0.25s;
