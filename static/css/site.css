@@ -3060,4 +3060,39 @@ a.btn {
     background: transparent !important;
 }
 
+/* Fondo negro → texto claro */
+.bg-black,
+.bg-black * {
+    color: #ffffff !important;
+}
+
+/* Título de FAQ */
+.bg-black h2 {
+    color: #ffffff !important;
+}
+
+/* Botones del acordeón */
+.bg-black .accordion-button {
+    background-color: #111 !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+/* Estado activo (cuando está abierto) */
+.bg-black .accordion-button:not(.collapsed) {
+    background-color: #222 !important;
+    color: #fff !important;
+    box-shadow: none !important;
+}
+
+/* Body de las respuestas */
+.bg-black .accordion-body {
+    color: #d0d0d0 !important;
+    background-color: transparent !important;
+}
+
+/* Bordes */
+.bg-black .accordion-item {
+    border: 1px solid #444 !important;
+}
 
