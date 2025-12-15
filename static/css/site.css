@@ -3001,22 +3001,22 @@ a.btn {
     opacity: 1 !important;
 }
 
-/* ========================== */
-/* SECCIÓN: LO MÁS VENDIDO   */
-/* ========================== */
+/* ================================ */
+/*   CATÁLOGOS ADMIN DINÁMICOS     */
+/* ================================ */
 
-/* Título del producto en azul */
-.bestseller-card .product-title,
-.bestseller-card .product-title * {
-    color: #0052cc !important;   /* azul profesional */
+/* Nombre del producto → azul */
+.catalog-card h6,
+.catalog-card h6 * {
+    color: #0052cc !important;   /* azul limpio profesional */
     opacity: 1 !important;
-    font-weight: 600;
+    font-weight: 600 !important;
 }
 
-/* Precio visible y en negro */
-.bestseller-card .product-price,
-.bestseller-card .product-price * {
-    color: #111 !important;
+/* Precio → negro y bien visible */
+.catalog-card p.fw-bold,
+.catalog-card p.fw-bold * {
+    color: #000 !important;
     opacity: 1 !important;
-    font-weight: 700;
+    font-weight: 700 !important;
 }
