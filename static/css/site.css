@@ -2993,3 +2993,10 @@ a.btn {
 .product-detail-info .text-muted {
     color: #555 !important;        /* gris visible real, no gris pálido */
 }
+
+/* Título del producto extremadamente legible */
+.product-detail-info h1,
+.product-detail-info h1 * {
+    color: #111 !important;     /* negro suave */
+    opacity: 1 !important;
+}
