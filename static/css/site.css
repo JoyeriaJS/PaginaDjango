@@ -3008,7 +3008,7 @@ a.btn {
 /* Nombre del producto → azul */
 .catalog-card h6,
 .catalog-card h6 * {
-    color: #000000 !important;   /* azul limpio profesional */
+    color: #000000 !important;   /* negro limpio profesional */
     opacity: 1 !important;
     font-weight: 600 !important;
 }
@@ -3019,4 +3019,32 @@ a.btn {
     color: #000 !important;
     opacity: 1 !important;
     font-weight: 700 !important;
+}
+
+/* ===================================== */
+/* FIX PARA PREGUNTAS FRECUENTES (FAQ)  */
+/* ===================================== */
+
+/* Resetear opacidad y color de texto en FAQ */
+.faq-section,
+.faq-section * {
+    color: #ffffff !important;  /* Texto blanco visible */
+    opacity: 1 !important;  /* Aseguramos que no esté opaco */
+}
+
+/* Aseguramos que el título de las preguntas frecuentes sea visible */
+.faq-title {
+    color: #ffffff !important;  /* Título blanco */
+    font-weight: 600 !important;  /* Estilo en negrita para destacar */
+}
+
+/* Respuestas en FAQ con color suave */
+.faq-answer {
+    color: #d1d1d1 !important;  /* Color gris suave para respuestas */
+    opacity: 1 !important;  /* Aseguramos que se vea completamente */
+}
+
+/* Opcional: Mejorar la visibilidad de las preguntas cuando están activas (hover) */
+.faq-item:hover .faq-title {
+    color: #00d2ff !important; /* Cambio de color a azul celeste al hacer hover */
 }
