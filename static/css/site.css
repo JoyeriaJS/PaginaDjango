@@ -3060,36 +3060,29 @@ a.btn {
     background: transparent !important;
 }
 
-/* 🔥 FIX TOTAL PARA FAQ EN FONDO NEGRO */
-.bg-black,
-.bg-black * {
-    color: #ffffff !important;
-    opacity: 1 !important;
-}
-
-/* Botón del accordion */
-.bg-black .accordion-button {
-    background-color: #111 !important;
+/* 🔥 FIX DEFINITIVO PARA QUE FAQ SE VEA NORMAL */
+.faq-wrapper {
     color: #fff !important;
     opacity: 1 !important;
+    filter: none !important;
+    -webkit-filter: none !important;
 }
 
-/* Botón activo */
-.bg-black .accordion-button:not(.collapsed) {
-    background-color: #222 !important;
+.faq-wrapper * {
     color: #fff !important;
     opacity: 1 !important;
+    filter: none !important;
+    -webkit-filter: none !important;
 }
 
-/* Respuestas */
-.bg-black .accordion-body {
-    color: #e0e0e0 !important;
-    opacity: 1 !important;
-    background-color: transparent !important;
+/* Títulos */
+.faq-wrapper h2,
+.faq-wrapper .accordion-button {
+    color: #fff !important;
 }
 
-/* Bordes */
-.bg-black .accordion-item {
-    border-color: #444 !important;
+/* Texto de las respuestas */
+.faq-wrapper .accordion-body {
+    color: #ccc !important;
 }
 
