@@ -3060,4 +3060,41 @@ a.btn {
     background: transparent !important;
 }
 
+/* FIX REAL PARA SECCIONES QUE SE VEN OPACAS O DESLAVADAS */
+.faq-wrapper {
+    filter: none !important;
+    -webkit-filter: none !important;
+    opacity: 1 !important;
+    color: #fff !important;
+}
+
+/* Título */
+.faq-wrapper h2,
+.faq-wrapper .h4 {
+    color: #fff !important;
+}
+
+/* Preguntas */
+.faq-wrapper .accordion-button {
+    background-color: rgba(0,0,0,0.3) !important;
+    color: #fff !important;
+    font-weight: 600;
+}
+
+/* Pregunta colapsada */
+.faq-wrapper .accordion-button.collapsed {
+    background-color: rgba(255,255,255,0.05) !important;
+    color: #fff !important;
+}
+
+/* Respuestas */
+.faq-wrapper .accordion-body {
+    color: #ddd !important;
+    opacity: 1 !important;
+}
+
+/* Eliminar borde gris default de Bootstrap */
+.faq-wrapper .accordion-item {
+    border-color: rgba(255,255,255,0.2) !important;
+}
 
