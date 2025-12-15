@@ -3071,7 +3071,7 @@ a.btn {
 /* Título */
 .faq-wrapper h2,
 .faq-wrapper .h4 {
-    color: #fff !important;
+    color: #000000 !important;
 }
 
 /* Preguntas */
@@ -3083,13 +3083,13 @@ a.btn {
 
 /* Pregunta colapsada */
 .faq-wrapper .accordion-button.collapsed {
-    background-color: rgba(255,255,255,0.05) !important;
-    color: #fff !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: #000000 !important;
 }
 
 /* Respuestas */
 .faq-wrapper .accordion-body {
-    color: #ddd !important;
+    color: #000000 !important;
     opacity: 1 !important;
 }
 
