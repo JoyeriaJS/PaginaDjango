@@ -381,25 +381,40 @@
     <div class="row g-4">
       {% for c in categories %}
       <div class="col-6 col-md-3" data-aos="zoom-in">
+
         <a href="{% url 'core:category_list' c.pk %}" class="text-decoration-none">
-          <div class="card card-elev text-center p-3 h-100">
+
+          <div class="card card-elev text-center p-3 h-100 category-card-fix">
+
             <div class="thumb-1x1 mb-2">
               {% with prod=c.products.first %}
                 {% if prod and prod.images.first %}
-                <img src="{{ prod.images.first.image.url }}" alt="{{ c.name }}" loading="lazy">
+                  <img src="{{ prod.images.first.image.url }}" alt="{{ c.name }}" loading="lazy">
+                {% else %}
+                  <div class="ratio ratio-1x1 bg-light d-flex align-items-center justify-content-center text-muted">
+                    Sin imagen
+                  </div>
                 {% endif %}
               {% endwith %}
             </div>
-            <h3 class="h6 text-dark mb-1">{{ c.name }}</h3>
-            <p class="small text-muted">{{ c.n }} productos</p>
+
+            <!-- TÍTULO FIJADO -->
+            <h3 class="h6 category-title-fix">{{ c.name }}</h3>
+
+            <!-- Cantidad de productos -->
+            <p class="small category-count-fix">{{ c.n }} productos</p>
+
           </div>
+
         </a>
+
       </div>
       {% endfor %}
     </div>
 
   </div>
 </section>
+
 
 <!-- NOVEDADES GRID -->
 <section id="nuevos" class="py-5 section-black">
