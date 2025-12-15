@@ -2965,3 +2965,13 @@ a.btn {
     color: #d4af37 !important;
 }
 
+.product-info-block {
+    color: #333 !important;
+    opacity: 1 !important;
+    z-index: 50;
+    position: relative;
+}
+
+.product-info-block * {
+    color: inherit !important;
+}
