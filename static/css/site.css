@@ -3020,31 +3020,44 @@ a.btn {
     opacity: 1 !important;
     font-weight: 700 !important;
 }
+/* ============================================
+   FIX GLOBAL PARA PREGUNTAS FRECUENTES (FAQ)
+   Rompe cualquier opacidad o color heredado
+   ============================================ */
 
-/* ===================================== */
-/* FIX PARA PREGUNTAS FRECUENTES (FAQ)  */
-/* ===================================== */
-
-/* Resetear opacidad y color de texto en FAQ */
-.faq-section,
-.faq-section * {
-    color: #ffffff !important;  /* Texto blanco visible */
-    opacity: 1 !important;  /* Aseguramos que no esté opaco */
+#faqs, 
+#faqs * {
+    opacity: 1 !important;
+    color: #fff !important;
+    visibility: visible !important;
 }
 
-/* Aseguramos que el título de las preguntas frecuentes sea visible */
-.faq-title {
-    color: #ffffff !important;  /* Título blanco */
-    font-weight: 600 !important;  /* Estilo en negrita para destacar */
+/* Título principal – blanco y fuerte */
+#faqs h2, 
+#faqs h3, 
+#faqs .faq-title {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    font-weight: 700 !important;
 }
 
-/* Respuestas en FAQ con color suave */
-.faq-answer {
-    color: #d1d1d1 !important;  /* Color gris suave para respuestas */
-    opacity: 1 !important;  /* Aseguramos que se vea completamente */
+/* Preguntas (items clickeables) */
+#faqs .faq-question {
+    color: #ffffff !important;
+    opacity: 1 !important;
 }
 
-/* Opcional: Mejorar la visibilidad de las preguntas cuando están activas (hover) */
-.faq-item:hover .faq-title {
-    color: #00d2ff !important; /* Cambio de color a azul celeste al hacer hover */
+/* Respuestas */
+#faqs .faq-answer,
+#faqs p {
+    color: #e0e0e0 !important;
+    opacity: 1 !important;
 }
+
+/* Limpieza de fondos que podrían bloquear visibilidad */
+#faqs,
+#faqs * {
+    background: transparent !important;
+}
+
+
