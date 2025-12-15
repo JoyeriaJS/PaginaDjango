@@ -3008,7 +3008,7 @@ a.btn {
 /* Nombre del producto → azul */
 .catalog-card h6,
 .catalog-card h6 * {
-    color: #0052cc !important;   /* azul limpio profesional */
+    color: #000000 !important;   /* azul limpio profesional */
     opacity: 1 !important;
     font-weight: 600 !important;
 }
