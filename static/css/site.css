@@ -3060,29 +3060,4 @@ a.btn {
     background: transparent !important;
 }
 
-/* 🔥 FIX DEFINITIVO PARA QUE FAQ SE VEA NORMAL */
-.faq-wrapper {
-    color: #fff !important;
-    opacity: 1 !important;
-    filter: none !important;
-    -webkit-filter: none !important;
-}
-
-.faq-wrapper * {
-    color: #fff !important;
-    opacity: 1 !important;
-    filter: none !important;
-    -webkit-filter: none !important;
-}
-
-/* Títulos */
-.faq-wrapper h2,
-.faq-wrapper .accordion-button {
-    color: #fff !important;
-}
-
-/* Texto de las respuestas */
-.faq-wrapper .accordion-body {
-    color: #ccc !important;
-}
 
