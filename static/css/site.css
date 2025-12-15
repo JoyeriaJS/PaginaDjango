@@ -3000,3 +3000,23 @@ a.btn {
     color: #111 !important;     /* negro suave */
     opacity: 1 !important;
 }
+
+/* ========================== */
+/* SECCIÓN: LO MÁS VENDIDO   */
+/* ========================== */
+
+/* Título del producto en azul */
+.bestseller-card .product-title,
+.bestseller-card .product-title * {
+    color: #0052cc !important;   /* azul profesional */
+    opacity: 1 !important;
+    font-weight: 600;
+}
+
+/* Precio visible y en negro */
+.bestseller-card .product-price,
+.bestseller-card .product-price * {
+    color: #111 !important;
+    opacity: 1 !important;
+    font-weight: 700;
+}
