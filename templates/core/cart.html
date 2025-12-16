@@ -73,61 +73,61 @@
       </div>
 
       <div class="col-12 col-lg-6">
-        <div class="card p-3 mt-3 mt-lg-0" style="min-width:320px">
+  <div class="card p-3 mt-3 mt-lg-0" style="min-width:320px">
 
-          <!-- SUBTOTAL -->
-          <div class="d-flex justify-content-between mb-2">
-            <span>Subtotal</span>
-            <strong id="cart-subtotal">${{ subtotal }}</strong>
-          </div>
+    <!-- SUBTOTAL -->
+    <div class="d-flex justify-content-between mb-2">
+      <span>Subtotal</span>
+      <strong id="cart-subtotal">${{ subtotal }}</strong>
+    </div>
 
-          <!-- ============================ -->
-          <!-- FORMULARIO DE CUPÓN -->
-          <!-- ============================ -->
-          <form method="post" action="{% url 'core:apply_coupon' %}" class="mb-2">
-            {% csrf_token %}
-            <label class="form-label small">Código de descuento</label>
+    <!-- CUPÓN -->
+    <form method="post" action="{% url 'core:apply_coupon' %}" class="mb-2">
+      {% csrf_token %}
+      <label class="form-label small">Código de descuento</label>
 
-            <div class="input-group">
-              <input type="text"
-                     name="coupon"
-                     class="form-control"
-                     placeholder="Ingresa tu cupón"
-                     value="{{ discount_code|default:'' }}">
-              <button class="btn btn-casteable-apply" type="submit">Aplicar</button>
-            </div>
-
-            {% if discount_code %}
-              <div class="d-flex justify-content-between mt-2">
-                <span class="text-success small">Cupón aplicado: <strong>{{ discount_code }}</strong></span>
-                <form method="post" action="{% url 'core:remove_coupon' %}">
-                  {% csrf_token %}
-                  <button class="btn btn-sm btn-outline-casteable">Quitar</button>
-                </form>
-              </div>
-            {% endif %}
-          </form>
-
-          {% if discount_amount > 0 %}
-            <div class="d-flex justify-content-between text-success">
-              <span>Descuento</span>
-              <strong>- ${{ discount_amount }}</strong>
-            </div>
-          {% endif %}
-
-          <hr class="my-2">
-
-          <div class="d-flex justify-content-between fs-5">
-            <span>Total</span>
-            <strong id="cart-grandtotal">${{ grand_total }}</strong>
-          </div>
-
-          <a class="btn btn-pay w-100 mt-3" href="{% url 'core:start_checkout' %}"></a>
-            Ir a pagar
-          </a>
-
-        </div>
+      <div class="input-group">
+        <input type="text"
+               name="coupon"
+               class="form-control"
+               placeholder="Ingresa tu cupón"
+               value="{{ discount_code|default:'' }}">
+        <button class="btn btn-casteable-apply" type="submit">Aplicar</button>
       </div>
+
+      {% if discount_code %}
+        <div class="d-flex justify-content-between mt-2">
+          <span class="text-success small">Cupón aplicado: <strong>{{ discount_code }}</strong></span>
+
+          <form method="post" action="{% url 'core:remove_coupon' %}">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-outline-casteable">Quitar</button>
+          </form>
+        </div>
+      {% endif %}
+    </form>
+
+    {% if discount_amount > 0 %}
+      <div class="d-flex justify-content-between text-success">
+        <span>Descuento</span>
+        <strong>- ${{ discount_amount }}</strong>
+      </div>
+    {% endif %}
+
+    <hr class="my-2">
+
+    <div class="d-flex justify-content-between fs-5">
+      <span>Total</span>
+      <strong id="cart-grandtotal">${{ grand_total }}</strong>
+    </div>
+
+    <!-- BOTÓN SEGURO DE CHECKOUT -->
+    <a class="btn btn-pay w-100 mt-3" href="{% url 'core:start_checkout' %}">
+      Ir a pagar
+    </a>
+
+  </div>
+</div>
     </div>
 
   {% else %}
