@@ -322,7 +322,7 @@
     <!-- 🔥 Formulario -->
     <form id="review-form" class="mt-4">
       {% csrf_token %}
-      <input type="hidden" name="product" value="{{ product.pk }}">
+      <input type="hidden" name="product_id" value="{{ product.pk }}">
 
       <div class="mb-2">
         <label class="form-label">Tu nombre</label>
