@@ -448,7 +448,7 @@ document.getElementById("review-form").addEventListener("submit", function(e){
   
     method: "POST",
     headers: {
-      "X-CSRFToken": "{{ csrf_token }}",
+      "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
       "X-Requested-With": "XMLHttpRequest"
     },
     body: formData
