@@ -1101,7 +1101,8 @@ from catalog.models import Review
 
 @require_POST
 def add_review(request):
-    product_id = request.POST.get("product")
+    print("🟦 POST RECIBIDO:", request.POST)   # <-- AGREGA ESTO
+    product_id = request.POST.get("product_id")
     name = request.POST.get("name", "").strip()
     rating = int(request.POST.get("rating", 5))
     comment = request.POST.get("comment", "").strip()
