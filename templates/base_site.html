@@ -135,6 +135,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+  <!-- ============================================
+     POPUP: Producto agregado al carrito
+============================================== -->
+<div class="modal fade" id="addedToCartModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-3">
+
+      <div class="d-flex align-items-center mb-2">
+        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" 
+             style="width:35px;height:35px;">
+          ✓
+        </div>
+        <h5 class="ms-2 mb-0">Producto agregado</h5>
+      </div>
+
+      <p id="atc-product-name" class="fw-bold mb-1"></p>
+      <p id="atc-product-subtotal" class="text-muted small mb-3"></p>
+
+      <div class="d-flex justify-content-between">
+        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Seguir comprando</button>
+        <a href="/cart/" class="btn btn-primary">Ir al carrito</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 
   </body>
 </html>

@@ -295,7 +295,6 @@ def add_to_cart(request, pk):
 
     qty = max(1, qty)
 
-    # Stock None => ilimitado; si no, validar
     stock = product.stock
     cart = _get_cart(request.session)
     pid = str(product.pk)
@@ -327,7 +326,7 @@ def add_to_cart(request, pk):
 
     cart[pid] = {
         "qty": new_qty,
-        "price": final_price  # <<—— ESTE ES EL FIX
+        "price": final_price
     }
 
     request.session["cart"] = cart
@@ -335,9 +334,22 @@ def add_to_cart(request, pk):
 
     msg_ok = f"Agregaste “{product.name}” ({qty} ud)."
 
+    # ======================================================
+    # 🔥 RESPUESTA AJAX PARA MOSTRAR POPUP (Shopify-style)
+    # ======================================================
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
-        cart_count = sum(i["qty"] for i in cart.values())
-        return JsonResponse({"ok": True, "message": msg_ok, "cart_count": cart_count})
+
+        # <<--- agregado para popup
+        items, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
+
+        # <<--- agregado para popup
+        return JsonResponse({
+            "ok": True,
+            "message": msg_ok,
+            "name": product.name,          # <<--- agregado
+            "subtotal": subtotal,          # <<--- agregado
+            "cart_count": count            # tu variable original
+        })
 
     messages.success(request, msg_ok)
     return redirect("core:cart_detail")
