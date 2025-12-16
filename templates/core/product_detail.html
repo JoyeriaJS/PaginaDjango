@@ -352,7 +352,7 @@ document.querySelectorAll(".add-to-cart-form").forEach(form => {
     let pid = form.dataset.product;
     let qty = form.querySelector(".qty-field").value;
 
-    fetch(`/add-to-cart/${pid}/`, {
+    fetch(`/carrito/agregar/${pid}/`, {   // ✅ URL correcta según tu urls.py
       method: "POST",
       headers: {
         "X-CSRFToken": "{{ csrf_token }}",
@@ -375,5 +375,6 @@ document.querySelectorAll(".add-to-cart-form").forEach(form => {
 
 });
 </script>
+
 
 {% endblock %}
