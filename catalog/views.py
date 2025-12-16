@@ -347,3 +347,4 @@ def add_review(request, pk):
         })
 
     return JsonResponse({"ok": False, "error": "Formulario inválido."})
+
