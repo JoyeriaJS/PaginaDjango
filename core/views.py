@@ -1097,7 +1097,7 @@ def category_all(request):
 
 
 from django.views.decorators.http import require_POST
-
+from catalog.models import Review
 
 @require_POST
 def add_review(request):
