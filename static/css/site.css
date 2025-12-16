@@ -3144,28 +3144,14 @@ a.btn {
     color: #ffffff !important; /* gris bootstrap */
     opacity: 1 !important;
 }
-/* BOTÓN SECUNDARIO DEL POPUP (Seguir comprando) */
-.btn-atc-secondary {
-    background-color: #000000 !important;
-    color: #333 !important;
-    border: 1px solid #000000 !important;
-    font-weight: 600;
+
+#addedToCartModal .btn {
+    background-color: #ffffff !important;
+    color: #1a1a1a !important;
+    border: 1px solid #ccc !important;
 }
 
-.btn-atc-secondary:hover {
-    background-color: #000000 !important;
-    color: #111 !important;
-    border-color: #000000 !important;
-}
-
-/* BOTÓN PRINCIPAL (Ir al carrito) */
-.btn-atc-primary {
-    background-color: #000000 !important;
-    color: #000000 !important;
-    font-weight: 600;
-}
-
-.btn-atc-primary:hover {
-    background-color: #000000 !important;
-    color: #000000 !important;
+#addedToCartModal .btn:hover {
+    background-color: #f2f2f2 !important;
+    color: #000 !important;
 }
