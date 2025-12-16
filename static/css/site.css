@@ -3144,3 +3144,28 @@ a.btn {
     color: #ffffff !important; /* gris bootstrap */
     opacity: 1 !important;
 }
+/* BOTÓN SECUNDARIO DEL POPUP (Seguir comprando) */
+.btn-atc-secondary {
+    background-color: #ffffff !important;
+    color: #333 !important;
+    border: 1px solid #ddd !important;
+    font-weight: 600;
+}
+
+.btn-atc-secondary:hover {
+    background-color: #f3f3f3 !important;
+    color: #111 !important;
+    border-color: #ccc !important;
+}
+
+/* BOTÓN PRINCIPAL (Ir al carrito) */
+.btn-atc-primary {
+    background-color: #0d6efd !important;
+    color: #fff !important;
+    font-weight: 600;
+}
+
+.btn-atc-primary:hover {
+    background-color: #0b5ed7 !important;
+    color: #fff !important;
+}
