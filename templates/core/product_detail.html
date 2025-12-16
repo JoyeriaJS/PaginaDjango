@@ -444,7 +444,8 @@ document.getElementById("review-form").addEventListener("submit", function(e){
 
   let formData = new FormData(this);
 
-  fetch("{% url 'core:add_review' %}", {
+  fetch("{% url 'add_review' %}", {
+    
     method: "POST",
     headers: {
       "X-CSRFToken": "{{ csrf_token }}",
