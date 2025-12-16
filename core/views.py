@@ -1099,29 +1099,33 @@ def category_all(request):
 from django.views.decorators.http import require_POST
 from catalog.models import Review
 
+
 @require_POST
 def add_review(request):
-    print("🟦 POST RECIBIDO:", request.POST)   # <-- AGREGA ESTO
-    product_id = request.POST.get("product_id")
-    name = request.POST.get("name", "").strip()
-    rating = int(request.POST.get("rating", 5))
-    comment = request.POST.get("comment", "").strip()
+    try:
+        print("🟦 POST RECIBIDO:", request.POST)
 
-    if not product_id or not name or not comment:
-        return JsonResponse({"ok": False, "error": "Campos incompletos."}, status=400)
+        product_id = request.POST.get("product_id")
+        name = request.POST.get("name", "").strip()
+        rating = int(request.POST.get("rating", 5))
+        comment = request.POST.get("comment", "").strip()
 
-    product = get_object_or_404(Product, pk=product_id)
+        product = get_object_or_404(Product, pk=product_id)
 
-    Review.objects.create(
-        product=product,
-        name=name,
-        rating=max(1, min(5, rating)),
-        comment=comment,
-    )
+        review = Review.objects.create(
+            product=product,
+            name=name,
+            rating=max(1, min(5, rating)),
+            comment=comment,
+        )
 
-    return JsonResponse({
-        "ok": True,
-        "name": name,
-        "rating": rating,
-        "comment": comment
-    })
+        return JsonResponse({
+            "ok": True,
+            "name": name,
+            "rating": rating,
+            "comment": comment
+        })
+
+    except Exception as e:
+        print("🟥 ERROR AL CREAR REVIEW:", type(e), e)
+        return JsonResponse({"ok": False, "error": str(e)}, status=500)
