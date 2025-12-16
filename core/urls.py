@@ -60,6 +60,7 @@ urlpatterns = [
     path("buscar/ajax/", views.search_ajax, name="search_ajax"),
 
     #resena
+    path("reviews/add/", views.add_review, name="add_review"),
     
     
 

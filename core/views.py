@@ -1096,3 +1096,31 @@ def category_all(request):
     return render(request, "core/category_all.html", {"categories": categories})
 
 
+from django.views.decorators.http import require_POST
+from catalog.models import Review
+
+@require_POST
+def add_review(request):
+    product_id = request.POST.get("product_id")
+    name = request.POST.get("name", "").strip()
+    rating = int(request.POST.get("rating", 5))
+    comment = request.POST.get("comment", "").strip()
+
+    if not product_id or not name or not comment:
+        return JsonResponse({"ok": False, "error": "Campos incompletos."}, status=400)
+
+    product = get_object_or_404(Product, pk=product_id)
+
+    Review.objects.create(
+        product=product,
+        name=name,
+        rating=max(1, min(5, rating)),
+        comment=comment,
+    )
+
+    return JsonResponse({
+        "ok": True,
+        "name": name,
+        "rating": rating,
+        "comment": comment
+    })
