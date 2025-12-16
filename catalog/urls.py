@@ -29,4 +29,6 @@ urlpatterns = [
     path('descuentos/nuevo/', views.discount_create, name='discount_create'),
     path('descuentos/<int:pk>/editar/', views.discount_edit, name='discount_edit'),
     path('descuentos/<int:pk>/eliminar/', views.discount_delete, name='discount_delete'),
+    path("product/<int:pk>/review/", views.add_review, name="add_review"),
+
 ]

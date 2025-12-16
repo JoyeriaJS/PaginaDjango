@@ -11,6 +11,7 @@ urlpatterns = [
      path('producto/<int:pk>/', views.product_detail, name='product_detail'),
      path("categoria/<int:pk>/", views.category_list, name="category_list"),  # ← usa pk
      path("buscar/", views.search, name="search"),
+     
 
 
     # Carrito
@@ -58,7 +59,8 @@ urlpatterns = [
 
     path("buscar/ajax/", views.search_ajax, name="search_ajax"),
 
-
+    #resena
+    
     
 
     

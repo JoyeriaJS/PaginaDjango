@@ -6,6 +6,9 @@ from django.utils import timezone
 #from .models import Order, OrderItem
 from django.contrib import admin
 from datetime import timedelta
+from django.contrib.auth.models import User
+
+
 
 # --- compat para migraciones antiguas (déjala aunque no la uses) ---
 def product_image_path(instance, filename):
@@ -52,6 +55,15 @@ class Product(models.Model):
         ordering = ['-created_at']
         verbose_name = 'Producto'
         verbose_name_plural = 'Productos'
+    def avg_rating(self):
+        """Promedio redondeado de estrellas"""
+        reviews = self.reviews.all()
+        if not reviews:
+            return 0
+        return sum(r.rating for r in reviews) / reviews.count()
+
+    def rating_count(self):
+        return self.reviews.count()
     def __str__(self):
         return f"{self.name} ({self.sku})"
     def save(self, *args, **kwargs):
@@ -304,3 +316,26 @@ class CatalogSectionAdmin(admin.ModelAdmin):
     list_display_links = ["title"]
     search_fields = ["title"]
     filter_horizontal = ["products"]
+
+
+class Review(models.Model):
+    product = models.ForeignKey(
+        Product,
+        related_name="reviews",
+        on_delete=models.CASCADE
+    )
+    user = models.ForeignKey(
+        User,
+        related_name="reviews",
+        on_delete=models.CASCADE
+    )
+    rating = models.PositiveSmallIntegerField(default=5)  # 1–5 estrellas
+    comment = models.TextField(max_length=800)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("product", "user")  # 👉 un usuario solo 1 review por producto
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.product.name} — {self.rating}⭐ por {self.user.username}"

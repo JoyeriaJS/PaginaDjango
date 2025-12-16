@@ -10,9 +10,10 @@ from .forms import DiscountForm
 from .models import Discount
 from django.http import HttpResponse
 from django.db.models import Prefetch
+from django.http import JsonResponse
 
 
-from .forms import ProductForm, ProductImageForm, CategoryForm, MaterialForm
+from .forms import ProductForm, ProductImageForm, CategoryForm, MaterialForm, ReviewForm
 from .models import Product, Category, Material, ProductImage
 
 @login_required
@@ -318,3 +319,31 @@ def _is_staff(u): return u.is_staff
 @user_passes_test(_is_staff)
 def menu_ping(request):
     return HttpResponse("OK /panel/menu/ping/ (llegamos a las URLs y permisos)")
+
+#reseña
+@login_required
+def add_review(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+
+    # Evitar reviews duplicadas
+    if product.reviews.filter(user=request.user).exists():
+        return JsonResponse({"ok": False, "error": "Ya has calificado este producto."})
+
+    form = ReviewForm(request.POST)
+    if form.is_valid():
+        review = form.save(commit=False)
+        review.product = product
+        review.user = request.user
+        review.save()
+
+        return JsonResponse({
+            "ok": True,
+            "rating": review.rating,
+            "comment": review.comment,
+            "user": review.user.username,
+            "created_at": review.created_at.strftime("%d/%m/%Y"),
+            "avg": product.avg_rating(),
+            "count": product.rating_count(),
+        })
+
+    return JsonResponse({"ok": False, "error": "Formulario inválido."})

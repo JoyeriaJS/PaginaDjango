@@ -156,18 +156,17 @@
       <form class="mt-3 sticky-cta add-to-cart-form" data-product="{{ product.pk }}">
         {% csrf_token %}
         <div class="d-flex align-items-center gap-2">
-    <input class="form-control qty-field"
-           type="number"
-           name="qty"
-           value="1"
-           min="1"
-           style="max-width:110px;">
-
-    <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
-      Agregar al carrito
-    </button>
-  </div>
-</form>
+          <input class="form-control qty-field"
+                type="number"
+                name="qty"
+                value="1"
+                min="1"
+                style="max-width:110px;">
+          <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
+            Agregar al carrito
+          </button>
+        </div>
+      </form>
       {% endif %}
 
       {% if product.tags %}
@@ -193,7 +192,6 @@
         Ver más
       </a>
     </div>
-
     <div class="row g-3">
       {% for p in related %}
       <div class="col-6 col-md-3">
@@ -297,6 +295,60 @@
   </section>
   {% endif %}
 
+  <!-- ================================================= -->
+  <!-- ⭐⭐⭐ SECCIÓN DE RESEÑAS ⭐⭐⭐ -->
+  <!-- ================================================= -->
+
+  <section id="reviews" class="mt-5 pt-4 border-top">
+    <h2 class="h5 mb-3">Opiniones del producto</h2>
+
+    <!-- 🔥 Lista de reseñas -->
+    <div id="review-list">
+      {% for r in product.reviews.all %}
+      <div class="border rounded p-3 mb-2">
+        <strong>{{ r.name }}</strong>
+        <div class="text-warning">
+          {% for i in "12345" %}
+            {% if forloop.counter <= r.rating %}★{% else %}☆{% endif %}
+          {% endfor %}
+        </div>
+        <p class="m-0">{{ r.comment }}</p>
+      </div>
+      {% empty %}
+        <p class="text-muted">Sé el primero en dejar una reseña ⭐</p>
+      {% endfor %}
+    </div>
+
+    <!-- 🔥 Formulario -->
+    <form id="review-form" class="mt-4">
+      {% csrf_token %}
+      <input type="hidden" name="product" value="{{ product.pk }}">
+
+      <div class="mb-2">
+        <label class="form-label">Tu nombre</label>
+        <input type="text" name="name" class="form-control" required>
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label">Calificación</label>
+        <select name="rating" class="form-select" required>
+          <option value="5">★★★★★ (5)</option>
+          <option value="4">★★★★☆ (4)</option>
+          <option value="3">★★★☆☆ (3)</option>
+          <option value="2">★★☆☆☆ (2)</option>
+          <option value="1">★☆☆☆☆ (1)</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Comentario</label>
+        <textarea name="comment" class="form-control" rows="3" required></textarea>
+      </div>
+
+      <button class="btn btn-primary">Enviar reseña</button>
+    </form>
+  </section>
+
 </div>
 
 <!-- MODAL -->
@@ -316,6 +368,10 @@
 
 {% block extra_js %}
 {{ block.super }}
+
+<!-- =========================== -->
+<!-- ZOOM SCRIPT -->
+<!-- =========================== -->
 <script>
 (function(){
   document.addEventListener('click', function(e){
@@ -343,6 +399,9 @@
 })();
 </script>
 
+<!-- =========================== -->
+<!-- AJAX ADD TO CART -->
+<!-- =========================== -->
 <script>
 document.querySelectorAll(".add-to-cart-form").forEach(form => {
 
@@ -352,7 +411,7 @@ document.querySelectorAll(".add-to-cart-form").forEach(form => {
     let pid = form.dataset.product;
     let qty = form.querySelector(".qty-field").value;
 
-    fetch(`/carrito/agregar/${pid}/`, {   // ✅ URL correcta según tu urls.py
+    fetch(`/carrito/agregar/${pid}/`, {
       method: "POST",
       headers: {
         "X-CSRFToken": "{{ csrf_token }}",
@@ -376,5 +435,47 @@ document.querySelectorAll(".add-to-cart-form").forEach(form => {
 });
 </script>
 
+<!-- =========================== -->
+<!-- AJAX PARA ENVIAR RESEÑAS -->
+<!-- =========================== -->
+<script>
+document.getElementById("review-form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  let formData = new FormData(this);
+
+  fetch("{% url 'core:add_review' %}", {
+    method: "POST",
+    headers: {
+      "X-CSRFToken": "{{ csrf_token }}",
+      "X-Requested-With": "XMLHttpRequest"
+    },
+    body: formData
+  })
+  .then(r => r.json())
+  .then(data => {
+
+    if (!data.ok) {
+      alert("Error al enviar reseña");
+      return;
+    }
+
+    // insertar reseña sin recargar
+    let block = `
+      <div class="border rounded p-3 mb-2">
+        <strong>${data.name}</strong>
+        <div class="text-warning">${data.stars}</div>
+        <p class="m-0">${data.comment}</p>
+      </div>
+    `;
+
+    document.getElementById("review-list")
+      .insertAdjacentHTML("afterbegin", block);
+
+    this.reset();
+  });
+
+});
+</script>
 
 {% endblock %}

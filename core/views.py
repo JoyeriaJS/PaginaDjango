@@ -1094,3 +1094,5 @@ def search_ajax(request):
 def category_all(request):
     categories = Category.objects.all().order_by("name")
     return render(request, "core/category_all.html", {"categories": categories})
+
+
