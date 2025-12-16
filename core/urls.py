@@ -33,8 +33,10 @@ urlpatterns = [
     path("orden/<str:payment_id>/pdf/", views.order_pdf, name="order_pdf"),
 
 
-   #CHECKOUT
-   path("checkout/", views.checkout, name="checkout"),
+   #CHECKOUT con token
+   path("checkout/<uuid:token>/", views.checkout, name="checkout"),
+   path("checkout/", views.start_checkout, name="start_checkout"),
+
 
    #LOGIN
     path("login/", views_auth.login_view, name="login"),
