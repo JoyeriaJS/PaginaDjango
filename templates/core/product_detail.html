@@ -325,11 +325,6 @@
       <input type="hidden" name="product_id" value="{{ product.pk }}">
 
       <div class="mb-2">
-        <label class="form-label">Tu nombre</label>
-        <input type="text" name="name" class="form-control" required>
-      </div>
-
-      <div class="mb-2">
         <label class="form-label">Calificación</label>
         <select name="rating" class="form-select" required>
           <option value="5">★★★★★ (5)</option>
@@ -445,27 +440,30 @@ document.getElementById("review-form").addEventListener("submit", function(e){
   let formData = new FormData(this);
 
   fetch("{% url 'core:add_review' %}", {
-  
     method: "POST",
     headers: {
-      "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
-      "X-Requested-With": "XMLHttpRequest"
+      "X-CSRFToken": "{{ csrf_token }}",
+      "X-Requested-With": "XMLHttpRequest",
     },
-    body: formData
+    body: formData,
   })
   .then(r => r.json())
   .then(data => {
 
     if (!data.ok) {
-      alert("Error al enviar reseña");
+      alert(data.error);
       return;
     }
 
-    // insertar reseña sin recargar
+    let stars = "";
+    for (let i = 1; i <= 5; i++) {
+      stars += i <= data.rating ? "★" : "☆";
+    }
+
     let block = `
       <div class="border rounded p-3 mb-2">
-        <strong>${data.name}</strong>
-        <div class="text-warning">${data.stars}</div>
+        <strong>${data.user}</strong>
+        <div class="text-warning">${stars}</div>
         <p class="m-0">${data.comment}</p>
       </div>
     `;
@@ -475,8 +473,8 @@ document.getElementById("review-form").addEventListener("submit", function(e){
 
     this.reset();
   });
-
 });
+
 </script>
 
 {% endblock %}

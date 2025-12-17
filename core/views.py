@@ -1102,30 +1102,31 @@ from catalog.models import Review
 
 @require_POST
 def add_review(request):
-    try:
-        print("🟦 POST RECIBIDO:", request.POST)
+    if not request.user.is_authenticated:
+        return JsonResponse({"ok": False, "error": "Debes iniciar sesión para dejar una reseña."}, status=401)
 
-        product_id = request.POST.get("product_id")
-        name = request.POST.get("name", "").strip()
-        rating = int(request.POST.get("rating", 5))
-        comment = request.POST.get("comment", "").strip()
+    product_id = request.POST.get("product_id")
+    rating = int(request.POST.get("rating", 5))
+    comment = request.POST.get("comment", "").strip()
 
-        product = get_object_or_404(Product, pk=product_id)
+    if not product_id or not comment:
+        return JsonResponse({"ok": False, "error": "Campos incompletos."}, status=400)
 
-        review = Review.objects.create(
-            product=product,
-            name=name,
-            rating=max(1, min(5, rating)),
-            comment=comment,
-        )
+    product = get_object_or_404(Product, pk=product_id)
 
-        return JsonResponse({
-            "ok": True,
-            "name": name,
-            "rating": rating,
-            "comment": comment
-        })
+    # Evitar duplicados por unique_together
+    Review.objects.update_or_create(
+        product=product,
+        user=request.user,
+        defaults={
+            "rating": max(1, min(5, rating)),
+            "comment": comment,
+        }
+    )
 
-    except Exception as e:
-        print("🟥 ERROR AL CREAR REVIEW:", type(e), e)
-        return JsonResponse({"ok": False, "error": str(e)}, status=500)
+    return JsonResponse({
+        "ok": True,
+        "user": request.user.username,
+        "rating": rating,
+        "comment": comment,
+    })
