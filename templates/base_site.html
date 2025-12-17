@@ -37,6 +37,14 @@
         .catch(err => console.warn("Error SW:", err));
     }
     </script>
+    <script>
+    if ("serviceWorker" in navigator && "SyncManager" in window) {
+      navigator.serviceWorker.ready.then(sw => {
+        sw.sync.register("sync-cart");
+    });
+}
+</script>
+
 
 </head>
 

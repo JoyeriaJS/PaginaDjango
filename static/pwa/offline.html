@@ -1,27 +1,39 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Sin conexión</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 40px;
-            background: #f2f2f2;
-        }
-        h1 {
-            color: #333;
-        }
-        p {
-            color: #555;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sin conexión</title>
+<style>
+body {
+    font-family: Inter, sans-serif;
+    background: #fafafa;
+    text-align: center;
+    padding: 40px;
+}
+h1 {
+    font-size: 28px;
+    color: #333;
+}
+p {
+    color: #666;
+}
+button {
+    background: #000;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: none;
+    margin-top: 20px;
+    font-size: 16px;
+}
+</style>
 </head>
+
 <body>
     <h1>Sin conexión</h1>
-    <p>No pudimos cargar la página.  
-       Revisa tu conexión e intenta nuevamente.</p>
+    <p>No pudimos cargar la página. Pero puedes seguir viendo algunos productos.</p>
+
+    <button onclick="window.location.reload()">Reintentar</button>
 </body>
 </html>

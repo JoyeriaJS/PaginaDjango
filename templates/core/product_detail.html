@@ -420,14 +420,31 @@ document.querySelectorAll(".add-to-cart-form").forEach(form => {
     })
     .then(r => r.json())
     .then(data => {
-      if (!data.ok) return;
 
-      document.getElementById("atc-product-name").textContent = data.name;
-      document.getElementById("atc-product-subtotal").textContent =
-        "Subtotal: $" + data.subtotal;
+  // 🟡 Caso: agregado OFFLINE (sin internet)
+  if (data.offline) {
+    alert("🟡 Producto guardado offline. Se sincronizará cuando vuelvas a tener internet.");
 
-      let modal = new bootstrap.Modal(document.getElementById("addedToCartModal"));
-      modal.show();
+    // Mostrar el modal PERO sin subtotal real
+    document.getElementById("atc-product-name").textContent = "Guardado offline";
+    document.getElementById("atc-product-subtotal").textContent =
+      "Se sincronizará al volver la conexión";
+
+    let modal = new bootstrap.Modal(document.getElementById("addedToCartModal"));
+    modal.show();
+    return;
+  }
+
+  // 🟢 Caso normal online
+  if (!data.ok) return;
+
+  document.getElementById("atc-product-name").textContent = data.name;
+  document.getElementById("atc-product-subtotal").textContent =
+    "Subtotal: $" + data.subtotal;
+
+  let modal = new bootstrap.Modal(document.getElementById("addedToCartModal"));
+  modal.show();
+
     });
   });
 
