@@ -55,86 +55,61 @@ self.addEventListener("activate", event => {
 // FETCH — Offline catálogo + imágenes + páginas
 // --------------------------------------
 self.addEventListener("fetch", event => {
-    const req = event.request;
-    const url = new URL(req.url);
+    const request = event.request;
 
-    // -------------------------------
-    // 1️⃣ Cloudinary + imágenes locales
-    // -------------------------------
-    if (req.destination === "image" || url.hostname.includes("cloudinary")) {
+    // -------------------------
+    // 1) IMÁGENES → cache-first
+    // -------------------------
+    if (request.destination === "image") {
         event.respondWith(
             caches.open(IMG_CACHE).then(cache =>
-                fetch(req)
+                fetch(request)
                     .then(res => {
-                        cache.put(req, res.clone());
+                        cache.put(request, res.clone());
                         return res;
                     })
-                    .catch(() => cache.match(req))
+                    .catch(() => caches.match(request))
             )
         );
         return;
     }
 
-    // -------------------------------
-    // 2️⃣ Páginas HTML completas
-    // -------------------------------
-    if (req.headers.get("accept")?.includes("text/html")) {
+    // -------------------------
+    // 2) HTML pages → network-first + fallback offline
+    // -------------------------
+    if (request.headers.get("accept").includes("text/html")) {
         event.respondWith(
-            fetch(req)
+            fetch(request)
                 .then(res => {
-                    caches.open(DYNAMIC_CACHE).then(cache => {
-                        cache.put(req, res.clone());
-                    });
+                    const clone = res.clone();
+                    caches.open(CACHE_NAME).then(c => c.put(request, clone));
                     return res;
                 })
-                .catch(() => caches.match(req) || caches.match("/static/pwa/offline.html"))
+                .catch(() => caches.match(request).then(cached => {
+                    return cached || caches.match("/static/pwa/offline.html");
+                }))
         );
         return;
     }
 
-    // -------------------------------
-    // 3️⃣ Sincronización de carrito Offline
-    // -------------------------------
-    if (url.pathname.includes("/carrito/agregar/")) {
-        event.respondWith(
-            fetch(req).catch(async () => {
-                // Guardar operación para sincronizar después
-                let pending = await readCartPending();
-                pending.push({
-                    url: url.pathname,
-                    method: req.method,
-                    timestamp: Date.now()
-                });
-                await writeCartPending(pending);
-
-                return new Response(
-                    JSON.stringify({ ok: true, offline: true }),
-                    { headers: { "Content-Type": "application/json" } }
-                );
-            })
-        );
-        return;
-    }
-
-    // -------------------------------
-    // 4️⃣ Normal: Static + fallback dinámico
-    // -------------------------------
+    // -------------------------
+    // 3) CSS / JS / fuentes → cache-first
+    // -------------------------
     event.respondWith(
-        caches.match(req).then(cached => {
+        caches.match(request).then(cached => {
             return (
                 cached ||
-                fetch(req)
-                    .then(res => {
-                        caches.open(DYNAMIC_CACHE).then(cache => {
-                            cache.put(req, res.clone());
-                        });
-                        return res;
-                    })
-                    .catch(() => cached)
+                fetch(request).then(res => {
+                    caches.open(CACHE_NAME).then(c =>
+                        c.put(request, res.clone())
+                    );
+                    return res;
+                })
             );
         })
     );
 });
+
 
 /* ---------------------------------------------------
    📦 Manejo de sincronización del carrito offline
