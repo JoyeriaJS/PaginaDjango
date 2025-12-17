@@ -1,79 +1,95 @@
-const CACHE_NAME = "pwa-cache-v1";
-const IMG_CACHE = "pwa-images-v1";
-const URLS_TO_CACHE = [
+const VERSION = "v4";
+const STATIC_CACHE = `static-${VERSION}`;
+const DYNAMIC_CACHE = `dynamic-${VERSION}`;
+const IMG_CACHE = `images-${VERSION}`;
+
+const STATIC_ASSETS = [
     "/",
     "/static/pwa/offline.html",
-
-    // CSS
     "/static/css/site.css",
     "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css",
-
-    // JS
     "/static/js/main.js",
-
-    // Íconos
     "/static/pwa/icon-192.png",
     "/static/pwa/icon-512.png"
 ];
 
-// INSTALACIÓN (guarda archivos en caché)
+// INSTALACIÓN
 self.addEventListener("install", event => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then(cache => {
-            console.log("📦 Guardando archivos en caché");
-            return cache.addAll(URLS_TO_CACHE);
+        caches.open(STATIC_CACHE).then(cache => {
+            console.log("📦 Cache estática lista");
+            return cache.addAll(STATIC_ASSETS);
         })
     );
+    self.skipWaiting();
 });
 
-// ACTIVACIÓN (borra cachés antiguas)
+// ACTIVACIÓN → elimina versiones antiguas
 self.addEventListener("activate", event => {
     event.waitUntil(
         caches.keys().then(keys =>
             Promise.all(
                 keys.map(key => {
-                    if (key !== CACHE_NAME) {
-                        console.log("🗑 Eliminando cache antigua:", key);
+                    if (![STATIC_CACHE, DYNAMIC_CACHE, IMG_CACHE].includes(key)) {
+                        console.log("🗑 Eliminando cache vieja:", key);
                         return caches.delete(key);
                     }
                 })
             )
         )
     );
+    self.clients.claim();
 });
 
-// INTERCEPTAR REQUESTS
+// FETCH → Manejo especial Cloudinary + offline
 self.addEventListener("fetch", event => {
+    const req = event.request;
+    const url = new URL(req.url);
 
-    const request = event.request;
-
-    // 🔵 1. CACHE DINÁMICO DE IMÁGENES
-    if (request.destination === "image") {
+    // 1️⃣ IMÁGENES DE CLOUDINARY — cache dinámico inteligente
+    if (req.destination === "image" || url.hostname.includes("cloudinary")) {
         event.respondWith(
-            caches.open(IMG_CACHE).then(cache => {
-                return fetch(request)
-                    .then(networkResponse => {
-                        cache.put(request, networkResponse.clone()); // Guarda imagen
-                        return networkResponse;
+            caches.open(IMG_CACHE).then(cache =>
+                fetch(req)
+                    .then(res => {
+                        cache.put(req, res.clone()); // Guardamos para offline
+                        return res;
                     })
-                    .catch(() => caches.match(request)); // Si no hay red → muestra la cacheada
-            })
+                    .catch(() => cache.match(req)) // Si no hay internet → imagen cacheada
+            )
         );
-        return; // Salimos para no afectar el resto
+        return;
     }
 
-    // 🔵 2. CACHE NORMAL (páginas + CSS + JS + etc.)
-    event.respondWith(
-        caches.match(request).then(cachedResponse => {
-            if (cachedResponse) return cachedResponse;
+    // 2️⃣ HTML — network first → fallback offline
+    if (req.headers.get("accept")?.includes("text/html")) {
+        event.respondWith(
+            fetch(req)
+                .then(res => {
+                    return caches.open(DYNAMIC_CACHE).then(cache => {
+                        cache.put(req, res.clone());
+                        return res;
+                    });
+                })
+                .catch(() => caches.match(req) || caches.match("/static/pwa/offline.html"))
+        );
+        return;
+    }
 
-            return fetch(request)
-                .catch(() => {
-                    if (request.headers.get("accept").includes("text/html")) {
-                        return caches.match("/static/pwa/offline.html");
-                    }
-                });
+    // 3️⃣ Static (CSS, JS, fuentes)
+    event.respondWith(
+        caches.match(req).then(cached => {
+            return (
+                cached ||
+                fetch(req)
+                    .then(res => {
+                        return caches.open(DYNAMIC_CACHE).then(cache => {
+                            cache.put(req, res.clone());
+                            return res;
+                        });
+                    })
+                    .catch(() => cached)
+            );
         })
     );
 });
-
