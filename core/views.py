@@ -59,13 +59,27 @@ def home(request):
 
 # ---------- PRODUCTO (página pública de detalle) ----------
 def product_detail(request, pk):
-    product = get_object_or_404(Product.objects.select_related('category').prefetch_related('images'), pk=pk, is_active=True)
-    related = (Product.objects.filter(is_active=True, category=product.category)
-               .exclude(pk=product.pk).prefetch_related('images')[:8])
+    product = get_object_or_404(
+        Product.objects.select_related('category').prefetch_related('images'),
+        pk=pk,
+        is_active=True
+    )
+
+    related = (
+        Product.objects.filter(is_active=True, category=product.category)
+        .exclude(pk=product.pk)
+        .prefetch_related('images')[:8]
+    )
+
+    # 🔥 Filtrar reseñas aprobadas (nuevo)
+    approved_reviews = product.reviews.filter(approved=True).order_by('-created_at')
+
     return render(request, "core/product_detail.html", {
         "product": product,
         "related": related,
+        "approved_reviews": approved_reviews,  # <<— agregado sin romper nada
     })
+
 
 def category_products(request, pk):
     category = get_object_or_404(Category, pk=pk)

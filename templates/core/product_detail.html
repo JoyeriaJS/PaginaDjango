@@ -304,7 +304,7 @@
 
     <!-- 🔥 Lista de reseñas -->
     <div id="review-list">
-      {% for r in product.reviews.filter(approved=True) %}
+      {% for r in approved_reviews %}
       <div class="border rounded p-3 mb-2">
         <strong>{{ r.name }}</strong>
         <div class="text-warning">
