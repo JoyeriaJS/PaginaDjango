@@ -1102,31 +1102,27 @@ from catalog.models import Review
 
 @require_POST
 def add_review(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({"ok": False, "error": "Debes iniciar sesión para dejar una reseña."}, status=401)
-
     product_id = request.POST.get("product_id")
+    name = request.POST.get("name", "").strip()
     rating = int(request.POST.get("rating", 5))
     comment = request.POST.get("comment", "").strip()
 
-    if not product_id or not comment:
-        return JsonResponse({"ok": False, "error": "Campos incompletos."}, status=400)
+    if not product_id or not name or not comment:
+        return JsonResponse({"ok": False, "error": "Faltan campos."}, status=400)
 
     product = get_object_or_404(Product, pk=product_id)
 
-    # Evitar duplicados por unique_together
-    Review.objects.update_or_create(
+    # ✔ Crear reseña como pendiente
+    review = Review.objects.create(
         product=product,
-        user=request.user,
-        defaults={
-            "rating": max(1, min(5, rating)),
-            "comment": comment,
-        }
+        name=name,
+        rating=max(1, min(5, rating)),
+        comment=comment,
+        approved=False  # 🔥 NO se publica automáticamente
     )
 
     return JsonResponse({
         "ok": True,
-        "user": request.user.username,
-        "rating": rating,
-        "comment": comment,
+        "message": "Reseña enviada y pendiente de aprobación."
     })
+

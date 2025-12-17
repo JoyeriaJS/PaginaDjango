@@ -316,6 +316,10 @@ class CatalogSectionAdmin(admin.ModelAdmin):
     list_display_links = ["title"]
     search_fields = ["title"]
     filter_horizontal = ["products"]
+    list_display = ("product", "name", "rating", "approved", "created_at")
+    list_filter = ("approved", "rating", "product")
+    search_fields = ("name", "comment", "product__name")
+    list_editable = ("approved",)  # ✔ Activar/desactivar desde la lista
 
 
 class Review(models.Model):
@@ -324,18 +328,17 @@ class Review(models.Model):
         related_name="reviews",
         on_delete=models.CASCADE
     )
-    user = models.ForeignKey(
-        User,
-        related_name="reviews",
-        on_delete=models.CASCADE
-    )
-    rating = models.PositiveSmallIntegerField(default=5)  # 1–5 estrellas
+
+    name = models.CharField(max_length=120)  # ✔ nombre del cliente
+    rating = models.PositiveSmallIntegerField(default=5)
     comment = models.TextField(max_length=800)
+
+    approved = models.BooleanField(default=False)  # ✔ debe aprobarse en admin
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ("product", "user")  # 👉 un usuario solo 1 review por producto
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"{self.product.name} — {self.rating}⭐ por {self.user.username}"
+        state = "✔" if self.approved else "✖"
+        return f"{self.product.name} — {self.rating}⭐ ({self.name}) {state}"
