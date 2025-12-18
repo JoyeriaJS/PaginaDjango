@@ -45,13 +45,17 @@ def home(request):
     featured_products = FeaturedProduct.objects.filter(is_active=True).select_related('product')
     catalog_sections = CatalogSection.objects.filter(is_active=True)
 
+    # ⭐ REVIEWS APROBADAS PARA TESTIMONIOS
+    testimonials = Review.objects.filter(approved=True).order_by('-created_at')[:10]
+
     return render(request, "core/home.html", {
         "categories": categories,
         "latest_products": latest_products,
         "banners_hero": Banner.objects.filter(is_active=True, position=Banner.HOME_HERO).order_by('order','-updated_at')[:6],
         "banners_strip": Banner.objects.filter(is_active=True, position=Banner.HOME_STRIP).order_by('order','-updated_at')[:6],
         "featured_products": featured_products,
-        "catalog_sections": catalog_sections,      # ← NUEVO
+        "catalog_sections": catalog_sections,
+        "testimonials": testimonials,   # 👈 AGREGADO AQUÍ
     })
 
 
