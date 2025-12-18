@@ -31,7 +31,7 @@ document.getElementById("newsletter-form").addEventListener("submit", function(e
     let form = e.target;
     let formData = new FormData(form);
 
-    fetch("{% url 'newsletter_subscribe' %}", {
+    fetch("{% url 'core:newsletter_subscribe' %}", {
         method: "POST",
         headers: {
             "X-CSRFToken": "{{ csrf_token }}",
