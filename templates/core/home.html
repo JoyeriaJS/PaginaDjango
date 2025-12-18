@@ -501,21 +501,30 @@
 </section>
 
 <!-- TESTIMONIOS -->
-<section class="py-5 section-black">
-  <div class="container">
-    <h2 class="fw-bold mb-4">Lo que dicen nuestros clientes</h2>
-
-    <div class="swiper testimonials-swiper">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide"><div class="card shadow-sm p-4 h-100">“Excelente calidad.”<br><small class="text-muted">— Camila A.</small></div></div>
-        <div class="swiper-slide"><div class="card shadow-sm p-4 h-100">“Llegó preciosa.”<br><small class="text-muted">— Jorge M.</small></div></div>
-        <div class="swiper-slide"><div class="card shadow-sm p-4 h-100">“Trabajo artesanal.”<br><small class="text-muted">— Daniela R.</small></div></div>
+<div class="swiper-wrapper">
+  {% for t in testimonials %}
+    <div class="swiper-slide">
+      <div class="card shadow-sm p-4 h-100">
+        “{{ t.comment }}”
+        <br>
+        <small class="text-muted">— {{ t.name }}</small>
+        <br>
+        <span class="text-warning">
+          {% for i in "12345" %}
+            {% if forloop.counter <= t.rating %}★{% else %}☆{% endif %}
+          {% endfor %}
+        </span>
       </div>
-      <div class="swiper-pagination mt-3"></div>
     </div>
+  {% empty %}
+    <div class="swiper-slide">
+      <div class="card shadow-sm p-4 h-100">
+        “Aún no hay testimonios, sé el primero en dejar una reseña ⭐”
+      </div>
+    </div>
+  {% endfor %}
+</div>
 
-  </div>
-</section>
 
 {% include "includes/newsletter.html" %}
 {% include "includes/faqs.html" %}
