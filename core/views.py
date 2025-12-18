@@ -1144,3 +1144,22 @@ def add_review(request):
         "message": "Reseña enviada y pendiente de aprobación."
     })
 
+from django.http import JsonResponse
+from catalog.models import NewsletterSubscriber
+
+def subscribe_newsletter(request):
+    if request.method != "POST":
+        return JsonResponse({"ok": False, "error": "Método no permitido"})
+
+    email = request.POST.get("email", "").strip().lower()
+
+    if not email:
+        return JsonResponse({"ok": False, "error": "Email vacío"})
+
+    # Evitar duplicados
+    if NewsletterSubscriber.objects.filter(email=email).exists():
+        return JsonResponse({"ok": True, "msg": "Ya estabas suscrito"})
+
+    NewsletterSubscriber.objects.create(email=email)
+
+    return JsonResponse({"ok": True, "msg": "¡Gracias por suscribirte!"})

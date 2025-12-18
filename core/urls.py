@@ -62,6 +62,9 @@ urlpatterns = [
     #resena
     path("reviews/add/", views.add_review, name="add_review"),
     
+    #NEWSLETTER
+    path("newsletter/subscribe/", views.subscribe_newsletter, name="newsletter_subscribe"),
+
     
 
     

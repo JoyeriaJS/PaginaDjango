@@ -6,14 +6,57 @@
           <h3 class="h5 mb-1">¿Te contamos nuestras novedades?</h3>
           <p class="text-muted mb-0">Lanzamientos, ofertas y piezas únicas, directo a tu correo.</p>
         </div>
-        <div class="col-md-6">
 
+        <div class="col-md-6">
+          <form id="newsletter-form">
             {% csrf_token %}
-            <input class="form-control" type="email" name="email" placeholder="Tu email" required>
-            <button class="btn btn-elegant">Suscribirme</button>
+            <div class="input-group">
+              <input class="form-control" type="email" name="email" placeholder="Tu email" required>
+              <button class="btn btn-elegant" type="submit">Suscribirme</button>
+            </div>
           </form>
+
+          <!-- Mensaje de resultado -->
+          <small id="newsletter-msg" class="text-success d-none"></small>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+document.getElementById("newsletter-form").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let form = e.target;
+    let formData = new FormData(form);
+
+    fetch("{% url 'newsletter_subscribe' %}", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "X-Requested-With": "XMLHttpRequest"
+        },
+        body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+        let msg = document.getElementById("newsletter-msg");
+
+        if (!data.ok) {
+            msg.textContent = data.error;
+            msg.classList.remove("text-success");
+            msg.classList.add("text-danger");
+            msg.classList.remove("d-none");
+            return;
+        }
+
+        msg.textContent = data.msg;
+        msg.classList.remove("text-danger");
+        msg.classList.add("text-success");
+        msg.classList.remove("d-none");
+
+        form.reset();
+    });
+});
+</script>
