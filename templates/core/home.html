@@ -500,30 +500,49 @@
   </div>
 </section>
 
-<!-- TESTIMONIOS -->
-<div class="swiper-wrapper">
-  {% for t in testimonials %}
-    <div class="swiper-slide">
-      <div class="card shadow-sm p-4 h-100">
-        “{{ t.comment }}”
-        <br>
-        <small class="text-muted">— {{ t.name }}</small>
-        <br>
-        <span class="text-warning">
-          {% for i in "12345" %}
-            {% if forloop.counter <= t.rating %}★{% else %}☆{% endif %}
+<!-- ===================================================== -->
+<!-- ⭐ TESTIMONIOS REALES DESDE REVIEWS APROBADAS ⭐ -->
+<!-- ===================================================== -->
+<section class="py-5 section-black">
+  <div class="container">
+    <h2 class="fw-bold mb-4 text-center">Lo que dicen nuestros clientes</h2>
+
+    <div class="swiper testimonials-swiper">
+      <div class="swiper-wrapper">
+
+        {% if testimonials %}
+          {% for t in testimonials %}
+            <div class="swiper-slide">
+              <div class="card testimonial-card shadow-sm p-4 h-100 text-center">
+                
+                <p class="testimonial-comment">“{{ t.comment }}”</p>
+
+                <div class="text-warning mb-2">
+                    {% for i in "12345" %}
+                      {% if forloop.counter <= t.rating %}★{% else %}☆{% endif %}
+                    {% endfor %}
+                </div>
+
+                <small class="text-muted d-block">— {{ t.name }}</small>
+
+              </div>
+            </div>
           {% endfor %}
-        </span>
+        {% else %}
+          <div class="swiper-slide">
+            <div class="card p-4 text-center">
+              <p class="m-0 text-muted">Aún no hay testimonios, sé el primero en dejar una reseña ⭐</p>
+            </div>
+          </div>
+        {% endif %}
+
       </div>
+
+      <div class="swiper-pagination mt-3"></div>
     </div>
-  {% empty %}
-    <div class="swiper-slide">
-      <div class="card shadow-sm p-4 h-100">
-        “Aún no hay testimonios, sé el primero en dejar una reseña ⭐”
-      </div>
-    </div>
-  {% endfor %}
-</div>
+  </div>
+</section>
+
 
 
 {% include "includes/newsletter.html" %}

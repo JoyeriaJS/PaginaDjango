@@ -3156,4 +3156,29 @@ a.btn {
     color: #000 !important;
 }
 
+.testimonial-card {
+    border-radius: 12px;
+    background: #fff;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.testimonial-comment {
+    font-size: 1.05rem;
+    line-height: 1.4;
+    color: #333;
+    font-style: italic;
+}
+
+.section-black {
+    background: #111;
+    color: white;
+}
+
+.section-black h2 {
+    color: white;
+}
+
 
