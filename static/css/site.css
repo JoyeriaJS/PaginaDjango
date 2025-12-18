@@ -3180,5 +3180,26 @@ a.btn {
 .section-black h2 {
     color: white;
 }
+.contact-card {
+    border-radius: 14px;
+    background: #ffffff;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
 
+.contact-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,.08);
+}
+
+.btn-elegant {
+    background: #000;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 20px;
+}
+
+.btn-elegant:hover {
+    background: #333;
+    color: #fff;
+}
 

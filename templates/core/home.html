@@ -548,21 +548,34 @@
 {% include "includes/newsletter.html" %}
 {% include "includes/faqs.html" %}
 
-<div class="section-fix">
-<section id="contacto" class="py-5">
+<section id="contacto" class="py-5 bg-light">
   <div class="container">
-    <div class="row g-3 align-items-center">
-      <div class="col-md-8">
-        <h3 class="fw-bold">¿Tienes un pedido especial?</h3>
-        <p class="text-muted">Escríbenos y te ayudamos.</p>
-      </div>
-      <div class="col-md-4 text-md-end">
-        <a class="btn btn-elegant" href="mailto:contacto@artesaniaspachy.cl">Contactar</a>
+    <div class="card border-0 shadow-sm p-4 p-md-5 contact-card">
+      <div class="row align-items-center g-4">
+
+        <!-- Texto -->
+        <div class="col-md-8">
+          <h3 class="fw-bold mb-2">
+            ¿Tienes un pedido especial?
+          </h3>
+          <p class="text-muted mb-0">
+            Cuéntanos tu idea y nuestro equipo te ayudará a crear exactamente lo que buscas.
+          </p>
+        </div>
+
+        <!-- Botón -->
+        <div class="col-md-4 text-md-end">
+          <a href="mailto:contacto@artesaniaspachy.cl"
+             class="btn btn-elegant btn-lg px-4">
+            <i class="bi bi-envelope-fill me-2"></i> Contactar
+          </a>
+        </div>
+
       </div>
     </div>
   </div>
 </section>
-</div>
+
 
 {% endblock %}
 
