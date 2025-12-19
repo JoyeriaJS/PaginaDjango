@@ -1,8 +1,6 @@
 {% extends "base_site.html" %}
 {% load static %}
 {% block title %}Checkout — Casteable{% endblock %}
-{% load form_extras %}
-
 
 {% block content %}
 <div class="container py-5">
@@ -205,15 +203,5 @@
 
   </div>
 </div>
-<script>
-const payBtn = document.getElementById("pay-btn");
-
-if (payBtn) {
-    payBtn.addEventListener("click", function() {
-        payBtn.disabled = true;
-        payBtn.innerHTML = "Procesando pago... 🔄";
-    });
-}
-</script>
 
 {% endblock %}
