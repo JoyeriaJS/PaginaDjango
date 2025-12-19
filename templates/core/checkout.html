@@ -200,4 +200,11 @@
 
   </div>
 </div>
+<script>
+document.getElementById("btn-pay").addEventListener("click", () => {
+    let btn = document.getElementById("btn-pay");
+    btn.disabled = true;
+    btn.innerHTML = "Procesando pago... 🔄";
+});
+</script>
 {% endblock %}

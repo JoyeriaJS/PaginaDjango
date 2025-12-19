@@ -740,22 +740,42 @@ def mp_checkout(request):
         messages.error(request, "Falta configurar MP_ACCESS_TOKEN en el servidor.")
         return redirect("core:cart_detail")
 
-    # CARRITO
+    # OBTENER CARRITO
     items = _cart_lines_from_session(request)
     if not items:
         messages.error(request, "Tu carrito está vacío.")
         return redirect("core:cart_detail")
 
-    # DATOS CHECKOUT
+    # OBTENER CHECKOUT DATA
     checkout_data = request.session.get("checkout_data")
     if not checkout_data:
         messages.warning(request, "Completa tus datos de envío y contacto.")
         return redirect("core:checkout")
 
-    # -------------------------------
-    # 🔥 CALCULAR DESCUENTO (MISMA LÓGICA DEL CARRITO)
-    # -------------------------------
+    # =====================================================
+    # 🔥 VALIDACIÓN DE STOCK ANTES DE PAGAR (ANTI DOBLE COMPRA)
+    # =====================================================
     cart = request.session.get("cart") or {}
+
+    for pid, line in cart.items():
+        try:
+            product = Product.objects.get(pk=pid, is_active=True)
+        except Product.DoesNotExist:
+            messages.error(request, f"El producto {pid} ya no existe.")
+            return redirect("core:cart_detail")
+
+        qty = int(line.get("qty", 1))
+
+        if product.stock < qty:
+            messages.error(
+                request,
+                f"😓 {product.name} solo tiene {product.stock} unidades disponibles."
+            )
+            return redirect("core:cart_detail")
+
+    # ======================================================
+    # 🔥 CÁLCULO DE DESCUENTOS (MISMA LÓGICA DEL CARRITO)
+    # ======================================================
     items_summary, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
 
     coupon_code = request.session.get("coupon")
@@ -764,9 +784,11 @@ def mp_checkout(request):
     if coupon_code:
         d = _find_discount_by_code(coupon_code)
         if d:
-            discount_amount = _discount_amount_for_cart(d, items_summary, Decimal(subtotal))
+            discount_amount = _discount_amount_for_cart(
+                d, items_summary, Decimal(subtotal)
+            )
 
-    # agregar item negativo si hay descuento
+    # Descuento como item negativo
     if discount_amount > 0:
         items.append({
             "id": "DESCUENTO",
@@ -775,10 +797,10 @@ def mp_checkout(request):
             "currency_id": "CLP",
             "unit_price": float(-discount_amount)
         })
-    # -------------------------------
 
-
-    # PAYER
+    # ======================================================
+    # 🔥 PAYER INFO
+    # ======================================================
     payer = {
         "name": checkout_data.get("first_name", ""),
         "surname": checkout_data.get("last_name", ""),
@@ -808,7 +830,7 @@ def mp_checkout(request):
     notif_url   = request.build_absolute_uri(reverse("core:mp_webhook"))
 
     preference = {
-        "items": items,     # 🔥 YA INCLUYE EL DESCUENTO AQUÍ
+        "items": items,
         "payer": payer,
         "metadata": metadata,
         "back_urls": {
@@ -822,17 +844,24 @@ def mp_checkout(request):
         "notification_url": notif_url,
     }
 
+    # ======================================================
+    # 🔥 CREAR PREFERENCIA SEGURA
+    # ======================================================
     try:
         pref_res = sdk.preference().create(preference)
         data = pref_res.get("response", {})
         init_point = data.get("init_point") or data.get("sandbox_init_point")
+
         if not init_point:
-            messages.error(request, "No se pudo crear la preferencia de pago.")
+            messages.error(request, "No se pudo iniciar el pago en MercadoPago.")
             return redirect("core:cart_detail")
+
         return redirect(init_point)
+
     except Exception as e:
-        messages.error(request, f"Error iniciando pago: {e}")
+        messages.error(request, f"Ocurrió un error con MercadoPago: {e}")
         return redirect("core:cart_detail")
+
 
 
 def _clear_cart(request):
