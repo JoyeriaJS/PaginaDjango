@@ -203,5 +203,24 @@
 
   </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("form");
+    const payBtn = document.getElementById("pay-btn");
+
+    if (!form || !payBtn) return;
+
+    form.addEventListener("submit", function (e) {
+
+        // Verifica si el botón usado fue el de pagar
+        const clickedButton = document.activeElement;
+
+        if (clickedButton && clickedButton.name === "pay") {
+            payBtn.disabled = true;
+            payBtn.innerHTML = "Procesando pago... 🔄";
+        }
+    });
+});
+</script>
 
 {% endblock %}
