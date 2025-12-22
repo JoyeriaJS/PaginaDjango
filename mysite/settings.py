@@ -21,8 +21,11 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "localhost", "127.0.0.1",
     "artesaniaspachy.cl",
-    "server-production-e90b5.up.railway.app",  # cambia si tu subdominio es otro
+    "server-production-e90b5.up.railway.app",
+    "casteable.cl",
+    "www.casteable.cl",  # cambia si tu subdominio es otro
 ]
+
 
 # Evita el error de CSRF en admin/login y formularios
 CSRF_TRUSTED_ORIGINS = [
