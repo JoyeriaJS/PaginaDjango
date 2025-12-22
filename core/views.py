@@ -39,6 +39,7 @@ except Exception:
 
 
 
+
 def home(request):
     categories = Category.objects.annotate(n=Count('products')).order_by('-n','name')[:8]
     latest_products = Product.objects.filter(is_active=True).order_by('-created_at')[:8]
