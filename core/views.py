@@ -29,6 +29,8 @@ from django.db import models
 from catalog.models import Category
 from django.http import JsonResponse
 import uuid
+from catalog.models import HomeSection
+
 
 
 
@@ -40,22 +42,33 @@ except Exception:
 
 
 def home(request):
+    # ⭐ CARGAR SECCIONES ORDENADAS POR ADMIN
+    sections = HomeSection.objects.filter(is_active=True).order_by("order")
+
+    # ⭐ TODO LO QUE YA TENÍAS SE MANTIENE
     categories = Category.objects.annotate(n=Count('products')).order_by('-n','name')[:8]
     latest_products = Product.objects.filter(is_active=True).order_by('-created_at')[:8]
     featured_products = FeaturedProduct.objects.filter(is_active=True).select_related('product')
     catalog_sections = CatalogSection.objects.filter(is_active=True)
 
-    # ⭐ REVIEWS APROBADAS PARA TESTIMONIOS
+    # ⭐ TESTIMONIOS
     testimonials = Review.objects.filter(approved=True).order_by('-created_at')[:10]
 
-    return render(request, "core/home.html", {
+    return render(request, "core/home_dynamic.html", {
+        "sections": sections,
         "categories": categories,
         "latest_products": latest_products,
-        "banners_hero": Banner.objects.filter(is_active=True, position=Banner.HOME_HERO).order_by('order','-updated_at')[:6],
-        "banners_strip": Banner.objects.filter(is_active=True, position=Banner.HOME_STRIP).order_by('order','-updated_at')[:6],
+        "banners_hero": Banner.objects.filter(
+            is_active=True, 
+            position=Banner.HOME_HERO
+        ).order_by('order','-updated_at')[:6],
+        "banners_strip": Banner.objects.filter(
+            is_active=True, 
+            position=Banner.HOME_STRIP
+        ).order_by('order','-updated_at')[:6],
         "featured_products": featured_products,
         "catalog_sections": catalog_sections,
-        "testimonials": testimonials,   # 👈 AGREGADO AQUÍ
+        "testimonials": testimonials,
     })
 
 

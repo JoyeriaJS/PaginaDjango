@@ -339,3 +339,27 @@ class NewsletterSubscriber(models.Model):
 
     def __str__(self):
         return self.email
+
+class HomeSection(models.Model):
+    SECTION_CHOICES = [
+        ("hero", "Carrusel Principal"),
+        ("categories", "Categorías Destacadas"),
+        ("latest_products", "Últimos Productos"),
+        ("featured", "Productos Destacados"),
+        ("testimonials", "Testimonios"),
+        ("catalog_sections", "Catálogos del Home"),
+        ("newsletter", "Newsletter"),
+        ("contact_block", "Bloque de Contacto"),
+    ]
+
+    key = models.CharField(max_length=50, choices=SECTION_CHOICES, unique=True)
+    title = models.CharField(max_length=100, blank=True)
+    order = models.PositiveIntegerField(default=1)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["order"]
+
+    def __str__(self):
+        return f"{self.order}. {self.get_key_display()}"
+
