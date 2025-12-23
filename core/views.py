@@ -964,9 +964,26 @@ def mp_webhook(request):
     #     return HttpResponse(status=401)
     return HttpResponse(status=200)
 
+SHIPPING_PRICES = {
+    "Región Metropolitana de Santiago": 5000,
+    "Región de Valparaíso": 6000,
+    "Región del Libertador General Bernardo O'Higgins": 7000,
+    "Región de Ñuble": 8000,
+    "Región del Maule": 8000,
+    "Región del Biobío": 9000,
+    "Región de La Araucanía": 10000,
+    "Región de Los Ríos": 11000,
+    "Región de Los Lagos": 12000,
+    "Región de Tarapacá": 10000,
+    "Región de Antofagasta": 14000,
+    "Región de Arica y Parinacota": 15000,
+    "Región de Aysén": 18000,
+    "Región de Magallanes": 20000,
+}
 
 
 #checkout form
+
 @login_required(login_url="core:login")
 def checkout(request, token):
 
@@ -1021,32 +1038,31 @@ def checkout(request, token):
 
     if request.method == "POST":
         form = CheckoutForm(request.POST)
+
         if form.is_valid():
 
-            # Guardamos los datos completos
-            request.session["checkout_data"] = form.cleaned_data
-            # =====================================
-            # 🔥 CALCULAR Y GUARDAR COSTO DE ENVÍO
-            # =====================================
-            shipping_method = form.cleaned_data.get("shipping_method")
-            region = form.cleaned_data.get("region")
-            comuna = form.cleaned_data.get("comuna")
+            data = form.cleaned_data
 
-            if shipping_method == "envio":
-                shipping_cost = calcular_shipping(region, comuna)
-            else:
-                shipping_cost = 0
+            # 📦 1) Guardar todos los datos del checkout
+            request.session["checkout_data"] = data
 
-            request.session["shipping_cost"] = shipping_cost
-            request.session.modified = True
+            # 📦 2) Calcular costo de envío
+            region = data.get("region")
+            shipping_cost = SHIPPING_PRICES.get(region, 0)
+
+            # Guardarlo en sesión
+            request.session["shipping_cost"] = int(shipping_cost)
+
             request.session.modified = True
 
-            # si hace clic en Pagar → MercadoPago
+            # 📦 3) Si eligió pagar → ir a MP
             if "pay" in request.POST:
                 return redirect("core:mp_checkout")
 
+            # 📦 4) Si solo guardó → recargar checkout
             messages.success(request, "Datos guardados.")
-            redirect("core:checkout", token=token)
+            return redirect("core:checkout", token=token)
+
 
 
     else:
