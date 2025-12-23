@@ -1046,7 +1046,8 @@ def checkout(request, token):
                 return redirect("core:mp_checkout")
 
             messages.success(request, "Datos guardados.")
-            return redirect("core:checkout")
+            redirect("core:checkout", token=token)
+
 
     else:
         form = CheckoutForm(initial=initial)
