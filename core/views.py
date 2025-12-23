@@ -1008,6 +1008,7 @@ def checkout(request, token):
         "shipping": shipping,
         "count": count,
         "regiones_json": json.dumps(cargar_regiones_comunas(), ensure_ascii=False),
+        
     }
 
     return render(request, "core/checkout.html", ctx)
