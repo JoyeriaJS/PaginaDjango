@@ -195,11 +195,13 @@
         </div>
         {% endif %}
 
-        {% if shipping and shipping > 0 %}
-        <div class="d-flex justify-content-between mb-1">
+        {% if request.session.shipping_cost %}
+      <div class="d-flex justify-content-between mb-1">
           <span class="text-muted">Envío</span>
-          <strong id="shipping-cost">$0</strong>
-        </div>
+          <strong>${{ request.session.shipping_cost }}</strong>
+      </div>
+      {% endif %}
+
         {% endif %}
 
         <hr>

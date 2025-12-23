@@ -588,6 +588,29 @@ def cart_detail(request):
 
     return render(request, "core/cart.html", context)
 
+#costo de envio
+def calcular_shipping(region, comuna):
+    """
+    Retorna el costo de envío según región / comuna.
+    Puedes modificar los valores como quieras.
+    """
+    if not region:
+        return 0  
+
+    region = region.lower()
+
+    # Ejemplo básico
+    if "metropolitana" in region:
+        return 5000
+    if "valparaíso" in region or "valparaiso" in region:
+        return 6000
+    if "biobío" in region or "biobio" in region:
+        return 7000
+
+    # Envío genérico
+    return 8000
+
+
     
 #DESCUENTOS
 def _find_discount_by_code(code):
@@ -999,6 +1022,20 @@ def checkout(request, token):
 
             # Guardamos los datos completos
             request.session["checkout_data"] = form.cleaned_data
+            # =====================================
+            # 🔥 CALCULAR Y GUARDAR COSTO DE ENVÍO
+            # =====================================
+            shipping_method = form.cleaned_data.get("shipping_method")
+            region = form.cleaned_data.get("region")
+            comuna = form.cleaned_data.get("comuna")
+
+            if shipping_method == "envio":
+                shipping_cost = calcular_shipping(region, comuna)
+            else:
+                shipping_cost = 0
+
+            request.session["shipping_cost"] = shipping_cost
+            request.session.modified = True
             request.session.modified = True
 
             # si hace clic en Pagar → MercadoPago
