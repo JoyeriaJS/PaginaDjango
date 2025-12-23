@@ -31,7 +31,7 @@ from django.http import JsonResponse
 import uuid
 import json
 from core.utils import cargar_regiones_comunas
-
+import token
 
 
 
@@ -783,7 +783,8 @@ def mp_checkout(request):
     checkout_data = request.session.get("checkout_data")
     if not checkout_data:
         messages.warning(request, "Completa tus datos de envío y contacto.")
-        return redirect("core:checkout")
+        redirect("core:checkout", token=token)
+
 
     # --------------------------------------------
     # 🔥 OBTENER COSTO DE ENVÍO DESDE SESIÓN
@@ -907,7 +908,8 @@ def mp_checkout(request):
             messages.error(request,
                 "No se pudo iniciar el pago en MercadoPago. Intenta nuevamente."
             )
-            return redirect("core:checkout")
+            redirect("core:checkout", token=token)
+
 
         return redirect(init_point)
 
@@ -916,7 +918,8 @@ def mp_checkout(request):
         messages.error(request,
             "Hubo un error al conectar con MercadoPago. Por favor intenta nuevamente."
         )
-        return redirect("core:checkout")
+        redirect("core:checkout", token=token)
+
 
 
 
