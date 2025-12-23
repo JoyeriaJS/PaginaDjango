@@ -1,0 +1,148 @@
+{
+  "Regiones": [
+    {
+      "region": "Región de Arica y Parinacota",
+      "comunas": ["Arica", "Camarones", "Putre", "General Lagos"]
+    },
+    {
+      "region": "Región de Tarapacá",
+      "comunas": ["Iquique", "Alto Hospicio", "Pozo Almonte", "Camiña", "Colchane", "Huara", "Pica"]
+    },
+    {
+      "region": "Región de Antofagasta",
+      "comunas": [
+        "Antofagasta", "Mejillones", "Sierra Gorda", "Taltal",
+        "Calama", "Ollagüe", "San Pedro de Atacama",
+        "Tocopilla", "María Elena"
+      ]
+    },
+    {
+      "region": "Región de Atacama",
+      "comunas": [
+        "Copiapó", "Caldera", "Tierra Amarilla",
+        "Chañaral", "Diego de Almagro",
+        "Vallenar", "Huasco", "Freirina", "Alto del Carmen"
+      ]
+    },
+    {
+      "region": "Región de Coquimbo",
+      "comunas": [
+        "La Serena", "Coquimbo", "Andacollo", "La Higuera", "Paihuano", "Vicuña",
+        "Ovalle", "Combarbalá", "Monte Patria", "Punitaqui", "Río Hurtado",
+        "Illapel", "Canela", "Los Vilos", "Salamanca"
+      ]
+    },
+    {
+      "region": "Región de Valparaíso",
+      "comunas": [
+        "Valparaíso", "Viña del Mar", "Concón", "Quilpué", "Villa Alemana",
+        "Quintero", "Puchuncaví", "Casablanca", "Juan Fernández",
+        "San Antonio", "Cartagena", "El Tabo", "El Quisco", "Algarrobo",
+        "San Felipe", "Putaendo", "Santa María", "Panquehue", "Llaillay", "Catemu",
+        "Los Andes", "Calle Larga", "Rinconada", "San Esteban",
+        "La Ligua", "Cabildo", "Zapallar", "Papudo", "Petorca"
+      ]
+    },
+    {
+      "region": "Región Metropolitana de Santiago",
+      "comunas": [
+        "Santiago", "Providencia", "Ñuñoa", "Las Condes", "Vitacura", "La Reina",
+        "Puente Alto", "La Florida", "Maipú", "Cerrillos", "Cerro Navia",
+        "Estación Central", "Huechuraba", "Independencia", "La Cisterna",
+        "La Granja", "La Pintana", "Lo Barnechea", "Lo Espejo", "Lo Prado",
+        "Macul", "Pedro Aguirre Cerda", "Peñalolén", "Pirque",
+        "Quilicura", "Quinta Normal", "Recoleta", "Renca",
+        "San Joaquín", "San Miguel", "San Ramón", "Vitacura",
+        "Talagante", "Isla de Maipo", "El Monte", "Padre Hurtado", "Peñaflor",
+        "Colina", "Lampa", "Tiltil", "Melipilla", "Curacaví", "María Pinto",
+        "San Bernardo", "Buin", "Paine", "Calera de Tango"
+      ]
+    },
+    {
+      "region": "Región del Libertador General Bernardo O'Higgins",
+      "comunas": [
+        "Rancagua", "Machalí", "Graneros", "Mostazal", "Codegua",
+        "Doñihue", "Coinco", "Coltauco", "Peumo", "Pichidegua",
+        "San Vicente", "Pichilemu", "Marchihue", "Navidad",
+        "Litueche", "San Fernando", "Chimbarongo", "Nancagua",
+        "Placilla", "Santa Cruz", "Lolol", "Pumanque"
+      ]
+    },
+    {
+      "region": "Región del Maule",
+      "comunas": [
+        "Talca", "Curicó", "Linares", "Cauquenes",
+        "San Clemente", "Pelarco", "Pencahue", "Maule",
+        "San Rafael", "Río Claro", "Constitución", "Empedrado",
+        "Curepto", "Hualañé", "Licantén", "Molina", "Rauco",
+        "Romeral", "Sagrada Familia", "Teno", "Vichuquén",
+        "Colbún", "Longaví", "Parral", "Retiro",
+        "Chanco", "Pelluhue"
+      ]
+    },
+    {
+      "region": "Región de Ñuble",
+      "comunas": [
+        "Chillán", "Chillán Viejo", "San Carlos", "San Nicolás",
+        "Coihueco", "El Carmen", "Pemuco", "Pinto", "Quillón",
+        "Bulnes", "San Ignacio", "Yungay", "Quirihue",
+        "Cobquecura", "Ninhue", "Portezuelo", "Ránquil", "Treguaco"
+      ]
+    },
+    {
+      "region": "Región del Biobío",
+      "comunas": [
+        "Concepción", "Talcahuano", "Hualpén", "San Pedro de la Paz",
+        "Chiguayante", "Hualqui", "Penco", "Tomé",
+        "Coronel", "Lota", "Santa Juana",
+        "Los Ángeles", "Mulchén", "Nacimiento", "Negrete",
+        "Quilaco", "Quilleco", "Santa Bárbara", "Tucapel", "Yumbel"
+      ]
+    },
+    {
+      "region": "Región de La Araucanía",
+      "comunas": [
+        "Temuco", "Padre Las Casas", "Cunco", "Melipeuco", "Vilcún",
+        "Curarrehue", "Pucón", "Villarrica", "Gorbea",
+        "Lautaro", "Perquenco", "Galvarino", "Cholchol",
+        "Carahue", "Nueva Imperial", "Saavedra", "Teodoro Schmidt",
+        "Toltén", "Loncoche", "Pitrufquén", "Freire"
+      ]
+    },
+    {
+      "region": "Región de Los Ríos",
+      "comunas": [
+        "Valdivia", "Corral", "Lanco", "Los Lagos", "Máfil",
+        "Mariquina", "Paillaco", "Panguipulli",
+        "La Unión", "Futrono", "Lago Ranco", "Río Bueno"
+      ]
+    },
+    {
+      "region": "Región de Los Lagos",
+      "comunas": [
+        "Puerto Montt", "Puerto Varas", "Llanquihue", "Frutillar",
+        "Los Muermos", "Maullín", "Cochamó",
+        "Osorno", "Río Negro", "Purranque", "San Pablo", "Puerto Octay",
+        "Castro", "Ancud", "Quellón", "Dalcahue", "Curaco de Vélez",
+        "Puqueldón", "Queilen", "Quinchao", "Chonchi"
+      ]
+    },
+    {
+      "region": "Región de Aysén",
+      "comunas": [
+        "Coyhaique", "Aysén", "Cisnes", "Guaitecas",
+        "Chile Chico", "Río Ibáñez",
+        "Cochrane", "O'Higgins", "Tortel"
+      ]
+    },
+    {
+      "region": "Región de Magallanes",
+      "comunas": [
+        "Punta Arenas", "Laguna Blanca", "Río Verde", "San Gregorio",
+        "Puerto Natales", "Torres del Paine",
+        "Porvenir", "Primavera", "Timaukel",
+        "Cabo de Hornos", "Antártica"
+      ]
+    }
+  ]
+}

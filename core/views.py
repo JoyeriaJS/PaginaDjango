@@ -922,22 +922,23 @@ def mp_webhook(request):
 
 #checkout form
 @login_required(login_url="core:login")
-
 def checkout(request, token):
-    session_token = request.session.get("checkout_token")
 
+    session_token = request.session.get("checkout_token")
     if not session_token or session_token != str(token):
         messages.error(request, "Tu sesión de checkout no es válida.")
         return redirect("core:start_checkout")
+
     # Protección: si el carrito está vacío
     cart = request.session.get("cart") or {}
     items, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
+
     if count <= 0:
         messages.info(request, "Tu carrito está vacío.")
         return redirect("core:cart_detail")
 
     # -----------------------------
-    # 🔥 APLICAR DESCUENTO AQUÍ
+    # 🔥 APLICAR DESCUENTO
     # -----------------------------
     coupon_code = request.session.get("coupon")
     discount_amount = Decimal("0")
@@ -956,7 +957,7 @@ def checkout(request, token):
     # ============================================================
     initial = request.session.get("checkout_data") or {}
 
-    if not initial:  # si no hay data previa → autocompletar
+    if not initial:
         default_addr = Address.objects.filter(user=request.user, is_default=True).first()
         if default_addr:
             initial = {
@@ -975,18 +976,24 @@ def checkout(request, token):
     if request.method == "POST":
         form = CheckoutForm(request.POST)
         if form.is_valid():
+
+            # Guardamos los datos completos
             request.session["checkout_data"] = form.cleaned_data
             request.session.modified = True
 
-            # si hace clic en Pagar
+            # si hace clic en Pagar → MercadoPago
             if "pay" in request.POST:
                 return redirect("core:mp_checkout")
-            else:
-                messages.success(request, "Datos guardados.")
-                return redirect("core:checkout")
+
+            messages.success(request, "Datos guardados.")
+            return redirect("core:checkout")
+
     else:
         form = CheckoutForm(initial=initial)
 
+    # ============================================================
+    # 🔥 PASAMOS REGIONES Y COMUNAS AL TEMPLATE
+    # ============================================================
     ctx = {
         "form": form,
         "items": items,
@@ -997,8 +1004,11 @@ def checkout(request, token):
         "tax": tax,
         "shipping": shipping,
         "count": count,
+        "regiones_json": json.dumps(cargar_regiones_comunas(), ensure_ascii=False),
     }
+
     return render(request, "core/checkout.html", ctx)
+
 #token checkout
 
 def start_checkout(request):

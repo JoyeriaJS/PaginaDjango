@@ -81,32 +81,43 @@
             {{ form.address_line.errors }}
           </div>
 
-          <!-- Comuna / Ciudad / Región -->
+          <!-- Región / Comuna / Ciudad -->
           <div class="row g-3 mb-2">
+
+            <!-- REGIÓN -->
+            <div class="col-md-4 input-wrap">
+              <label class="form-label fw-semibold">Región</label>
+              <div class="input-holder">
+                <select id="region" name="region" class="form-select">
+                  <option value="">Selecciona región...</option>
+                </select>
+              </div>
+              {{ form.region.errors }}
+            </div>
+
+            <!-- COMUNA -->
             <div class="col-md-4 input-wrap">
               <label class="form-label fw-semibold">Comuna</label>
               <div class="input-holder">
-                {{ form.comuna }}
+                <select id="comuna" name="comuna" class="form-select">
+                  <option value="">Selecciona comuna...</option>
+                </select>
               </div>
               {{ form.comuna.errors }}
             </div>
 
+            <!-- CIUDAD (autocompleta según región) -->
             <div class="col-md-4 input-wrap">
               <label class="form-label fw-semibold">Ciudad</label>
               <div class="input-holder">
-                {{ form.ciudad }}
+                <input id="ciudad" name="ciudad" class="form-control"
+                      value="{{ form.initial.ciudad|default_if_none:'' }}">
               </div>
               {{ form.ciudad.errors }}
             </div>
 
-            <div class="col-md-4 input-wrap">
-              <label class="form-label fw-semibold">Región</label>
-              <div class="input-holder">
-                {{ form.region }}
-              </div>
-              {{ form.region.errors }}
-            </div>
           </div>
+
 
           <!-- Código Postal / Envío -->
           <div class="row g-3 mb-2">
@@ -222,6 +233,59 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const regionesData = JSON.parse(`{{ regiones_json|escapejs }}`);
+    const regionSelect = document.getElementById("region");
+    const comunaSelect = document.getElementById("comuna");
+    const ciudadInput  = document.getElementById("ciudad");
+
+    const initialRegion = "{{ form.initial.region|default:'' }}";
+    const initialComuna = "{{ form.initial.comuna|default:'' }}";
+
+    // Cargar regiones al select
+    for (const region in regionesData) {
+        const opt = document.createElement("option");
+        opt.value = region;
+        opt.textContent = region;
+        regionSelect.appendChild(opt);
+    }
+
+    // Seleccionar región inicial (si venía guardada en sesión)
+    if (initialRegion) {
+        regionSelect.value = initialRegion;
+        cargarComunas(initialRegion);
+    }
+
+    // Cambiar región → actualizar comunas
+    regionSelect.addEventListener("change", function () {
+        const region = this.value;
+        cargarComunas(region);
+        ciudadInput.value = region; // Ciudad por defecto igual a región
+    });
+
+    // Función para cargar comunas
+    function cargarComunas(region) {
+        comunaSelect.innerHTML = '<option value="">Selecciona comuna...</option>';
+
+        if (!regionesData[region]) return;
+
+        regionesData[region].forEach(com => {
+            const opt = document.createElement("option");
+            opt.value = com;
+            opt.textContent = com;
+            comunaSelect.appendChild(opt);
+        });
+
+        if (initialComuna) {
+            comunaSelect.value = initialComuna;
+        }
+    }
+
+});
+</script>
+
 
 
 {% endblock %}
