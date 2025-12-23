@@ -741,28 +741,32 @@ def mp_checkout(request):
         messages.error(request, "Falta configurar MP_ACCESS_TOKEN en el servidor.")
         return redirect("core:cart_detail")
 
-    # OBTENER CARRITO
+    # --------------------------------------------
+    # 🔥 OBTENER CARRITO
+    # --------------------------------------------
+    cart = request.session.get("cart") or {}
     items = _cart_lines_from_session(request)
+
     if not items:
         messages.error(request, "Tu carrito está vacío.")
         return redirect("core:cart_detail")
 
-    # OBTENER CHECKOUT DATA
+    # --------------------------------------------
+    # 🔥 OBTENER DATOS DEL CHECKOUT
+    # --------------------------------------------
     checkout_data = request.session.get("checkout_data")
     if not checkout_data:
         messages.warning(request, "Completa tus datos de envío y contacto.")
         return redirect("core:checkout")
 
     # =====================================================
-    # 🔥 VALIDACIÓN DE STOCK ANTES DE PAGAR (ANTI DOBLE COMPRA)
+    # 🔥 VALIDACIÓN DE STOCK (ANTI DOBLE COMPRA)
     # =====================================================
-    cart = request.session.get("cart") or {}
-
     for pid, line in cart.items():
         try:
             product = Product.objects.get(pk=pid, is_active=True)
         except Product.DoesNotExist:
-            messages.error(request, f"El producto {pid} ya no existe.")
+            messages.error(request, "Uno de los productos ya no existe.")
             return redirect("core:cart_detail")
 
         qty = int(line.get("qty", 1))
@@ -774,9 +778,9 @@ def mp_checkout(request):
             )
             return redirect("core:cart_detail")
 
-    # ======================================================
-    # 🔥 CÁLCULO DE DESCUENTOS (MISMA LÓGICA DEL CARRITO)
-    # ======================================================
+    # =====================================================
+    # 🔥 CÁLCULO DE DESCUENTOS
+    # =====================================================
     items_summary, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
 
     coupon_code = request.session.get("coupon")
@@ -789,19 +793,19 @@ def mp_checkout(request):
                 d, items_summary, Decimal(subtotal)
             )
 
-    # Descuento como item negativo
+    # añadir descuento como item negativo
     if discount_amount > 0:
         items.append({
             "id": "DESCUENTO",
             "title": f"Descuento {coupon_code}",
             "quantity": 1,
             "currency_id": "CLP",
-            "unit_price": float(-discount_amount)
+            "unit_price": float(-discount_amount),
         })
 
-    # ======================================================
-    # 🔥 PAYER INFO
-    # ======================================================
+    # =====================================================
+    # 🔥 ARMAR OBJETO PAYER
+    # =====================================================
     payer = {
         "name": checkout_data.get("first_name", ""),
         "surname": checkout_data.get("last_name", ""),
@@ -809,8 +813,8 @@ def mp_checkout(request):
         "phone": {"number": checkout_data.get("phone", "")},
         "identification": {"type": "RUT", "number": checkout_data.get("rut", "")},
         "address": {
-            "zip_code": checkout_data.get("postal_code", "") or "",
-            "street_name": checkout_data.get("address_line", "") or "",
+            "zip_code": checkout_data.get("postal_code") or "",
+            "street_name": checkout_data.get("address_line") or "",
         },
     }
 
@@ -841,27 +845,37 @@ def mp_checkout(request):
         },
         "auto_return": "approved",
         "binary_mode": True,
-        "statement_descriptor": "ARTES PACHY",
+        "statement_descriptor": "CASTEABLE",
         "notification_url": notif_url,
     }
 
-    # ======================================================
-    # 🔥 CREAR PREFERENCIA SEGURA
-    # ======================================================
+    # =====================================================
+    # 🔥 CREAR PREFERENCIA EN MERCADOPAGO (SEGURO)
+    # =====================================================
     try:
         pref_res = sdk.preference().create(preference)
+
+        # debug opcional
+        print("MP PREFERENCE RESPONSE:", pref_res)
+
         data = pref_res.get("response", {})
         init_point = data.get("init_point") or data.get("sandbox_init_point")
 
         if not init_point:
-            messages.error(request, "No se pudo iniciar el pago en MercadoPago.")
-            return redirect("core:cart_detail")
+            messages.error(request,
+                "No se pudo iniciar el pago en MercadoPago. Intenta nuevamente."
+            )
+            return redirect("core:checkout")
 
         return redirect(init_point)
 
     except Exception as e:
-        messages.error(request, f"Ocurrió un error con MercadoPago: {e}")
-        return redirect("core:cart_detail")
+        print("⚠ ERROR MERCADOPAGO:", str(e))
+        messages.error(request,
+            "Hubo un error al conectar con MercadoPago. Por favor intenta nuevamente."
+        )
+        return redirect("core:checkout")
+
 
 
 
