@@ -762,6 +762,11 @@ def mp_checkout(request):
         messages.warning(request, "Completa tus datos de envío y contacto.")
         return redirect("core:checkout")
 
+    # --------------------------------------------
+    # 🔥 OBTENER COSTO DE ENVÍO DESDE SESIÓN
+    # --------------------------------------------
+    shipping_cost = request.session.get("shipping_cost", 0)
+
     # =====================================================
     # 🔥 VALIDACIÓN DE STOCK (ANTI DOBLE COMPRA)
     # =====================================================
@@ -804,6 +809,18 @@ def mp_checkout(request):
             "quantity": 1,
             "currency_id": "CLP",
             "unit_price": float(-discount_amount),
+        })
+
+    # --------------------------------------------
+    # 🔥 AGREGAR ENVÍO COMO ITEM (si corresponde)
+    # --------------------------------------------
+    if shipping_cost > 0:
+        items.append({
+            "id": "ENVIO",
+            "title": "Envío a domicilio",
+            "quantity": 1,
+            "currency_id": "CLP",
+            "unit_price": float(shipping_cost),
         })
 
     # =====================================================
@@ -858,7 +875,6 @@ def mp_checkout(request):
     try:
         pref_res = sdk.preference().create(preference)
 
-        # debug opcional
         print("MP PREFERENCE RESPONSE:", pref_res)
 
         data = pref_res.get("response", {})
@@ -878,6 +894,7 @@ def mp_checkout(request):
             "Hubo un error al conectar con MercadoPago. Por favor intenta nuevamente."
         )
         return redirect("core:checkout")
+
 
 
 
