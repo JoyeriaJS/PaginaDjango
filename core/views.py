@@ -30,6 +30,8 @@ from catalog.models import Category
 from django.http import JsonResponse
 import uuid
 import json
+from core.utils import cargar_regiones_comunas
+
 
 
 
