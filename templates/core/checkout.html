@@ -349,29 +349,46 @@ document.addEventListener("DOMContentLoaded", function () {
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    const regionSelect = document.getElementById("region");
+    const shippingMethod = document.getElementById("id_shipping_method");
+
+shippingMethod.addEventListener("change", function () {
+    const method = this.value;
+    const region = regionSelect.value;
+
     const shippingElem = document.getElementById("shipping-cost");
     const totalElem = document.getElementById("total-final");
 
-    regionSelect.addEventListener("change", function () {
+    let subtotal = parseInt("{{ subtotal }}") || 0;
+    let discount = parseInt("{{ discount_amount }}") || 0;
 
-        const selectedRegion = this.value;
-        if (!selectedRegion) return;
+    // Si RETIRO → envío = 0
+    if (method === "retiro") {
+        if (shippingElem) shippingElem.textContent = "$0";
 
-        fetch(`/ajax/set-shipping/?region=${encodeURIComponent(selectedRegion)}`)
-            .then(res => res.json())
-            .then(data => {
+        let final = subtotal - discount;
+        totalElem.textContent = "$" + final.toLocaleString("es-CL");
 
-                if (data.error) return;
+        // Guardar en sesión
+        fetch("/set-shipping-cost/0");
 
-                // actualizar envío
-                shippingElem.textContent = "$" + data.shipping.toLocaleString("es-CL");
+        return;
+    }
 
-                // actualizar total
-                totalElem.textContent = "$" + data.total.toLocaleString("es-CL");
-            })
-            .catch(err => console.error("Error AJAX shipping:", err));
-    });
+    // Si ENVÍO A DOMICILIO → recalcular en base a región
+    if (method === "envio") {
+        let price = shippingPrices[region] || 0;
+
+        if (shippingElem) {
+            shippingElem.textContent = "$" + price.toLocaleString("es-CL");
+        }
+
+        let final = subtotal - discount + price;
+        totalElem.textContent = "$" + final.toLocaleString("es-CL");
+
+        // Guardar valor correcto en sesión
+        fetch(`/set-shipping-cost/${price}`);
+    }
+});
 
 });
 </script>
