@@ -61,6 +61,7 @@ class CheckoutForm(forms.Form):
     )
 
     SHIPPING_CHOICES = (
+        ("seleccionar", "Selecciona método..."),
         ("retiro", "Retiro en tienda"),
         ("envio", "Envío a domicilio"),
     )
