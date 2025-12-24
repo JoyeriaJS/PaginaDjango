@@ -783,40 +783,14 @@ def mp_checkout(request):
     checkout_data = request.session.get("checkout_data")
     if not checkout_data:
         messages.warning(request, "Completa tus datos de envío y contacto.")
-        redirect("core:checkout", token=token)
-
-
-    # --------------------------------------------
-    # 🔥 OBTENER COSTO DE ENVÍO DESDE SESIÓN
-    # --------------------------------------------
-    shipping_cost = request.session.get("shipping_cost", 0)
-    grand_total += Decimal(shipping_cost)
+        return redirect("core:cart_detail")
 
     # =====================================================
-    # 🔥 VALIDACIÓN DE STOCK (ANTI DOBLE COMPRA)
-    # =====================================================
-    for pid, line in cart.items():
-        try:
-            product = Product.objects.get(pk=pid, is_active=True)
-        except Product.DoesNotExist:
-            messages.error(request, "Uno de los productos ya no existe.")
-            return redirect("core:cart_detail")
-
-        qty = int(line.get("qty", 1))
-
-        if product.stock < qty:
-            messages.error(
-                request,
-                f"😓 {product.name} solo tiene {product.stock} unidades disponibles."
-            )
-            return redirect("core:cart_detail")
-
-    # =====================================================
-    # 🔥 CÁLCULO DE DESCUENTOS
+    # 🔥 CALCULAR SUBTOTAL Y TOTALES BASE
     # =====================================================
     items_summary, subtotal, tax, shipping_old, base_total, count = _cart_summary(cart)
 
-    # base_total viene sin incluir nuestro envío personalizado
+    # Crear grand_total correctamente
     grand_total = Decimal(base_total)
 
     # =====================================================
@@ -828,11 +802,12 @@ def mp_checkout(request):
     if coupon_code:
         d = _find_discount_by_code(coupon_code)
         if d:
-            discount_amount = _discount_amount_for_cart(d, items_summary, Decimal(subtotal))
+            discount_amount = _discount_amount_for_cart(
+                d, items_summary, Decimal(subtotal)
+            )
 
     grand_total -= discount_amount
 
-    # añadir item negativo a MP
     if discount_amount > 0:
         items.append({
             "id": "DESCUENTO",
@@ -843,31 +818,19 @@ def mp_checkout(request):
         })
 
     # =====================================================
-    # 🔥 AGREGAR ENVÍO USANDO SESIÓN
+    # 🔥 COSTO DE ENVÍO DESDE LA SESIÓN
     # =====================================================
-    shipping_cost = request.session.get("shipping_cost", 0)
-    grand_total += Decimal(shipping_cost)
+    shipping_cost = Decimal(request.session.get("shipping_cost", 0))
+    grand_total += shipping_cost
 
     if shipping_cost > 0:
         items.append({
             "id": "ENVIO",
-            "title": "Costo de envío",
+            "title": "Envío a domicilio",
             "quantity": 1,
             "currency_id": "CLP",
             "unit_price": float(shipping_cost),
         })
-
-        # --------------------------------------------
-        # 🔥 AGREGAR ENVÍO COMO ITEM (si corresponde)
-        # --------------------------------------------
-        if shipping_cost > 0:
-            items.append({
-                "id": "ENVIO",
-                "title": "Envío a domicilio",
-                "quantity": 1,
-                "currency_id": "CLP",
-                "unit_price": float(shipping_cost),
-            })
 
     # =====================================================
     # 🔥 ARMAR OBJETO PAYER
@@ -915,32 +878,28 @@ def mp_checkout(request):
         "notification_url": notif_url,
     }
 
-    # =====================================================
-    # 🔥 CREAR PREFERENCIA EN MERCADOPAGO (SEGURO)
-    # =====================================================
     try:
         pref_res = sdk.preference().create(preference)
-
-        print("MP PREFERENCE RESPONSE:", pref_res)
-
         data = pref_res.get("response", {})
         init_point = data.get("init_point") or data.get("sandbox_init_point")
 
         if not init_point:
-            messages.error(request,
-                "No se pudo iniciar el pago en MercadoPago. Intenta nuevamente."
+            messages.error(
+                request,
+                "No se pudo iniciar el pago en MercadoPago. Intenta nuevamente.",
             )
-            redirect("core:checkout", token=token)
-
+            return redirect("core:cart_detail")
 
         return redirect(init_point)
 
     except Exception as e:
         print("⚠ ERROR MERCADOPAGO:", str(e))
-        messages.error(request,
-            "Hubo un error al conectar con MercadoPago. Por favor intenta nuevamente."
+        messages.error(
+            request,
+            "Hubo un error al conectar con MercadoPago. Por favor intenta nuevamente.",
         )
-        redirect("core:checkout", token=token)
+        return redirect("core:cart_detail")
+
 
 
 
