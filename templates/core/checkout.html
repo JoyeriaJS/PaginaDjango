@@ -194,13 +194,14 @@
           <strong>${{ tax }}</strong>
         </div>
         {% endif %}
-
-        {% if request.session.shipping_cost %}
-      <div class="d-flex justify-content-between mb-1">
-          <span class="text-muted">Envío</span>
-          <strong>${{ request.session.shipping_cost }}</strong>
+        <div class="d-flex justify-content-between mb-1">
+        <span class="text-muted">Envío</span>
+        <strong id="shipping-cost">
+            ${{ request.session.shipping_cost|default:0 }}
+        </strong>
       </div>
-      {% endif %}
+
+        
 
         <hr>
 
@@ -322,6 +323,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const regionSelect = document.getElementById("region");
+    const shippingElem = document.getElementById("shipping-cost");
+    const totalElem = document.getElementById("total-final");
+
+    regionSelect.addEventListener("change", function () {
+
+        const selectedRegion = this.value;
+        if (!selectedRegion) return;
+
+        fetch(`/ajax/set-shipping/?region=${encodeURIComponent(selectedRegion)}`)
+            .then(res => res.json())
+            .then(data => {
+
+                if (data.error) return;
+
+                // actualizar envío
+                shippingElem.textContent = "$" + data.shipping.toLocaleString("es-CL");
+
+                // actualizar total
+                totalElem.textContent = "$" + data.total.toLocaleString("es-CL");
+            })
+            .catch(err => console.error("Error AJAX shipping:", err));
+    });
+
+});
+</script>
+
 
 
 

@@ -65,7 +65,9 @@ urlpatterns = [
     #NEWSLETTER
     path("newsletter/subscribe/", views.subscribe_newsletter, name="newsletter_subscribe"),
 
-    
+    # --- SHIPPINGS AJAX ---
+    path("ajax/set-shipping/", views.ajax_set_shipping, name="ajax_set_shipping"),
+
 
     
 ]

@@ -790,6 +790,7 @@ def mp_checkout(request):
     # 🔥 OBTENER COSTO DE ENVÍO DESDE SESIÓN
     # --------------------------------------------
     shipping_cost = request.session.get("shipping_cost", 0)
+    grand_total += Decimal(shipping_cost)
 
     # =====================================================
     # 🔥 VALIDACIÓN DE STOCK (ANTI DOBLE COMPRA)
@@ -1295,3 +1296,38 @@ def subscribe_newsletter(request):
     NewsletterSubscriber.objects.create(email=email)
 
     return JsonResponse({"ok": True, "msg": "¡Gracias por suscribirte!"})
+
+
+#AJAX ENVUIS
+def ajax_set_shipping(request):
+    region = request.GET.get("region")
+    if not region:
+        return JsonResponse({"error": "No region provided"}, status=400)
+
+    # calcular envío
+    shipping_cost = SHIPPING_PRICES.get(region, 0)
+
+    # guardar en la sesión
+    request.session["shipping_cost"] = shipping_cost
+    request.session.modified = True
+
+    # obtener subtotal y descuento actual
+    cart = request.session.get("cart") or {}
+    items, subtotal, tax, shipping, total, count = _cart_summary(cart)
+
+    discount_amount = 0
+    coupon_code = request.session.get("coupon")
+    if coupon_code:
+        d = _find_discount_by_code(coupon_code)
+        if d:
+            discount_amount = _discount_amount_for_cart(d, items, Decimal(subtotal))
+
+    # total final correcto
+    final_total = subtotal - discount_amount + shipping_cost
+
+    return JsonResponse({
+        "shipping": shipping_cost,
+        "subtotal": subtotal,
+        "discount": int(discount_amount),
+        "total": int(final_total),
+    })
