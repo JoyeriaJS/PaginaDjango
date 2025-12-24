@@ -820,7 +820,13 @@ def mp_checkout(request):
     # =====================================================
     # 🔥 COSTO DE ENVÍO DESDE LA SESIÓN
     # =====================================================
-    shipping_cost = Decimal(request.session.get("shipping_cost", 0))
+    shipping_method = checkout_data.get("shipping_method")
+    # Si es retiro → costo 0
+    if shipping_method == "retiro":
+        shipping_cost = Decimal("0")
+    else:
+        shipping_cost = Decimal(request.session.get("shipping_cost", 0))
+
     grand_total += shipping_cost
 
     if shipping_cost > 0:
@@ -831,6 +837,7 @@ def mp_checkout(request):
             "currency_id": "CLP",
             "unit_price": float(shipping_cost),
         })
+
 
     # =====================================================
     # 🔥 ARMAR OBJETO PAYER
@@ -1312,3 +1319,9 @@ def ajax_set_shipping(request):
         "discount": int(discount_amount),
         "total": int(final_total),
     })
+
+
+def set_shipping_cost(request, cost):
+    request.session["shipping_cost"] = int(cost)
+    request.session.modified = True
+    return JsonResponse({"ok": True})
