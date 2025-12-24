@@ -814,19 +814,25 @@ def mp_checkout(request):
     # =====================================================
     # 🔥 CÁLCULO DE DESCUENTOS
     # =====================================================
-    items_summary, subtotal, tax, shipping, grand_total, count = _cart_summary(cart)
+    items_summary, subtotal, tax, shipping_old, base_total, count = _cart_summary(cart)
 
+    # base_total viene sin incluir nuestro envío personalizado
+    grand_total = Decimal(base_total)
+
+    # =====================================================
+    # 🔥 DESCUENTO
+    # =====================================================
     coupon_code = request.session.get("coupon")
     discount_amount = Decimal("0")
 
     if coupon_code:
         d = _find_discount_by_code(coupon_code)
         if d:
-            discount_amount = _discount_amount_for_cart(
-                d, items_summary, Decimal(subtotal)
-            )
+            discount_amount = _discount_amount_for_cart(d, items_summary, Decimal(subtotal))
 
-    # añadir descuento como item negativo
+    grand_total -= discount_amount
+
+    # añadir item negativo a MP
     if discount_amount > 0:
         items.append({
             "id": "DESCUENTO",
@@ -836,17 +842,32 @@ def mp_checkout(request):
             "unit_price": float(-discount_amount),
         })
 
-    # --------------------------------------------
-    # 🔥 AGREGAR ENVÍO COMO ITEM (si corresponde)
-    # --------------------------------------------
+    # =====================================================
+    # 🔥 AGREGAR ENVÍO USANDO SESIÓN
+    # =====================================================
+    shipping_cost = request.session.get("shipping_cost", 0)
+    grand_total += Decimal(shipping_cost)
+
     if shipping_cost > 0:
         items.append({
             "id": "ENVIO",
-            "title": "Envío a domicilio",
+            "title": "Costo de envío",
             "quantity": 1,
             "currency_id": "CLP",
             "unit_price": float(shipping_cost),
         })
+
+        # --------------------------------------------
+        # 🔥 AGREGAR ENVÍO COMO ITEM (si corresponde)
+        # --------------------------------------------
+        if shipping_cost > 0:
+            items.append({
+                "id": "ENVIO",
+                "title": "Envío a domicilio",
+                "quantity": 1,
+                "currency_id": "CLP",
+                "unit_price": float(shipping_cost),
+            })
 
     # =====================================================
     # 🔥 ARMAR OBJETO PAYER
