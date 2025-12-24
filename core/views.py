@@ -947,6 +947,7 @@ def mp_checkout(request):
 
 
 
+
 def _clear_cart(request):
     if "cart" in request.session:
         del request.session["cart"]
