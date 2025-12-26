@@ -3203,4 +3203,155 @@ a.btn {
     color: #fff;
 }
 
+/* ============================================================
+   CASTEABLE NAVBAR PREMIUM — COMPATIBLE CON TODO TU SITE.CSS
+   ============================================================ */
+
+/* Contenedor general */
+.premium-navbar {
+    backdrop-filter: blur(10px);
+    transition: 0.25s ease-in-out;
+    padding-top: 0.9rem !important;
+    padding-bottom: 0.9rem !important;
+}
+
+/* Logo */
+.premium-navbar .navbar-brand {
+    font-size: 1.8rem !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    letter-spacing: -1px;
+}
+
+:root[data-theme="dark"] .premium-navbar .navbar-brand {
+    color: #fff !important;
+}
+
+/* ------- BUSCADOR ------- */
+
+.search-wrapper {
+    min-width: 280px;
+    width: 420px;
+    position: relative;
+}
+
+.search-input {
+    background: #f2f2f2 !important;
+    border-radius: 14px !important;
+    padding-left: 38px !important;
+    height: 44px;
+    border: 1px solid #ddd !important;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    font-size: 1.1rem;
+    color: #888;
+}
+
+:root[data-theme="dark"] .search-input {
+    background: #1a1a1a !important;
+    border-color: #333 !important;
+    color: #fff !important;
+}
+
+.search-results {
+    top: 110%;
+    left: 0;
+    z-index: 2000;
+    display: none;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* ------- MENÚ LINKS ------- */
+
+.premium-menu .premium-link {
+    font-weight: 500 !important;
+    font-size: 0.95rem;
+    color: #333 !important;
+    transition: 0.2s;
+}
+
+.premium-menu .premium-link:hover {
+    color: #0d6efd !important;
+}
+
+:root[data-theme="dark"] .premium-menu .premium-link {
+    color: #fff !important;
+}
+
+.premium-navbar .dropdown-menu {
+    border-radius: 12px !important;
+    padding: 8px 0 !important;
+}
+
+/* ------- CHIPS PREMIUM ------- */
+
+.chip-btn {
+    background: #111 !important;
+    color: #fff !important;
+    border: 1px solid #222 !important;
+    border-radius: 999px !important;
+    padding: 7px 16px !important;
+    font-size: 0.85rem;
+    transition: 0.22s ease-in-out;
+    cursor: pointer;
+}
+
+.chip-btn:hover {
+    border-color: #d4af37 !important;
+    color: #d4af37 !important;
+}
+
+.badge-small {
+    top: -6px;
+    right: -6px;
+    font-size: 0.65rem;
+    padding: 3px 6px;
+    border-radius: 50%;
+}
+
+/* ------- MODO SCROLL ------- */
+
+.premium-navbar.scrolled {
+    background: #ffffff !important;
+    border-bottom: 1px solid #ddd !important;
+}
+
+:root[data-theme="dark"] .premium-navbar.scrolled {
+    background: rgba(14,14,14,0.96) !important;
+    border-bottom: 1px solid #333 !important;
+}
+
+/* ------- MOBILE ------- */
+@media (max-width: 992px) {
+
+    .search-wrapper {
+        width: 100% !important;
+        margin-bottom: 12px;
+    }
+
+    .premium-navbar {
+        background: #111 !important;
+        border-bottom: 1px solid #222 !important;
+    }
+
+    .premium-navbar .navbar-collapse {
+        background: #111 !important;
+        border-radius: 12px;
+        padding: 1rem;
+    }
+
+    .premium-menu .premium-link {
+        color: #fff !important;
+        padding: 0.8rem !important;
+        border-radius: 6px;
+    }
+
+    .premium-menu .premium-link:hover {
+        background: #222 !important;
+    }
+}
 
