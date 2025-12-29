@@ -66,7 +66,7 @@ class CheckoutForm(forms.Form):
         ("envio", "Envío a domicilio"),
     )
     shipping_method = forms.ChoiceField(
-        label="Seleccionar", choices=SHIPPING_CHOICES, initial="seleccionar"
+        label="Envio", choices=SHIPPING_CHOICES, initial="envio"
     )
 
     # --------------------------------------
