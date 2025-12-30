@@ -1181,9 +1181,22 @@ footer .bi {
    ================================================================ */
 
 /* Estado inicial transparente (estilo Apple) */
+.navbar {
+  background: rgba(0, 0, 0, 0) !important;
+  backdrop-filter: blur(0px);
+  transition: background 0.35s ease, backdrop-filter 0.35s ease, padding 0.3s ease;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
 
-
-
+/* Estado scrolleado → negro elegante */
+.navbar.scrolled {
+  background: rgba(14, 14, 14, 0.97) !important;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #222 !important;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
 
 /* Marca CASTEABLE */
 .navbar .navbar-brand {
