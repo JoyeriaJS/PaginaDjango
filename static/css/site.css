@@ -1181,13 +1181,7 @@ footer .bi {
    ================================================================ */
 
 /* Estado inicial transparente (estilo Apple) */
-.navbar {
-  background: rgba(0, 0, 0, 0) !important;
-  backdrop-filter: blur(0px);
-  transition: background 0.35s ease, backdrop-filter 0.35s ease, padding 0.3s ease;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
+
 
 /* Estado scrolleado → negro elegante */
 .navbar.scrolled {
