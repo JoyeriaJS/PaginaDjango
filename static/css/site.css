@@ -3295,19 +3295,3 @@ a.btn {
 }
 
 
-#themeToggle {
-  position: relative;
-  z-index: 5000 !important;
-  cursor: pointer;
-  opacity: 1 !important;
-  color: inherit !important;
-}
-
-.navbar {
-  z-index: 3000 !important;
-}
-
-[data-theme="dark"] #themeToggle {
-  color: #fff !important;
-  border-color: #fff !important;
-}
