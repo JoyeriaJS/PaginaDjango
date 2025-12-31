@@ -1,40 +1,53 @@
 {% load i18n %}
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top shadow-sm">
+<nav class="navbar navbar-expand-lg sticky-top">
   <div class="container">
 
     <!-- LOGO -->
     <a class="navbar-brand fw-bold" href="/">Casteable</a>
 
-    <!-- BOTÓN MÓVIL -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#mainNav" aria-controls="mainNav"
-            aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <!-- ICONOS DERECHA (MOBILE) -->
+    <div class="d-lg-none d-flex align-items-center gap-2">
+
+      <!-- Botón Tema -->
+      <button id="themeToggle" class="btn btn-sm btn-outline-secondary rounded-circle p-2">
+        🌙
+      </button>
+
+      <!-- Carrito -->
+      <a href="{% url 'core:cart_detail' %}" class="position-relative">
+        <i class="bi bi-bag fs-4 text-white"></i>
+        {% if cart_count %}
+          <span class="badge bg-primary position-absolute" style="top:-5px; right:-10px;">
+            {{ cart_count }}
+          </span>
+        {% endif %}
+      </a>
+
+      <!-- Menú hamburguesa -->
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+              data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
 
     <!-- CONTENIDO -->
     <div class="collapse navbar-collapse" id="mainNav">
 
-      <!-- BUSCADOR + AUTOCOMPLETE -->
-      <form class="d-flex me-auto ms-lg-3 my-2 my-lg-0 position-relative"
+      <!-- BUSCADOR -->
+      <form class="d-flex my-2 my-lg-0 flex-grow-1 position-relative"
             method="get" action="{% url 'core:search' %}">
-        
-        <input class="form-control" type="search" name="q" id="searchInput"
-              placeholder="Buscar productos…" autocomplete="off"
-              aria-label="Buscar" value="{{ request.GET.q }}">
-
-        <!-- RESULTADOS -->
+        <input class="form-control" type="search" id="searchInput"
+               name="q" placeholder="Buscar productos…" autocomplete="off"
+               value="{{ request.GET.q }}">
         <div id="searchResults"
              class="position-absolute bg-white shadow rounded w-100"
              style="top: 110%; left: 0; z-index: 1000; display:none;"></div>
       </form>
 
-      <!-- ============================= -->
-      <!-- MENÚS (CMS + CATEGORÍAS) -->
-      <!-- ============================= -->
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <!-- MENU PRINCIPAL -->
+      <ul class="navbar-nav ms-lg-4 mb-2 mb-lg-0">
 
-        <!-- MENÚ DINÁMICO CMS -->
+        <!-- Menú CMS dinámico -->
         {% for it in main_menu %}
           {% if it.children %}
             <li class="nav-item dropdown">
@@ -54,26 +67,25 @@
           {% endif %}
         {% endfor %}
 
-        <!-- MENÚ DE CATEGORÍAS -->
+        <!-- CATEGORÍAS -->
         {% if nav_categories %}
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
             Categorías
           </a>
           <ul class="dropdown-menu">
-
-            <!-- Ver todas -->
             <li>
-              <a class="dropdown-item fw-bold text-primary" href="{% url 'core:category_all' %}">
+              <a class="dropdown-item fw-bold text-primary"
+                 href="{% url 'core:category_all' %}">
                 Todas las Categorías
               </a>
             </li>
             <li><hr class="dropdown-divider"></li>
 
-            <!-- Listado de categorías -->
             {% for c in nav_categories %}
               <li>
-                <a class="dropdown-item" href="{% url 'core:category_list' c.pk %}">
+                <a class="dropdown-item"
+                   href="{% url 'core:category_list' c.pk %}">
                   {{ c.name }}
                 </a>
               </li>
@@ -81,126 +93,119 @@
           </ul>
         </li>
         {% endif %}
+
       </ul>
 
-      <!-- SELECTOR DE IDIOMA -->
-      <select id="lang-switcher"
-              class="form-select form-select-sm me-3"
-              style="width:auto"
-              onchange="window.changeLang && window.changeLang(this.value)">
-        <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>ES</option>
-        <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
-      </select>
+      <!-- ZONA DE ACCIONES (DESKTOP) -->
+      <div class="d-none d-lg-flex align-items-center ms-auto gap-3">
 
-      <!-- DARK MODE -->
-      <button id="themeToggle"
-              class="btn btn-sm btn-outline-secondary rounded-pill px-3 me-2">
-        🌙
-      </button>
+        <!-- Selector de idioma -->
+        <select id="lang-switcher" class="form-select form-select-sm"
+                style="width:auto"
+                onchange="window.changeLang && window.changeLang(this.value)">
+          <option value="es" {% if request.LANGUAGE_CODE == 'es' %}selected{% endif %}>ES</option>
+          <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
+        </select>
 
-      <!-- MENÚ DE CUENTA -->
-      {% if request.user.is_authenticated %}
-        <div class="nav-item dropdown">
-          <a class="btn btn-elegant dropdown-toggle text-white rounded-pill px-3"
-             href="#" data-bs-toggle="dropdown">
-            Mi Cuenta
-          </a>
+        <!-- Botón dark mode -->
+        <button id="themeToggle"
+                class="btn btn-sm btn-outline-secondary rounded-circle p-2">
+          🌙
+        </button>
 
-      <!-- CARRITO -->
-      <a href="{% url 'core:cart_detail' %}"
-         class="btn btn-elegant d-flex align-items-center gap-2 position-relative me-3">
-        <span class="bi bi-bag"></span>
-        <span>Carrito</span>
+        <!-- Carrito -->
+        <a href="{% url 'core:cart_detail' %}"
+           class="btn btn-elegant position-relative d-flex align-items-center gap-2">
+          <i class="bi bi-bag"></i>
+          Carrito
+          {% if cart_count %}
+            <span class="badge bg-primary position-absolute"
+                  style="top:-6px; right:-6px; font-size:0.65rem;">
+              {{ cart_count }}
+            </span>
+          {% endif %}
+        </a>
 
-        {% if cart_count %}
-          <span class="badge bg-primary text-white position-absolute"
-                style="top:-6px; right:-6px; font-size:0.65rem;">
-            {{ cart_count }}
-          </span>
+        <!-- CUENTA -->
+        {% if request.user.is_authenticated %}
+          <div class="nav-item dropdown">
+            <a class="btn btn-elegant dropdown-toggle px-3" href="#" data-bs-toggle="dropdown">
+              Mi Cuenta
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+              <li><a class="dropdown-item" href="{% url 'accounts:dashboard' %}">Panel</a></li>
+              <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Perfil</a></li>
+              <li><a class="dropdown-item" href="{% url 'accounts:address_list' %}">Direcciones</a></li>
+              <li><a class="dropdown-item" href="{% url 'accounts:orders_list' %}">Compras</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="{% url 'core:logout' %}">
+                Cerrar sesión
+              </a></li>
+            </ul>
+          </div>
+
+        {% else %}
+          <a class="btn btn-elegant" href="{% url 'core:login' %}">Ingresar</a>
+          <a class="btn btn-elegant" href="{% url 'core:register' %}">Crear cuenta</a>
         {% endif %}
-      </a>
-
-      
-
-          <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-            <li><a class="dropdown-item" href="{% url 'accounts:dashboard' %}">Panel</a></li>
-            <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Perfil</a></li>
-            <li><a class="dropdown-item" href="{% url 'accounts:address_list' %}">Direcciones</a></li>
-            <li><a class="dropdown-item" href="{% url 'accounts:orders_list' %}">Historial de compras</a></li>
-
-            <li><hr class="dropdown-divider"></li>
-
-            <li><a class="dropdown-item text-danger" href="{% url 'core:logout' %}">
-              Cerrar sesión
-            </a></li>
-          </ul>
-        </div>
-      {% else %}
-        <a class="btn btn-elegant text-white" href="{% url 'core:login' %}">Ingresar</a>
-        <a class="btn btn-elegant text-white" href="{% url 'core:register' %}">Crear cuenta</a>
-      {% endif %}
+      </div>
 
     </div>
   </div>
 
-  <!-- FORMULARIO OCULTO (i18n) -->
+  <!-- FORMULARIO OCULTO i18n -->
   <form id="lang-form" method="post" action="{% url 'set_language' %}" class="d-none">
     {% csrf_token %}
     <input type="hidden" name="language" id="lang-input">
   </form>
 
-  <!-- ================================= -->
-  <!-- SCRIPT — AUTOCOMPLETADO BUSCADOR -->
-  <!-- ================================= -->
+  <!-- AUTOCOMPLETE -->
   <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const input = document.getElementById("searchInput");
-    const box = document.getElementById("searchResults");
+    document.addEventListener("DOMContentLoaded", function () {
+        const input = document.getElementById("searchInput");
+        const box = document.getElementById("searchResults");
+        let timeout = null;
 
-    let timeout = null;
+        input.addEventListener("input", function () {
+            const q = this.value.trim();
+            clearTimeout(timeout);
 
-    input.addEventListener("input", function () {
-        const q = this.value.trim();
-        clearTimeout(timeout);
+            if (!q) { box.style.display = "none"; return; }
 
-        if (!q) {
-            box.style.display = "none";
-            return;
-        }
-
-        timeout = setTimeout(() => {
-            fetch(`/buscar/ajax/?q=${encodeURIComponent(q)}`)
-                .then(res => res.json())
-                .then(data => {
+            timeout = setTimeout(() => {
+                fetch(`/buscar/ajax/?q=${encodeURIComponent(q)}`)
+                  .then(res => res.json())
+                  .then(data => {
                     if (!data.results.length) {
-                        box.innerHTML = `<div class="p-2 text-muted small">Sin resultados…</div>`;
-                        box.style.display = "block";
-                        return;
+                      box.innerHTML = `<div class="p-2 text-muted small">Sin resultados…</div>`;
+                      box.style.display = "block";
+                      return;
                     }
 
                     box.innerHTML = data.results.map(p => `
-                        <a href="${p.url}" class="d-flex align-items-center p-2 text-decoration-none text-dark border-bottom">
-                            <img src="${p.image || '/static/img/no-image.jpg'}"
-                                 style="width:45px; height:45px; object-fit:cover;"
-                                 class="rounded me-2">
-                            <div>
-                                <div class="fw-semibold">${p.name}</div>
-                                <div class="text-muted small">${p.price}</div>
-                            </div>
-                        </a>
+                      <a href="${p.url}" 
+                         class="d-flex align-items-center p-2 text-decoration-none text-dark border-bottom">
+                        <img src="${p.image || '/static/img/no-image.jpg'}"
+                             style="width:45px; height:45px; object-fit:cover;"
+                             class="rounded me-2">
+                        <div>
+                          <div class="fw-semibold">${p.name}</div>
+                          <div class="text-muted small">${p.price}</div>
+                        </div>
+                      </a>
                     `).join("");
 
                     box.style.display = "block";
-                });
-        }, 250);
-    });
+                  });
+            }, 250);
+        });
 
-    document.addEventListener("click", (e) => {
-        if (!box.contains(e.target) && e.target !== input) {
-            box.style.display = "none";
-        }
+        document.addEventListener("click", (e) => {
+            if (!box.contains(e.target) && e.target !== input) {
+              box.style.display = "none";
+            }
+        });
     });
-});
   </script>
 
 </nav>
