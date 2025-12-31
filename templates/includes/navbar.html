@@ -65,7 +65,7 @@
             <!-- Ver todas -->
             <li>
               <a class="dropdown-item fw-bold text-primary" href="{% url 'core:category_all' %}">
-                🔍 Ver todas las categorías
+                Todas las Categorías
               </a>
             </li>
             <li><hr class="dropdown-divider"></li>
@@ -98,6 +98,14 @@
         🌙
       </button>
 
+      <!-- MENÚ DE CUENTA -->
+      {% if request.user.is_authenticated %}
+        <div class="nav-item dropdown">
+          <a class="btn btn-elegant dropdown-toggle text-white rounded-pill px-3"
+             href="#" data-bs-toggle="dropdown">
+            Mi Cuenta
+          </a>
+
       <!-- CARRITO -->
       <a href="{% url 'core:cart_detail' %}"
          class="btn btn-elegant d-flex align-items-center gap-2 position-relative me-3">
@@ -112,13 +120,7 @@
         {% endif %}
       </a>
 
-      <!-- MENÚ DE CUENTA -->
-      {% if request.user.is_authenticated %}
-        <div class="nav-item dropdown">
-          <a class="btn btn-elegant dropdown-toggle text-white rounded-pill px-3"
-             href="#" data-bs-toggle="dropdown">
-            Mi Cuenta
-          </a>
+      
 
           <ul class="dropdown-menu dropdown-menu-end shadow-sm">
             <li><a class="dropdown-item" href="{% url 'accounts:dashboard' %}">Panel</a></li>
