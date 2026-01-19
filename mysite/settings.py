@@ -167,4 +167,4 @@ LOGIN_REDIRECT_URL = "/panel/productos/"
 # --- Default PK --------------------------------------------------------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MIDDLEWARE.insert(0, "core.middleware.allow_ip.AllowOnlySpecificIPMiddleware")
+#MIDDLEWARE.insert(0, "core.middleware.allow_ip.AllowOnlySpecificIPMiddleware")
